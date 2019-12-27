@@ -7,11 +7,12 @@ import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class DriverService {
+public class  DriverService {
     @Autowired
     IDriverRepo repo;
 
@@ -21,8 +22,8 @@ public class DriverService {
     }
 
     @Transactional
-    public Collection<Driver> getDriversList(){
-        return repo.findAll();
+    public List<Driver> getDriversList(){
+        return (List<Driver>) repo.findAll();
     }
 
     @Transactional
@@ -30,11 +31,15 @@ public class DriverService {
         return repo.findById(id);
     }
 
+    /**
+     * @param name: can be a first, middle, or last name of the driver
+     * todo: make method more smart, find by any entered text. f+m, f+l, f+m+l etc.
+     * */
     @Transactional
     public Driver getDriver(String name){
         var drivers = getDriversList();
         for (Driver d: drivers) {
-            if(d.getName().equals(name))
+            if(d.getFirstName().equals(name) || d.getMiddleName().equals(name) || d.getLastName().equals(name))
                 return d;
         }
         // todo: return null or throw an exception?

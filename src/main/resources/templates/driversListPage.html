@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Drivers</title>
+</head>
+
+<body>
+<div align="center">
+    <h1>Drivers</h1>
+    <br/>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="driver : ${drivers}">
+                <td th:text="$driver.id">driver id</td>
+                <td th:text="$driver.firstName">firstName</td>
+                <td th:text="$driver.middleName">middleName</td>
+                <td th:text="$driver.lastName">lastName</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/picasso/drivers/add">Add new driver</a>
+</div>
+
+</body>
+</html>
