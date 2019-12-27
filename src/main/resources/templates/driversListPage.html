@@ -18,11 +18,10 @@
         </thead>
 
         <tbody>
-            <tr th:each="driver : ${drivers}">
-                <td th:text="$driver.id">driver id</td>
-                <td th:text="$driver.firstName">firstName</td>
-                <td th:text="$driver.middleName">middleName</td>
-                <td th:text="$driver.lastName">lastName</td>
+        <!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
+            <tr th:each="driver:${drivers}">
+                <td th:text="${driver.id}"/>
+                <td th:text="${driver.getFullName()}"/>
             </tr>
         </tbody>
     </table>

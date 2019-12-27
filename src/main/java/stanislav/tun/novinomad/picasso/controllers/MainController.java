@@ -20,21 +20,22 @@ public class MainController {
     public String getAllDrivers(Model model) {
         List<Driver> drivers = driverService.getDriversList();
         model.addAttribute("drivers", drivers);
-        return "driversListPage";
+        return "driversListPage.html";
     }
 
     @RequestMapping("/drivers/add")
     public String addDriver(Model model) {
         Driver driver = new Driver();
         model.addAttribute("driver", driver);
-        return "addDriverPage";
+        return "addDriverPage.html";
     }
 
+    // action
     @RequestMapping(value = "/drivers/save", method = RequestMethod.POST)
     public String addDriver(@ModelAttribute("driver") Driver driver, Model model){
         driverService.createDriver(driver);
         model.addAttribute("driver", driver);
-        return "redirect:/drivers/add";
+        return "redirect:/picasso/drivers/add";
     }
 
 
