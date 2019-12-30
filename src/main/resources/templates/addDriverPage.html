@@ -9,7 +9,7 @@
         <h1>Add new driver</h1>
         <br/>
         <!--/*@thymesVar id="driver" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
-        <form action="#" th:action="@{/picasso/drivers/save}" th:object="${driver}" method="post">
+        <form action="#" th:action="@{/drivers/save}" th:object="${driver}" method="post">
             <table border="0" cellpadding="10">
                 <tr>
                     <td>First name:</td>
@@ -34,7 +34,7 @@
 
             </table>
         </form>
-        <a href="/picasso/drivers/list">Back to list of drivers</a>
+        <a href="/drivers/list">Back to list of drivers</a>
     </div>
 </body>
 </html>

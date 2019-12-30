@@ -28,7 +28,7 @@ public class DriverController {
 
     // get view
     @RequestMapping("/add")
-    public ModelAndView addDriver() {
+    public ModelAndView addDriverView() {
         var driver = new Driver();
         var modelAndView = new ModelAndView();
         modelAndView.addObject("driver", driver);
@@ -38,7 +38,7 @@ public class DriverController {
 
     // action todo: make single method for adding driver to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String addDriver(@ModelAttribute("driver") Driver driver, Model model) {
+    public String addDriverAction(@ModelAttribute("driver") Driver driver, Model model) {
         driverService.createDriver(driver);
         model.addAttribute("driver", driver);
         return "redirect:/drivers/add";

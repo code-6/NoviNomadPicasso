@@ -12,6 +12,7 @@ import java.util.Set;
 @JsonRootName(value = "tour")
 public class Tour {
     @Id
+    @Column(name = "tour_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column
@@ -25,7 +26,8 @@ public class Tour {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "tour")
+    @OneToMany
+    @JoinColumn(name = "tour_id")
     private Set<Driver> drivers;
 
     public Tour() {
