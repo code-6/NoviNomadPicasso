@@ -8,7 +8,6 @@
 <div align="center">
     <h1>Add new tour</h1>
     <br/>
-
     <!--/*@thymesVar id="tourForm" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
     <form action="#" th:action="@{/tours/save}" th:object="${tourForm}" method="post">
         <table border="0" cellpadding="10">
@@ -18,19 +17,21 @@
             </tr>
             <tr>
                 <td>Start date:</td>
-                <td><input type="date" th:field="*{startDate}"/></td>
+                <td><input id = "startDate" type="datetime-local" th:field="*{startDate}"/></td>
             </tr>
             <tr>
                 <td>End date:</td>
-                <td><input type="date" th:field="*{endDate}"/></td>
+                <td><input id = "endDate" type="datetime-local" th:field="*{endDate}"/></td>
             </tr>
             <tr>
                 <td>
                     <!--/*@thymesVar id="id" type="java.lang.Long"*/-->
-                    <select class="form-control" th:field="*{id}">
+                    <select th:field="*{id}" multiple="true" >
                         <option value="0">select driver</option>
                         <!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
-                        <option th:each="d : ${drivers}" th:value="${d.id}" th:text="${d.id+' '+d.fullName}"></option>
+                        <option th:each="d : ${drivers}" th:value="${d.id}" th:text="${d.id+' '+d.fullName}">
+                            <input type="hidden" name="attachDriver" th:value="${d.id}">
+                        </option>
                     </select>
                 </td>
             </tr>
@@ -43,7 +44,6 @@
                     <button type="submit">Create</button>
                 </td>
             </tr>
-
         </table>
     </form>
     <a href="/tours/list">Back to tours list</a>

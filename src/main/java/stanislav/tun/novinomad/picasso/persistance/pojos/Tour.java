@@ -1,10 +1,16 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Set;
 
 @Indexed
@@ -15,20 +21,27 @@ public class Tour {
     @Column(name = "tour_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column
+    @Column(nullable = true)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar startDate;
-    @Column
+    @Column(nullable = true)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar endDate;
-    @Column
+    @Column(nullable = true)
     private int days;
-    @Column
+    @Column(nullable = true)
     private String tittle;
-    @Column
+    @Column(nullable = true)
     private String description;
 
-    @OneToMany
-    @JoinColumn(name = "tour_id")
-    private Set<Driver> drivers;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="tours_drivers", joinColumns = {@JoinColumn(name = "tour_id")}, inverseJoinColumns = {@JoinColumn(name="driver_id")})
+    private Set<Driver> drivers = new HashSet<>();
+
+    @Autowired
+    @JsonIgnore
+    @Transient
+    ObjectMapper mapper;
 
     public Tour() {
         if(startDate != null && endDate != null)
@@ -63,6 +76,10 @@ public class Tour {
         this.id = id;
     }
 
+    public void setDays(int days) {
+        this.days = days;
+    }
+
     public String getTittle() {
         return tittle;
     }
@@ -91,9 +108,8 @@ public class Tour {
         drivers.add(driver);
     }
 
-    public void addDriver(long id, String firstName, String middleName, String lastName){
+    public void addDriver(String firstName, String middleName, String lastName){
         var driver = new Driver();
-        driver.setId(id);
         driver.setFirstName(firstName);
         driver.setMiddleName(middleName);
         driver.setLastName(lastName);

@@ -6,13 +6,16 @@
 </head>
 <body>
 <div align="center">
-    <h1>Drivers</h1>
+    <h1>Tours</h1>
     <br/>
     <table border="1">
         <thead>
         <tr>
             <th>Id</th>
-            <th>Name</th>
+            <th>Tittle</th>
+            <th>Start date</th>
+            <th>End date</th>
+
         </tr>
         </thead>
 
@@ -20,12 +23,22 @@
 
         <tr th:each="tour:${tours}">
             <td th:text="${tour.id}"/>
-
+            <td th:text="${tour.tittle}"/>
+            <td th:datetime-local="${tour.startDate}"/>
+            <td th:datetime-local="${tour.endDate}"/>
+            <td th:text="${tour.description}"/>
+            <table>
+                <span th:if="${tour.drivers != null}">
+                    <tr th:each="driver:${tour.drivers}">
+                        <td th:text="${driver.fullName"></td>
+                    </tr>
+                </span>
+            </table>
         </tr>
         </tbody>
     </table>
 
-    <a href="/drivers/add">Add new driver</a>
+    <a href="/tours/add">Add new tour</a>
 </div>
 </body>
 </html>

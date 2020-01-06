@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-public class NoviNomadPicassoApplication {
+public class NovinomadPicassoApp {
 	@Autowired
 	DataSource dataSource;
 
@@ -19,7 +19,7 @@ public class NoviNomadPicassoApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(NoviNomadPicassoApplication.class, args);
+		SpringApplication.run(NovinomadPicassoApp.class, args);
 	}
 
 }

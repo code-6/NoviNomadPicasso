@@ -9,6 +9,8 @@ import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Indexed
 @Entity(name = "drivers")
@@ -33,6 +35,9 @@ public class Driver implements Serializable {
     @Column
     private String middleName;
 
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<Tour> tours = new HashSet<>();
+
     public Driver() {
     }
 
@@ -40,6 +45,14 @@ public class Driver implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+//    public Set<Tour> getTours() {
+//        return tours;
+//    }
+//
+//    public void setTours(Set<Tour> tours) {
+//        this.tours = tours;
+//    }
 
     public long getId() {
         return id;
