@@ -11,6 +11,7 @@ import org.springframework.stereotype.Indexed;
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Indexed
@@ -19,34 +20,46 @@ import java.util.Set;
 public class Tour {
     @Id
     @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(nullable = true)
+    @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar startDate;
-    @Column(nullable = true)
+    @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar endDate;
-    @Column(nullable = true)
+    @Column
     private int days;
-    @Column(nullable = true)
+    @Column
     private String tittle;
-    @Column(nullable = true)
+    @Column
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name="tours_drivers", joinColumns = {@JoinColumn(name = "tour_id")}, inverseJoinColumns = {@JoinColumn(name="driver_id")})
     private Set<Driver> drivers = new HashSet<>();
-
-    @Autowired
-    @JsonIgnore
-    @Transient
-    ObjectMapper mapper;
 
     public Tour() {
         if(startDate != null && endDate != null)
             days = endDate.get(Calendar.DAY_OF_YEAR) - startDate.get(Calendar.DAY_OF_YEAR);
     }
+
+    public void addDriver(Optional<Driver> driver){
+        drivers.add(driver.get());
+    }
+
+    public void addDriver(String firstName, String middleName, String lastName){
+        var driver = new Driver();
+        driver.setFirstName(firstName);
+        driver.setMiddleName(middleName);
+        driver.setLastName(lastName);
+        drivers.add(driver);
+    }
+
+    @Autowired
+    @JsonIgnore
+    @Transient
+    ObjectMapper mapper;
 
     public int getDays() {
         return days;
@@ -104,15 +117,7 @@ public class Tour {
         this.drivers = drivers;
     }
 
-    public void addDriver(Driver driver){
-        drivers.add(driver);
-    }
 
-    public void addDriver(String firstName, String middleName, String lastName){
-        var driver = new Driver();
-        driver.setFirstName(firstName);
-        driver.setMiddleName(middleName);
-        driver.setLastName(lastName);
-        drivers.add(driver);
-    }
+
+
 }

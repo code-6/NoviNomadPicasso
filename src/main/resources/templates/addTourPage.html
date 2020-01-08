@@ -25,14 +25,11 @@
                 <td><input id = "endDate" type="datetime-local" th:field="*{endDate}"/></td>
             </tr>
             <tr>
+                <td>Attach a driver</td>
                 <td>
-                    <!--/*@thymesVar id="id" type="java.lang.Long"*/-->
-                    <select th:field="*{id}" multiple="true" >
-                        <option value="0">select driver</option>
+                    <select th:name="driverId">
                         <!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
-                        <option th:each="d : ${drivers}" th:value="${d.id}" th:text="${d.id+' '+d.fullName}">
-                            <input type="hidden" name="attachDriver" th:value="${d.id}">
-                        </option>
+                        <option th:each="d : ${drivers}" th:value="${d.driverId}" th:text="${d.driverId+' '+d.fullName}"/>
                     </select>
                 </td>
             </tr>

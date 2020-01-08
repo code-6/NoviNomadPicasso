@@ -15,7 +15,8 @@
             <th>Tittle</th>
             <th>Start date</th>
             <th>End date</th>
-
+            <th>Total days</th>
+            <th>Drivers</th>
         </tr>
         </thead>
 
@@ -26,13 +27,12 @@
             <td th:text="${tour.tittle}"/>
             <td th:datetime-local="${tour.startDate}"/>
             <td th:datetime-local="${tour.endDate}"/>
+            <td th:text="${tour.days}"></td>
             <td th:text="${tour.description}"/>
             <table>
-                <span th:if="${tour.drivers != null}">
                     <tr th:each="driver:${tour.drivers}">
                         <td th:text="${driver.fullName"></td>
                     </tr>
-                </span>
             </table>
         </tr>
         </tbody>

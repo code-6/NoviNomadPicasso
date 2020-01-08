@@ -9,8 +9,6 @@ import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Indexed
 @Entity(name = "drivers")
@@ -22,9 +20,9 @@ public class Driver implements Serializable {
     ObjectMapper mapper;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "driver_id")
-    private long id;
+    private long driverId;
 
     @Column
     private String lastName;
@@ -54,12 +52,12 @@ public class Driver implements Serializable {
 //        this.tours = tours;
 //    }
 
-    public long getId() {
-        return id;
+    public long getDriverId() {
+        return driverId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setDriverId(long driverId) {
+        this.driverId = driverId;
     }
 
     public String getLastName() {
@@ -94,10 +92,10 @@ public class Driver implements Serializable {
     public String toString() {
         try {
             return mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "Driver:{" +
-                    "id=" + id +
+                    "id=" + driverId +
                     ", lastName=\"" + lastName + '\"' +
                     ", firstName=\"" + firstName + '\"' +
                     ", middleName=\"" + middleName + '\"' +

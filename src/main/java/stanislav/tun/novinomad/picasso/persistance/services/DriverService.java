@@ -6,7 +6,6 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
