@@ -29,7 +29,12 @@
             <td th:datetime-local="${tour.startDate}"/>
             <td th:datetime-local="${tour.endDate}"/>
             <td th:text="${tour.days}"></td>
-            <td th:text="${tour.drivers}"/>
+            <td>
+                <span th:each="d: ${tour.drivers}">
+                    <span th:text="${d.fullName}"/>
+                </span>
+            </td>
+
             <td th:text="${tour.description}"/>
         </tr>
         </tbody>
