@@ -30,10 +30,6 @@ public class TourController {
     @Autowired
     ObjectMapper mapper;
 
-    public TourController() {
-
-    }
-
     @RequestMapping("/add")
     public ModelAndView getAddTourView(Model model) {
         var map = new HashMap<String, Object>();

@@ -22,18 +22,14 @@
 
         <tbody>
 
-        <tr th:each="tour:${tours}">
+        <tr th:each="tour:${toursList}">
             <td th:text="${tour.id}"/>
             <td th:text="${tour.tittle}"/>
             <td th:datetime-local="${tour.startDate}"/>
             <td th:datetime-local="${tour.endDate}"/>
             <td th:text="${tour.days}"></td>
             <td th:text="${tour.description}"/>
-            <table>
-                    <tr th:each="driver:${tour.drivers}">
-                        <td th:text="${driver.fullName"></td>
-                    </tr>
-            </table>
+            <td th:text="${tour.drivers}"/>
         </tr>
         </tbody>
     </table>
