@@ -17,6 +17,7 @@
             <th>End date</th>
             <th>Total days</th>
             <th>Drivers</th>
+            <th>Description</th>
         </tr>
         </thead>
 
@@ -28,8 +29,8 @@
             <td th:datetime-local="${tour.startDate}"/>
             <td th:datetime-local="${tour.endDate}"/>
             <td th:text="${tour.days}"></td>
-            <td th:text="${tour.description}"/>
             <td th:text="${tour.drivers}"/>
+            <td th:text="${tour.description}"/>
         </tr>
         </tbody>
     </table>
