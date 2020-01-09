@@ -8,8 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/drivers")
 public class DriverController {
@@ -26,6 +24,18 @@ public class DriverController {
         return modelAndView;
     }
 
+    @RequestMapping(value="/edit{id}")
+    public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId){
+        System.out.println("Driver id to be edited = "+driverId);
+        var driver = driverService.getDriver(driverId);
+        System.out.println("Driver to be edited "+driver.toString());
+
+        var mav = new ModelAndView();
+        mav.addObject("driver", driver);
+        mav.setViewName("addDriverPage.html");
+        return mav;
+    }
+
     // get view
     @RequestMapping("/add")
     public ModelAndView addDriverView() {
@@ -38,21 +48,9 @@ public class DriverController {
 
     // action todo: make single method for adding driver to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String addDriverAction(@ModelAttribute("driver") Driver driver, Model model) {
-        driverService.createDriver(driver);
-        model.addAttribute("driver", driver);
+    public String addOrUpdateDriverAction(Driver driver) {
+        System.out.println("driver to be created or updated = "+driver.toString());
+        driverService.createOrUpdateDriver(driver);
         return "redirect:/drivers/add";
     }
-    @RequestMapping(value="/edit{id}")
-    public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId){
-        System.out.println("Driver id to be edited = "+driverId);
-        var driver = driverService.getDriver(driverId);
-        System.out.println("Driver to be edited "+driver.toString());
-        var mav = new ModelAndView();
-        mav.addObject("driver", driver);
-        mav.setViewName("addDriverPage.html");
-        return mav;
-    }
-
-
 }

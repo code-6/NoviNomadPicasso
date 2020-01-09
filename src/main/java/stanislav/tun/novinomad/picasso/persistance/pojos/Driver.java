@@ -37,6 +37,7 @@ public class Driver implements Serializable {
 //    private Set<Tour> tours = new HashSet<>();
 
     public Driver() {
+        System.out.println("Start create new driver");
     }
 
     public Driver(String firstName, String lastName){
@@ -93,7 +94,7 @@ public class Driver implements Serializable {
         try {
             return mapper.writeValueAsString(this);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return "Driver:{" +
                     "id=" + driverId +
                     ", lastName=\"" + lastName + '\"' +

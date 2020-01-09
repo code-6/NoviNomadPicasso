@@ -16,7 +16,7 @@ public class  DriverService {
     IDriverRepo repo;
 
     @Transactional
-    public void createDriver(Driver driver){
+    public void createOrUpdateDriver(Driver driver){
         repo.save(driver);
     }
 

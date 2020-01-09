@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Tours</title>
+	<meta charset="UTF-8">
+	<title>Tours</title>
 </head>
 <body>
 <div align="center">
-    <h1>Tours</h1>
-    <br/>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Tittle</th>
-            <th>Start date</th>
-            <th>End date</th>
-            <th>Total days</th>
-            <th>Drivers</th>
-            <th>Description</th>
-        </tr>
-        </thead>
+	<h1>Tours</h1>
+	<br/>
+	<table border="1">
+		<thead>
+		<tr>
+			<th>Id</th>
+			<th>Tittle</th>
+			<th>Start date</th>
+			<th>End date</th>
+			<th>Total days</th>
+			<th>Drivers</th>
+			<th>Description</th>
+		</tr>
+		</thead>
 
-        <tbody>
-
-        <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
-        <tr th:each="tour:${toursList}">
-            <td th:text="${tour.id}"/>
-            <td th:text="${tour.tittle}"/>
-            <td th:text="${tour.getStartDate()}"/>
-            <td th:text="${tour.getEndDate()}"/>
-            <td th:text="${tour.days}"></td>
-            <td>
+		<tbody>
+		<!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
+		<tr th:each="tour:${toursList}">
+			<td th:text="${tour.id}"></td>
+			<td th:text="${tour.tittle}"></td>
+			<td th:text="${tour.getStartDate()}"></td>
+			<td th:text="${tour.getEndDate()}"></td>
+			<td th:text="${tour.days}"></td>
+			<td>
                 <span th:each="d: ${tour.drivers}">
-                    <span th:text="${d.fullName}"/>
+                    <span th:text="${d.fullName}"></span>
                 </span>
-            </td>
+			</td>
 
-            <td th:text="${tour.description}"/>
-        </tr>
-        </tbody>
-    </table>
-
-    <a href="/tours/add">Add new tour</a>
+			<td th:text="${tour.description}"></td>
+			<td>
+				<a th:href="@{/tours/edit{id}(id=${tour.id})}">edit</a>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<a href="/tours/add">Add new tour</a>
 </div>
 </body>
 </html>

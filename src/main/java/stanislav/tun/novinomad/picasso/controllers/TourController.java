@@ -13,9 +13,7 @@ import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -89,8 +87,8 @@ public class TourController {
     public void createtour(){
         var tour = new Tour();
         tour.setTittle("Uahahaha");
-        var driver = new Driver("pizdabol", "Pizdabolovich");
-        driverService.createDriver(driver);
+        var driver = new Driver("asdasd", "asdasf");
+        driverService.createOrUpdateDriver(driver);
         tour.addDriver(Optional.of(driver));
         tourService.createTour(tour);
     }
@@ -102,8 +100,8 @@ public class TourController {
         var d1 = new Driver("Stanislav", "Tun");
         var d2 = new Driver("Alexander", "Baratov");
 
-        driverService.createDriver(d1);
-        driverService.createDriver(d2);
+        driverService.createOrUpdateDriver(d1);
+        driverService.createOrUpdateDriver(d2);
 
         return "redirect:/tours/add";
     }
