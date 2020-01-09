@@ -20,7 +20,7 @@ public class Driver implements Serializable {
     ObjectMapper mapper;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "driver_id")
     private long driverId;
 

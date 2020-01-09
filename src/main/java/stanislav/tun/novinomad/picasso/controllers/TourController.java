@@ -14,8 +14,11 @@ import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Null;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -47,6 +50,7 @@ public class TourController {
         return mav;
     }
 
+    // todo : refactor and add possibility to set many drivers during create action
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addTourAction(@ModelAttribute("tourForm") @Valid Tour tour,
                                 @RequestParam(required = false, name = "driverId") Long driverId,
@@ -56,11 +60,15 @@ public class TourController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+
         var start = tour.getStartDate();
         var end = tour.getEndDate();
 
         if (start != null && end != null)
-            tour.setDays(end.get(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR));
+            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
 
         if(driverId != null){
             System.out.println("Driver id in addTourAction param = "+ driverId);
@@ -76,6 +84,7 @@ public class TourController {
         return "redirect:/tours/add";
     }
 
+    // todo : debug method. Remove for production
     @RequestMapping("/test")
     public void createtour(){
         var tour = new Tour();
@@ -86,14 +95,17 @@ public class TourController {
         tourService.createTour(tour);
     }
 
+    // todo : debug method. Remove for production
     @RequestMapping("/init")
-    public void init(){
+    public String init(){
         // todo: remove saving drivers!
         var d1 = new Driver("Stanislav", "Tun");
         var d2 = new Driver("Alexander", "Baratov");
 
         driverService.createDriver(d1);
         driverService.createDriver(d2);
+
+        return "redirect:/tours/add";
     }
 
 

@@ -9,6 +9,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Optional;
@@ -18,16 +22,24 @@ import java.util.Set;
 @Entity(name = "tours")
 @JsonRootName(value = "tour")
 public class Tour {
+    @JsonIgnore
+    @Transient
+    private static final String datePattern = "yyyy-MM-dd'T'HH:mm";
+
+    @JsonIgnore
+    @Transient
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(datePattern);
+
     @Id
     @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private Calendar startDate;
+    @DateTimeFormat(pattern = datePattern)
+    private LocalDateTime startDate;
     @Column
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private Calendar endDate;
+    @DateTimeFormat(pattern = datePattern)
+    private LocalDateTime endDate;
     @Column
     private int days;
     @Column
@@ -38,11 +50,6 @@ public class Tour {
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name="tours_drivers", joinColumns = {@JoinColumn(name = "tour_id")}, inverseJoinColumns = {@JoinColumn(name="driver_id")})
     private Set<Driver> drivers = new HashSet<>();
-
-    public Tour() {
-        if(startDate != null && endDate != null)
-            days = endDate.get(Calendar.DAY_OF_YEAR) - startDate.get(Calendar.DAY_OF_YEAR);
-    }
 
     public void addDriver(Optional<Driver> driver){
         drivers.add(driver.get());
@@ -65,19 +72,19 @@ public class Tour {
         return days;
     }
 
-    public Calendar getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Calendar startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Calendar getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Calendar endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

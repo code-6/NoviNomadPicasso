@@ -23,11 +23,12 @@
 
         <tbody>
 
+        <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
         <tr th:each="tour:${toursList}">
             <td th:text="${tour.id}"/>
             <td th:text="${tour.tittle}"/>
-            <td th:datetime-local="${tour.startDate}"/>
-            <td th:datetime-local="${tour.endDate}"/>
+            <td th:text="${tour.getStartDate()}"/>
+            <td th:text="${tour.getEndDate()}"/>
             <td th:text="${tour.days}"></td>
             <td>
                 <span th:each="d: ${tour.drivers}">

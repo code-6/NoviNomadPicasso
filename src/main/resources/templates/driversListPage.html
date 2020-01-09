@@ -14,15 +14,20 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th></th>
             </tr>
         </thead>
 
         <tbody>
         <!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
             <tr th:each="driver:${drivers}">
-                <td th:text="${driver.id}"/>
+                <td th:text="${driver.driverId}"/>
                 <td th:text="${driver.getFullName()}"/>
+                <td>
+                    <a th:href="@{/drivers/edit{id}(id=${driver.driverId})}">edit</a>
+                </td>
             </tr>
+
         </tbody>
     </table>
 
