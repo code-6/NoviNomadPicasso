@@ -14,10 +14,7 @@ import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/tours")
@@ -49,19 +46,10 @@ public class TourController {
     }
 
     // todo : refactor and add possibility to set many drivers during create action
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addTourAction(@ModelAttribute("tourForm") @Valid Tour tour,
                                 @RequestParam(required = false, name = "driverId") Long driverId,
                                 Model model) {
-        try {
-            System.out.printf(mapper.writeValueAsString(tour));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-
         var start = tour.getStartDate();
         var end = tour.getEndDate();
 
@@ -73,6 +61,34 @@ public class TourController {
             var driver = driverService.getDriver(driverId);
             System.out.println("DRIVER = "+driver.toString());
             tour.addDriver(driver);
+        }else{
+            System.out.println("DRIVER ID IS EMPTY!");
+        }
+
+        tourService.createTour(tour);
+        model.addAttribute("tour", tour);
+        return "redirect:/tours/add";
+    }*/
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String addTourAction(@ModelAttribute("tourForm") @Valid Tour tour,
+                                @RequestParam(required = false, name = "driverId") List<Long> driverId,
+                                Model model) {
+        System.out.println("DRIVERS IDS "+driverId.size());
+        var start = tour.getStartDate();
+        var end = tour.getEndDate();
+
+        if (start != null && end != null)
+            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
+
+        if(driverId.size() > 0){
+            System.out.println("DriverS more than 1");
+            for(Long id : driverId){
+                System.out.println("Driver id in addTourAction param = "+ id);
+                var driver = driverService.getDriver(id);
+                System.out.println("DRIVER = "+driver.toString());
+                tour.addDriver(driver);
+            }
         }else{
             System.out.println("DRIVER ID IS EMPTY!");
         }
