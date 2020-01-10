@@ -45,30 +45,20 @@ public class TourController {
         return mav;
     }
 
-    // todo : refactor and add possibility to set many drivers during create action
-    /*@RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String addTourAction(@ModelAttribute("tourForm") @Valid Tour tour,
-                                @RequestParam(required = false, name = "driverId") Long driverId,
-                                Model model) {
-        var start = tour.getStartDate();
-        var end = tour.getEndDate();
+    @RequestMapping(value="/edit{id}")
+    public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId){
+        System.out.println("Tour id to be edited = "+tourId);
+        var tour = tourService.getTour(tourId);
+        System.out.println("Tour to be edited "+tourId.toString());
 
-        if (start != null && end != null)
-            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
-
-        if(driverId != null){
-            System.out.println("Driver id in addTourAction param = "+ driverId);
-            var driver = driverService.getDriver(driverId);
-            System.out.println("DRIVER = "+driver.toString());
-            tour.addDriver(driver);
-        }else{
-            System.out.println("DRIVER ID IS EMPTY!");
-        }
-
-        tourService.createTour(tour);
-        model.addAttribute("tour", tour);
-        return "redirect:/tours/add";
-    }*/
+        var mav = new ModelAndView();
+        mav.addObject("tourForm", tour);
+        var allDrivers = driverService.getDriversList();
+        allDrivers.removeAll(tour.get().getDrivers());
+        mav.addObject("drivers", allDrivers);
+        mav.setViewName("addTourPage.html");
+        return mav;
+    }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addTourAction(@ModelAttribute("tourForm") @Valid Tour tour,
