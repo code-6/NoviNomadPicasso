@@ -74,25 +74,24 @@ public class TourController {
     public String addTourAction(@ModelAttribute("tourForm") @Valid Tour tour,
                                 @RequestParam(required = false, name = "driverId") List<Long> driverId,
                                 Model model) {
-        System.out.println("DRIVERS IDS "+driverId.size());
+
         var start = tour.getStartDate();
         var end = tour.getEndDate();
 
         if (start != null && end != null)
             tour.setDays(end.getDayOfYear() - start.getDayOfYear());
 
-        if(driverId.size() > 0){
-            System.out.println("DriverS more than 1");
-            for(Long id : driverId){
-                System.out.println("Driver id in addTourAction param = "+ id);
-                var driver = driverService.getDriver(id);
-                System.out.println("DRIVER = "+driver.toString());
-                tour.addDriver(driver);
+        if(driverId != null){
+            if( driverId.size() > 0){
+                System.out.println("DriverS more than 1");
+                for(Long id : driverId){
+                    System.out.println("Driver id in addTourAction param = "+ id);
+                    var driver = driverService.getDriver(id);
+                    System.out.println("DRIVER = "+driver.toString());
+                    tour.addDriver(driver);
+                }
             }
-        }else{
-            System.out.println("DRIVER ID IS EMPTY!");
         }
-
         tourService.createTour(tour);
         model.addAttribute("tour", tour);
         return "redirect:/tours/add";

@@ -32,7 +32,7 @@ public class Tour {
 
     @Id
     @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column
     @DateTimeFormat(pattern = datePattern)
@@ -47,7 +47,7 @@ public class Tour {
     @Column
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name="tours_drivers", joinColumns = {@JoinColumn(name = "tour_id")}, inverseJoinColumns = {@JoinColumn(name="driver_id")})
     private Set<Driver> drivers = new HashSet<>();
 
