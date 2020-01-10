@@ -1,0 +1,28 @@
+package stanislav.tun.novinomad.picasso.util;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+
+public abstract class JsonPrinter {
+
+    private static ObjectMapper mapper = new ObjectMapper();
+
+    static {
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+        mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+    }
+
+    public static String getString(Object o){
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        try {
+            return  mapper.writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            System.err.println("Print failed. "+e.getMessage());
+            return "";
+        }
+    }
+}

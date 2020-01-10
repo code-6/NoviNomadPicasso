@@ -62,12 +62,6 @@ public class Tour {
         driver.setLastName(lastName);
         drivers.add(driver);
     }
-
-    @Autowired
-    @JsonIgnore
-    @Transient
-    ObjectMapper mapper;
-
     public int getDays() {
         return days;
     }

@@ -15,11 +15,6 @@ import java.io.Serializable;
 @Entity(name = "drivers")
 @JsonRootName(value = "driver")
 public class Driver implements Serializable {
-    @Autowired
-    @JsonIgnore
-    @Transient
-    ObjectMapper mapper;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "driver_id")
@@ -88,21 +83,6 @@ public class Driver implements Serializable {
 
     public String getFullName() {
         return String.format("%s %s %s", firstName, middleName, lastName);
-    }
-
-    @Override
-    public String toString() {
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return "Driver:{" +
-                    "id=" + driverId +
-                    ", lastName=\"" + lastName + '\"' +
-                    ", firstName=\"" + firstName + '\"' +
-                    ", middleName=\"" + middleName + '\"' +
-                    '}';
-        }
     }
 
 

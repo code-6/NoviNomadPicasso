@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 @Controller
 @RequestMapping("/drivers")
@@ -28,7 +29,7 @@ public class DriverController {
     public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId){
         System.out.println("Driver id to be edited = "+driverId);
         var driver = driverService.getDriver(driverId);
-        System.out.println("Driver to be edited "+driver.toString());
+        System.out.println("Driver to be edited "+ JsonPrinter.getString(driver.get()));
 
         var mav = new ModelAndView();
         mav.addObject("driver", driver);
@@ -49,7 +50,7 @@ public class DriverController {
     // action todo: make single method for adding driver to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addOrUpdateDriverAction(Driver driver) {
-        System.out.println("driver to be created or updated = "+driver.toString());
+        System.out.println("driver to be created or updated = "+JsonPrinter.getString(driver));
         driverService.createOrUpdateDriver(driver);
         return "redirect:/drivers/add";
     }

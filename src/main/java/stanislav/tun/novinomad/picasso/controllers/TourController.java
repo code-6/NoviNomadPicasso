@@ -1,6 +1,5 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +12,11 @@ import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 
 @Controller
 @RequestMapping("/tours")
@@ -77,7 +79,7 @@ public class TourController {
                 for(Long id : driverId){
                     System.out.println("Driver id in addTourAction param = "+ id);
                     var driver = driverService.getDriver(id);
-                    System.out.println("DRIVER = "+driver.toString());
+                    System.out.println(getString(driver.get()));
                     tour.addDriver(driver);
                 }
             }
