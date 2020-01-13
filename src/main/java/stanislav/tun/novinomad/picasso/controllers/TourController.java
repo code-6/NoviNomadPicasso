@@ -38,11 +38,11 @@ public class TourController {
     @RequestMapping("/add")
     public ModelAndView getAddTourView(Model model) {
         var map = new HashMap<String, Object>();
-
-        map.put("tour", new Tour());
+        var tour = new Tour();
+        map.put("tour", tour);
         // todo : get drivers list from cash data
         map.put("drivers", driverService.getDriversList());
-
+        map.put("driversExclude",tour.getDrivers());
         return new ModelAndView("addTourPage.html", map);
     }
 
@@ -60,16 +60,20 @@ public class TourController {
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
-        // exclude already attached drivers
+        // exclude already attached drivers from view
         allDrivers.removeAll(tour.get().getDrivers());
         mav.addObject("drivers", allDrivers);
+        mav.addObject("driversExclude",tour.get().getDrivers());
         mav.setViewName("addTourPage.html");
         return mav;
     }
 
+
+
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addTourAction(@ModelAttribute("tour") Tour tour,
-                                @RequestParam(required = false, name = "driverId") List<Long> driverId,
+                                @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,
+                                @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                 Model model) {
         logger.debug("addTourAction TOUR PARAM = " + getString(tour));
         var t = tourService.getTour(tour.getId());
@@ -86,14 +90,23 @@ public class TourController {
             tour.setDays(end.getDayOfYear() - start.getDayOfYear());
         }
 
-        if (driverId != null)
-            if (driverId.size() > 0)
-                for (Long id : driverId) {
+        if (drivers2attach != null)
+            if (drivers2attach.size() > 0)
+                for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
 //                    if(Validator.overlaps(driver.get(), start, end)){
 //                        // todo : show error to user
 //                    }
                     tour.addDriver(driver);
+                }
+        if (drivers2exclude != null)
+            if (drivers2exclude.size() > 0)
+                for (Long id : drivers2exclude) {
+                    var driver = driverService.getDriver(id);
+//                    if(Validator.overlaps(driver.get(), start, end)){
+//                        // todo : show error to user
+//                    }
+                    tour.deleteDriver(driver.get());
                 }
 
         logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
@@ -118,6 +131,4 @@ public class TourController {
 
         return "redirect:/tours/add";
     }
-
-
 }

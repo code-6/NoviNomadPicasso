@@ -27,11 +27,18 @@
 			<tr>
 				<td>Attach a driver</td>
 				<td>
-					<select th:name="driverId" multiple="multiple">
+					<select th:name="drivers2attach" multiple="multiple">
 						<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
 						<option th:each="d : ${drivers}" th:value="${d.driverId}"
 						        th:text="${d.driverId+' '+d.fullName}">
 						</option>
+					</select>
+				</td>
+				<td>Exclude driver</td>
+				<td>
+					<select th:name="drivers2exclude" multiple="multiple">
+						<option th:each="d : ${driversExclude}" th:value="${d.driverId}"
+								th:text="${d.driverId+' '+d.fullName}">
 					</select>
 				</td>
 			</tr>

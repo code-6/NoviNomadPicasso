@@ -67,6 +67,14 @@ public class Tour implements Serializable {
         drivers.addAll(_drivers);
     }
 
+    public void deleteDriver(Driver driver){
+        drivers.remove(driver);
+    }
+
+    public void deleteDriver(Collection<Driver> _drivers){
+        drivers.removeAll(_drivers);
+    }
+
     public int getDays() {
         return days;
     }
