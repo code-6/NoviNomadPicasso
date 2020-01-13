@@ -15,7 +15,7 @@ public class TourService {
     @Autowired
     ITourRepo repo;
 
-    public void createTour(Tour tour) {
+    public void createOrUpdateTour(Tour tour) {
         repo.save(tour);
     }
 
@@ -27,10 +27,10 @@ public class TourService {
         return repo.findAll();
     }
 
-    public Tour getTour(String name) {
+    public Tour getTour(String tittle) {
         var allTours = getAllTours();
         for (Tour t : allTours) {
-            if (t.getTittle().toLowerCase().equals(name.toLowerCase()))
+            if (t.getTittle().toLowerCase().equals(tittle.toLowerCase()))
                 return t;
         }
         return null;

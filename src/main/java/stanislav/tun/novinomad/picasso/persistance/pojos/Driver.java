@@ -33,7 +33,7 @@ public class Driver implements Serializable {
 //    private Set<Tour> tours = new HashSet<>();
 
     public Driver() {
-        System.out.println("Start create new driver");
+
     }
 
     public Driver(String firstName, String lastName){
@@ -74,6 +74,9 @@ public class Driver implements Serializable {
     }
 
     public String getMiddleName() {
+        if(middleName == null)
+            return "";
+
         return middleName;
     }
 
@@ -82,7 +85,7 @@ public class Driver implements Serializable {
     }
 
     public String getFullName() {
-        return String.format("%s %s %s", firstName, middleName, lastName);
+        return String.format("%s %s %s", firstName == null ? "" : firstName, middleName == null ? "" : middleName, lastName == null ? "" : lastName);
     }
 
 

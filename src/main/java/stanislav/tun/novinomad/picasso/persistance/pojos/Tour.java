@@ -7,16 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Indexed;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Indexed
 @Entity(name = "tours")
@@ -62,6 +60,11 @@ public class Tour {
         driver.setLastName(lastName);
         drivers.add(driver);
     }
+
+    public void addDriver(Set<Driver> _drivers){
+        drivers.addAll(_drivers);
+    }
+
     public int getDays() {
         return days;
     }
@@ -117,8 +120,4 @@ public class Tour {
     public void setDrivers(Set<Driver> drivers) {
         this.drivers = drivers;
     }
-
-
-
-
 }

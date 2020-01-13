@@ -27,10 +27,7 @@ public class DriverController {
 
     @RequestMapping(value="/edit{id}")
     public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId){
-        System.out.println("Driver id to be edited = "+driverId);
         var driver = driverService.getDriver(driverId);
-        System.out.println("Driver to be edited "+ JsonPrinter.getString(driver.get()));
-
         var mav = new ModelAndView();
         mav.addObject("driver", driver);
         mav.setViewName("addDriverPage.html");
@@ -52,6 +49,7 @@ public class DriverController {
     public String addOrUpdateDriverAction(Driver driver) {
         System.out.println("driver to be created or updated = "+JsonPrinter.getString(driver));
         driverService.createOrUpdateDriver(driver);
+
         return "redirect:/drivers/add";
     }
 }

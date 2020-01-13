@@ -12,9 +12,7 @@ import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 
@@ -34,7 +32,8 @@ public class TourController {
     public ModelAndView getAddTourView(Model model) {
         var map = new HashMap<String, Object>();
 
-        map.put("tourForm", new Tour());
+        map.put("tour", new Tour());
+        // todo : get drivers list from cash data
         map.put("drivers", driverService.getDriversList());
 
         return new ModelAndView("addTourPage.html", map);
@@ -49,13 +48,12 @@ public class TourController {
 
     @RequestMapping(value="/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId){
-        System.out.println("Tour id to be edited = "+tourId);
         var tour = tourService.getTour(tourId);
-        System.out.println("Tour to be edited "+tourId.toString());
-
+        System.out.println("getEditTourView TOUR TO EDIT "+getString(tour.get()));
         var mav = new ModelAndView();
-        mav.addObject("tourForm", tour);
+        mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
+        // exclude already attached drivers
         allDrivers.removeAll(tour.get().getDrivers());
         mav.addObject("drivers", allDrivers);
         mav.setViewName("addTourPage.html");
@@ -63,28 +61,32 @@ public class TourController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String addTourAction(@ModelAttribute("tourForm") @Valid Tour tour,
+    public String addTourAction(@ModelAttribute("tour") Tour tour,
                                 @RequestParam(required = false, name = "driverId") List<Long> driverId,
                                 Model model) {
-
+        System.out.println("addTourAction TOUR PARAM = "+getString(tour));
+        var t = tourService.getTour(tour.getId());
+        System.out.println("DEBUG tour optional isEmpty: "+t.isEmpty()+"; isPresent: "+t.isPresent());
         var start = tour.getStartDate();
         var end = tour.getEndDate();
 
         if (start != null && end != null)
             tour.setDays(end.getDayOfYear() - start.getDayOfYear());
 
-        if(driverId != null){
-            if( driverId.size() > 0){
-                System.out.println("DriverS more than 1");
+        if(!t.isEmpty() && t.isPresent()){
+            Set<Driver> tDrivers = t.get().getDrivers();
+            tour.addDriver(tDrivers);
+        }
+
+        if(driverId != null)
+            if( driverId.size() > 0)
                 for(Long id : driverId){
-                    System.out.println("Driver id in addTourAction param = "+ id);
                     var driver = driverService.getDriver(id);
-                    System.out.println(getString(driver.get()));
                     tour.addDriver(driver);
                 }
-            }
-        }
-        tourService.createTour(tour);
+
+        System.out.println("addTourAction TOUR BEFORE INSERT = "+getString(tour));
+        tourService.createOrUpdateTour(tour);
         model.addAttribute("tour", tour);
         return "redirect:/tours/add";
     }
@@ -97,18 +99,22 @@ public class TourController {
         var driver = new Driver("asdasd", "asdasf");
         driverService.createOrUpdateDriver(driver);
         tour.addDriver(Optional.of(driver));
-        tourService.createTour(tour);
+        tourService.createOrUpdateTour(tour);
     }
 
     // todo : debug method. Remove for production
     @RequestMapping("/init")
     public String init(){
         // todo: remove saving drivers!
-        var d1 = new Driver("Stanislav", "Tun");
-        var d2 = new Driver("Alexander", "Baratov");
+        var d1 = new Driver("Ryan", "Cooper");
+        var d2 = new Driver("Carol", "Shelby");
+        var d3 = new Driver("Michael","Schumacher");
+        var d4 = new Driver("Ken","Block");
 
         driverService.createOrUpdateDriver(d1);
         driverService.createOrUpdateDriver(d2);
+        driverService.createOrUpdateDriver(d3);
+        driverService.createOrUpdateDriver(d4);
 
         return "redirect:/tours/add";
     }
