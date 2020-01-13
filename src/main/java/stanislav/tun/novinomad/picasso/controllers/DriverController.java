@@ -1,5 +1,7 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,8 @@ public class DriverController {
 
     @Autowired
     DriverService driverService;
+
+    Logger logger = LoggerFactory.getLogger(DriverController.class);
 
     @RequestMapping("/list")
     public ModelAndView getDriversListView() {
@@ -47,7 +51,7 @@ public class DriverController {
     // action todo: make single method for adding driver to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addOrUpdateDriverAction(Driver driver) {
-        System.out.println("driver to be created or updated = "+JsonPrinter.getString(driver));
+       logger.debug("driver to be created or updated = "+JsonPrinter.getString(driver));
         driverService.createOrUpdateDriver(driver);
 
         return "redirect:/drivers/add";

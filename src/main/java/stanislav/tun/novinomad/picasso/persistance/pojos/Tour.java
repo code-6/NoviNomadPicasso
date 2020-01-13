@@ -2,24 +2,20 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Indexed;
-import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.persistence.*;
-import java.text.DateFormat;
-import java.time.LocalDateTime;
+import java.io.Serializable;
+
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 @Indexed
 @Entity(name = "tours")
 @JsonRootName(value = "tour")
-public class Tour {
+public class Tour implements Serializable {
     @JsonIgnore
     @Transient
     private static final String datePattern = "yyyy-MM-dd'T'HH:mm";
@@ -34,7 +30,7 @@ public class Tour {
     private long id;
     @Column
     @DateTimeFormat(pattern = datePattern)
-    private LocalDateTime startDate;
+    private org.joda.time.LocalDateTime startDate;
     @Column
     @DateTimeFormat(pattern = datePattern)
     private LocalDateTime endDate;

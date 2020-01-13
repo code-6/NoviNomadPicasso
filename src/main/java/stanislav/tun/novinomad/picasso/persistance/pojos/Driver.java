@@ -1,15 +1,12 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Indexed
 @Entity(name = "drivers")
@@ -29,8 +26,8 @@ public class Driver implements Serializable {
     @Column
     private String middleName;
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Tour> tours = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "drivers")
+    private Set<Tour> tours = new HashSet<>();
 
     public Driver() {
 
@@ -41,13 +38,13 @@ public class Driver implements Serializable {
         this.lastName = lastName;
     }
 
-//    public Set<Tour> getTours() {
-//        return tours;
-//    }
-//
-//    public void setTours(Set<Tour> tours) {
-//        this.tours = tours;
-//    }
+    public Set<Tour> getTours() {
+        return tours;
+    }
+
+    public void setTours(Set<Tour> tours) {
+        this.tours = tours;
+    }
 
     public long getDriverId() {
         return driverId;

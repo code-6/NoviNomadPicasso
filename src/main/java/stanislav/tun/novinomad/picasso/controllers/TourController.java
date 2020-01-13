@@ -1,6 +1,8 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,9 +12,12 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
+import stanislav.tun.novinomad.picasso.util.Validator;
 
-import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 
@@ -27,6 +32,8 @@ public class TourController {
 
     @Autowired
     ObjectMapper mapper;
+
+    Logger logger = LoggerFactory.getLogger(TourController.class);
 
     @RequestMapping("/add")
     public ModelAndView getAddTourView(Model model) {
@@ -49,7 +56,7 @@ public class TourController {
     @RequestMapping(value="/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId){
         var tour = tourService.getTour(tourId);
-        System.out.println("getEditTourView TOUR TO EDIT "+getString(tour.get()));
+        logger.debug("getEditTourView TOUR TO EDIT "+getString(tour.get()));
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
@@ -64,28 +71,32 @@ public class TourController {
     public String addTourAction(@ModelAttribute("tour") Tour tour,
                                 @RequestParam(required = false, name = "driverId") List<Long> driverId,
                                 Model model) {
-        System.out.println("addTourAction TOUR PARAM = "+getString(tour));
+       logger.debug("addTourAction TOUR PARAM = "+getString(tour));
         var t = tourService.getTour(tour.getId());
-        System.out.println("DEBUG tour optional isEmpty: "+t.isEmpty()+"; isPresent: "+t.isPresent());
+       logger.debug("DEBUG tour optional isEmpty: "+t.isEmpty()+"; isPresent: "+t.isPresent());
         var start = tour.getStartDate();
         var end = tour.getEndDate();
-
-        if (start != null && end != null)
-            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
 
         if(!t.isEmpty() && t.isPresent()){
             Set<Driver> tDrivers = t.get().getDrivers();
             tour.addDriver(tDrivers);
         }
 
+        if (start != null && end != null){
+            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
+        }
+
         if(driverId != null)
             if( driverId.size() > 0)
                 for(Long id : driverId){
                     var driver = driverService.getDriver(id);
+                    if(Validator.overlaps(driver.get(), start, end)){
+                        // todo : show error to user
+                    }
                     tour.addDriver(driver);
                 }
 
-        System.out.println("addTourAction TOUR BEFORE INSERT = "+getString(tour));
+       logger.debug("addTourAction TOUR BEFORE INSERT = "+getString(tour));
         tourService.createOrUpdateTour(tour);
         model.addAttribute("tour", tour);
         return "redirect:/tours/add";
