@@ -1,6 +1,7 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.Cascade;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
@@ -11,9 +12,12 @@ import java.util.Set;
 @Indexed
 @Entity(name = "drivers")
 @JsonRootName(value = "driver")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "driverId")
 public class Driver implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "driver_id")
     private long driverId;
 
@@ -26,7 +30,9 @@ public class Driver implements Serializable {
     @Column
     private String middleName;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "drivers")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drivers")
+    @JsonBackReference
+    //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Tour> tours = new HashSet<>();
 
     public Driver() {

@@ -53,10 +53,10 @@ public class TourController {
         return mav;
     }
 
-    @RequestMapping(value="/edit{id}")
-    public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId){
+    @RequestMapping(value = "/edit{id}")
+    public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
         var tour = tourService.getTour(tourId);
-        logger.debug("getEditTourView TOUR TO EDIT "+getString(tour.get()));
+        logger.debug("getEditTourView TOUR TO EDIT " + tour.get());
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
@@ -71,61 +71,50 @@ public class TourController {
     public String addTourAction(@ModelAttribute("tour") Tour tour,
                                 @RequestParam(required = false, name = "driverId") List<Long> driverId,
                                 Model model) {
-       logger.debug("addTourAction TOUR PARAM = "+getString(tour));
+        logger.debug("addTourAction TOUR PARAM = " + getString(tour));
         var t = tourService.getTour(tour.getId());
-       logger.debug("DEBUG tour optional isEmpty: "+t.isEmpty()+"; isPresent: "+t.isPresent());
+        logger.debug("DEBUG tour optional isEmpty: " + t.isEmpty() + "; isPresent: " + t.isPresent());
         var start = tour.getStartDate();
         var end = tour.getEndDate();
 
-        if(!t.isEmpty() && t.isPresent()){
+        if (!t.isEmpty() && t.isPresent()) {
             Set<Driver> tDrivers = t.get().getDrivers();
             tour.addDriver(tDrivers);
         }
 
-        if (start != null && end != null){
+        if (start != null && end != null) {
             tour.setDays(end.getDayOfYear() - start.getDayOfYear());
         }
 
-        if(driverId != null)
-            if( driverId.size() > 0)
-                for(Long id : driverId){
+        if (driverId != null)
+            if (driverId.size() > 0)
+                for (Long id : driverId) {
                     var driver = driverService.getDriver(id);
-                    if(Validator.overlaps(driver.get(), start, end)){
-                        // todo : show error to user
-                    }
+//                    if(Validator.overlaps(driver.get(), start, end)){
+//                        // todo : show error to user
+//                    }
                     tour.addDriver(driver);
                 }
 
-       logger.debug("addTourAction TOUR BEFORE INSERT = "+getString(tour));
+        logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
         tourService.createOrUpdateTour(tour);
         model.addAttribute("tour", tour);
         return "redirect:/tours/add";
     }
 
     // todo : debug method. Remove for production
-    @RequestMapping("/test")
-    public void createtour(){
-        var tour = new Tour();
-        tour.setTittle("Uahahaha");
-        var driver = new Driver("asdasd", "asdasf");
-        driverService.createOrUpdateDriver(driver);
-        tour.addDriver(Optional.of(driver));
-        tourService.createOrUpdateTour(tour);
-    }
-
-    // todo : debug method. Remove for production
     @RequestMapping("/init")
-    public String init(){
-        // todo: remove saving drivers!
+    public String init() {
         var d1 = new Driver("Ryan", "Cooper");
-        var d2 = new Driver("Carol", "Shelby");
-        var d3 = new Driver("Michael","Schumacher");
-        var d4 = new Driver("Ken","Block");
+        var d2 = new Driver("Ken", "Miles");
+        var d3 = new Driver("Michael", "Schumacher");
+        var d4 = new Driver("Ken", "Block");
 
         driverService.createOrUpdateDriver(d1);
         driverService.createOrUpdateDriver(d2);
         driverService.createOrUpdateDriver(d3);
         driverService.createOrUpdateDriver(d4);
+        driverService.createOrUpdateDriver(new Driver("Carroll","Shelby"));
 
         return "redirect:/tours/add";
     }

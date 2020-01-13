@@ -1,7 +1,10 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.hibernate.annotations.Cascade;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Indexed;
@@ -26,7 +29,7 @@ public class Tour implements Serializable {
 
     @Id
     @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
     @DateTimeFormat(pattern = datePattern)
@@ -41,7 +44,10 @@ public class Tour implements Serializable {
     @Column
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+
+    //@Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="tours_drivers", joinColumns = {@JoinColumn(name = "tour_id")}, inverseJoinColumns = {@JoinColumn(name="driver_id")})
     private Set<Driver> drivers = new HashSet<>();
 

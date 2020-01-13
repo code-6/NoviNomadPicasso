@@ -4,8 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
@@ -51,7 +52,7 @@ public class DriverController {
     // action todo: make single method for adding driver to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addOrUpdateDriverAction(Driver driver) {
-       logger.debug("driver to be created or updated = "+JsonPrinter.getString(driver));
+       logger.debug("driver to be created or updated = "+ JsonPrinter.getString(driver));
         driverService.createOrUpdateDriver(driver);
 
         return "redirect:/drivers/add";
