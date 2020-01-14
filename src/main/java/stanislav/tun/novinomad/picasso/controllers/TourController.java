@@ -68,8 +68,6 @@ public class TourController {
         return mav;
     }
 
-
-
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addTourAction(@ModelAttribute("tour") Tour tour,
                                 @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,

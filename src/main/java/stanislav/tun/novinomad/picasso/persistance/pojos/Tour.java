@@ -52,6 +52,7 @@ public class Tour implements Serializable {
     @Column
     private String tittle;
     @Column
+    @JsonIgnore
     private String description;
 
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)

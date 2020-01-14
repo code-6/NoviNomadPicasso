@@ -22,12 +22,15 @@ public class Driver implements Serializable {
     private long driverId;
 
     @Column
+    @JsonIgnore
     private String lastName;
 
     @Column
+    @JsonIgnore
     private String firstName;
 
     @Column
+    @JsonIgnore
     private String middleName;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drivers")
@@ -35,7 +38,7 @@ public class Driver implements Serializable {
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Tour> tours = new HashSet<>();
 
-    private Map<Tour, List<Interval>> tourTime = new HashMap<>();
+    //private Map<Tour, List<Interval>> tourTime = new HashMap<>();
 
     public Driver() {
 
