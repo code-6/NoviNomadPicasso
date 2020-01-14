@@ -1,19 +1,26 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Indexed
 @Entity(name = "tours")
@@ -25,25 +32,27 @@ public class Tour implements Serializable {
 
     @JsonIgnore
     @Transient
-    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(datePattern);
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
 
     @Id
     @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     @Column
     @DateTimeFormat(pattern = datePattern)
-    private org.joda.time.LocalDateTime startDate;
+    private LocalDateTime startDate;
+
     @Column
     @DateTimeFormat(pattern = datePattern)
     private LocalDateTime endDate;
+
     @Column
     private int days;
     @Column
     private String tittle;
     @Column
     private String description;
-
 
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JsonManagedReference

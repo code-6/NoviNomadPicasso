@@ -2,12 +2,12 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 
 import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.Cascade;
+import org.joda.time.Interval;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Indexed
 @Entity(name = "drivers")
@@ -17,7 +17,7 @@ import java.util.Set;
         property = "driverId")
 public class Driver implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "driver_id")
     private long driverId;
 
@@ -34,6 +34,8 @@ public class Driver implements Serializable {
     @JsonBackReference
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Tour> tours = new HashSet<>();
+
+    private Map<Tour, List<Interval>> tourTime = new HashMap<>();
 
     public Driver() {
 

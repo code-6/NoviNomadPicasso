@@ -56,7 +56,7 @@ public class TourController {
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
         var tour = tourService.getTour(tourId);
-        logger.debug("getEditTourView TOUR TO EDIT " + tour.get());
+        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour.get()));
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
