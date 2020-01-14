@@ -36,7 +36,7 @@ public class Tour implements Serializable {
 
     @Id
     @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
@@ -57,7 +57,7 @@ public class Tour implements Serializable {
 
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JsonManagedReference
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="tours_drivers", joinColumns = {@JoinColumn(name = "tour_id")}, inverseJoinColumns = {@JoinColumn(name="driver_id")})
     private Set<Driver> drivers = new HashSet<>();
 

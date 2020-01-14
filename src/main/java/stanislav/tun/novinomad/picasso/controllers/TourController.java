@@ -1,6 +1,9 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,5 +131,24 @@ public class TourController {
         driverService.createOrUpdateDriver(new Driver("Carroll","Shelby"));
 
         return "redirect:/tours/add";
+    }
+
+    @GetMapping("/init2")
+    public String init2(){
+        Driver driver = new Driver("Test", "Test");
+        Tour tour = new Tour();
+
+        driverService.createOrUpdateDriver(driver);
+
+        tour.setTittle("Tour 1");
+        tour.setStartDate(new LocalDateTime());
+        tour.setEndDate(new LocalDateTime(2020, 01, 20, 10, 00));
+        tour.addDriver(java.util.Optional.ofNullable(driver));
+
+        tourService.createOrUpdateTour(tour);
+
+        driver.addParticipateDate(tour, new Interval(new DateTime(), new DateTime(2020, 01, 20, 10, 00)));
+        driverService.createOrUpdateDriver(driver);
+        return "done";
     }
 }
