@@ -36,7 +36,7 @@ public class Tour implements Serializable {
 
     @Id
     @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column

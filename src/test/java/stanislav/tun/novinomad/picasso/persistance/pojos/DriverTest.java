@@ -46,19 +46,19 @@ class DriverTest {
         tourService.createOrUpdateTour(tour);
     }
 
-    @org.junit.jupiter.api.Test
-    void addParticipateDate() {
-        driver.addParticipateDate(tour, new Interval(new DateTime(), new DateTime(2020, 01, 20, 10, 00)));
-        driverService.createOrUpdateDriver(driver);
-    }
-
-    @org.junit.jupiter.api.Test
-    void testAddParticipateDate() {
-        var intervals = new ArrayList<Interval>();
-        intervals.add(new Interval(new DateTime(), new DateTime(2020, 01, 20, 10, 00)));
-        intervals.add(new Interval(new DateTime(2020, 01, 20, 10, 00),
-                new DateTime(2020, 01, 29, 10, 00)));
-        driver.addParticipateDate(tour, intervals);
-        driverService.createOrUpdateDriver(driver);
-    }
+//    @org.junit.jupiter.api.Test
+//    void addParticipateDate() {
+//        driver.addParticipateDate(tour, new Interval(new DateTime(), new DateTime(2020, 01, 20, 10, 00)));
+//        driverService.createOrUpdateDriver(driver);
+//    }
+//
+//    @org.junit.jupiter.api.Test
+//    void testAddParticipateDate() {
+//        var intervals = new ArrayList<Interval>();
+//        intervals.add(new Interval(new DateTime(), new DateTime(2020, 01, 20, 10, 00)));
+//        intervals.add(new Interval(new DateTime(2020, 01, 20, 10, 00),
+//                new DateTime(2020, 01, 29, 10, 00)));
+//        driver.addParticipateDate(tour, intervals);
+//        driverService.createOrUpdateDriver(driver);
+//    }
 }

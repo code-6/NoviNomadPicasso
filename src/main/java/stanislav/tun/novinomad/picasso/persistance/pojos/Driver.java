@@ -17,7 +17,7 @@ import java.util.*;
         property = "driverId")
 public class Driver implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "driver_id")
     private long driverId;
 
@@ -38,13 +38,16 @@ public class Driver implements Serializable {
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Tour> tours = new HashSet<>();
 
-    /*todo: learn. Sources:
-    *  https://thoughts-on-java.org/map-association-java-util-map/
+    /* todo: learn. Sources:
+    * https://thoughts-on-java.org/map-association-java-util-map/
+    * https://stackoverflow.com/questions/21096412/getting-list-of-lists-in-hibernate => https://docs.jboss.org/hibernate/orm/3.3/api/org/hibernate/transform/ResultTransformer.html
+    *
     * */
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @ElementCollection(targetClass = Tour.class)
-    private Map<Tour, List<Interval>> participateDates = new HashMap<>();
-
+//    @Column(name = "intervals")
+//    @ElementCollection(targetClass = Interval.class, fetch = FetchType.LAZY)
+//    private List<Interval> intervals = new ArrayList<>();
+//    @MapKey(name = "id")
+//    private Map<Tour, Intervals> driverIntervals = new HashMap<>();
     public Driver() {
 
     }
@@ -54,6 +57,9 @@ public class Driver implements Serializable {
         this.lastName = lastName;
     }
 
+
+
+    // getters and setters
     public Set<Tour> getTours() {
         return tours;
     }
@@ -86,21 +92,13 @@ public class Driver implements Serializable {
         this.firstName = firstName;
     }
 
-    public Map<Tour, List<Interval>> getParticipateDates() {
-        return participateDates;
-    }
-
-    public void addParticipateDate(Tour tour, Interval ... dates){
-        participateDates.put(tour, Arrays.asList(dates));
-    }
-
-    public void addParticipateDate(Tour tour, List<Interval> dates){
-        participateDates.put(tour,dates);
-    }
-
-    public void setParticipateDates(Map<Tour, List<Interval>> participateDates) {
-        this.participateDates = participateDates;
-    }
+//    public List<Interval> getIntervals() {
+//        return intervals;
+//    }
+//
+//    public void setIntervals(List<Interval> intervals) {
+//        this.intervals = intervals;
+//    }
 
     public String getMiddleName() {
         if(middleName == null)
