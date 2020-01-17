@@ -9,8 +9,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
-import java.time.LocalDateTime;
-
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
