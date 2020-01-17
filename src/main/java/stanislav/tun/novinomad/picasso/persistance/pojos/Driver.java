@@ -17,7 +17,7 @@ import java.util.*;
         property = "driverId")
 public class Driver implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "driver_id")
     private long driverId;
 
@@ -37,13 +37,6 @@ public class Driver implements Serializable {
     @JsonBackReference
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Tour> tours = new HashSet<>();
-
-    /*todo: learn. Sources:
-    *  https://thoughts-on-java.org/map-association-java-util-map/
-    * */
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @ElementCollection(targetClass = Tour.class)
-    private Map<Tour, List<Interval>> participateDates = new HashMap<>();
 
     public Driver() {
 
@@ -84,22 +77,6 @@ public class Driver implements Serializable {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public Map<Tour, List<Interval>> getParticipateDates() {
-        return participateDates;
-    }
-
-    public void addParticipateDate(Tour tour, Interval ... dates){
-        participateDates.put(tour, Arrays.asList(dates));
-    }
-
-    public void addParticipateDate(Tour tour, List<Interval> dates){
-        participateDates.put(tour,dates);
-    }
-
-    public void setParticipateDates(Map<Tour, List<Interval>> participateDates) {
-        this.participateDates = participateDates;
     }
 
     public String getMiddleName() {

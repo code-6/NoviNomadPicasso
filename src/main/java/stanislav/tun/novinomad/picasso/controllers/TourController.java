@@ -11,15 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
+
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
-import stanislav.tun.novinomad.picasso.util.Validator;
 
+
+import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
@@ -131,24 +131,5 @@ public class TourController {
         driverService.createOrUpdateDriver(new Driver("Carroll","Shelby"));
 
         return "redirect:/tours/add";
-    }
-
-    @GetMapping("/init2")
-    public String init2(){
-        Driver driver = new Driver("Test", "Test");
-        Tour tour = new Tour();
-
-        driverService.createOrUpdateDriver(driver);
-
-        tour.setTittle("Tour 1");
-        tour.setStartDate(new LocalDateTime());
-        tour.setEndDate(new LocalDateTime(2020, 01, 20, 10, 00));
-        tour.addDriver(java.util.Optional.ofNullable(driver));
-
-        tourService.createOrUpdateTour(tour);
-
-        driver.addParticipateDate(tour, new Interval(new DateTime(), new DateTime(2020, 01, 20, 10, 00)));
-        driverService.createOrUpdateDriver(driver);
-        return "done";
     }
 }
