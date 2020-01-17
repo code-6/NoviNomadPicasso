@@ -14,9 +14,9 @@ public abstract class AbstractIntervals extends AbstractEntity {
     @ManyToOne
     private Tour tour;
     @JsonIgnore
-    private LocalDateTime from;
+    private LocalDateTime startDate;
     @JsonIgnore
-    private LocalDateTime to;
+    private LocalDateTime endDate;
 
     @NotNull
     @Transient
@@ -28,8 +28,8 @@ public abstract class AbstractIntervals extends AbstractEntity {
     public AbstractIntervals(Tour tour, MyInterval interval) {
         this.tour = tour;
         this.interval = interval;
-        from = interval.getStart();
-        to = interval.getEnd();
+        startDate = interval.getStart();
+        endDate = interval.getEnd();
     }
 
     public Tour getTour() {
@@ -40,20 +40,20 @@ public abstract class AbstractIntervals extends AbstractEntity {
         this.tour = tour;
     }
 
-    public LocalDateTime getFrom() {
-        return from;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setFrom(LocalDateTime from) {
-        this.from = from;
+    public void setStartDate(LocalDateTime from) {
+        this.startDate = from;
     }
 
-    public LocalDateTime getTo() {
-        return to;
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
-    public void setTo(LocalDateTime to) {
-        this.to = to;
+    public void setEndDate(LocalDateTime to) {
+        this.endDate = to;
     }
 
     public MyInterval getInterval() {
