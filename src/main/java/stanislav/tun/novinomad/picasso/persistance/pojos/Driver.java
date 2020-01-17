@@ -9,12 +9,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
-@Indexed
+
 @Entity(name = "drivers")
 @JsonRootName(value = "driver")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "driverId")
 public class Driver implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
