@@ -15,10 +15,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-@Indexed
+
 @Entity(name = "tours")
 @JsonRootName(value = "tour")
-public class Tour implements Serializable {
+public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
     private static final String datePattern = "yyyy-MM-dd'T'HH:mm";
@@ -26,11 +26,6 @@ public class Tour implements Serializable {
     @JsonIgnore
     @Transient
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
-
-    @Id
-    @Column(name = "tour_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
 
     @Column
     @DateTimeFormat(pattern = datePattern)
@@ -96,14 +91,6 @@ public class Tour implements Serializable {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public void setDays(int days) {
