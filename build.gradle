@@ -23,8 +23,8 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.2.2.RELEASE'
-	compile group: 'joda-time', name: 'joda-time', version: '2.10.5'
-	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: '2.10.1'
+	//compile group: 'joda-time', name: 'joda-time', version: '2.10.5'
+	//compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: '2.10.1'
     implementation 'junit:junit:4.12'
 }
 

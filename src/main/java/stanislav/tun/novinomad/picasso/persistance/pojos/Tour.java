@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
