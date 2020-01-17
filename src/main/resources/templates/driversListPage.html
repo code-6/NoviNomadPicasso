@@ -22,10 +22,10 @@
         <tbody>
         <!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
             <tr th:each="driver:${drivers}">
-                <td th:text="${driver.driverId}"></td>
+                <td th:text="${driver.getId()}"></td>
                 <td th:text="${driver.getFullName()}"></td>
                 <td>
-                    <a th:href="@{/drivers/edit{id}(id=${driver.driverId})}">edit</a>
+                    <a th:href="@{/drivers/edit{id}(id=${driver.getId()})}">edit</a>
                 </td>
             </tr>
         </tbody>
