@@ -1,22 +1,18 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.*;
-import org.hibernate.annotations.Cascade;
-import org.joda.time.Interval;
-import org.springframework.stereotype.Indexed;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity(name = "drivers")
 @JsonRootName(value = "driver")
-public class Driver implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "driver_id")
-    private long driverId;
+public class Driver extends AbstractEntity implements Serializable {
 
     @Column
     @JsonIgnore
@@ -50,14 +46,6 @@ public class Driver implements Serializable {
 
     public void setTours(Set<Tour> tours) {
         this.tours = tours;
-    }
-
-    public long getDriverId() {
-        return driverId;
-    }
-
-    public void setDriverId(long driverId) {
-        this.driverId = driverId;
     }
 
     public String getLastName() {
