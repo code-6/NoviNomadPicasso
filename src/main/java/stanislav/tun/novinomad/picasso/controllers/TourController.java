@@ -93,24 +93,24 @@ public class TourController {
         return "redirect:/tours/add";
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String addTourAction(@ModelAttribute("tour") Tour tour,
-                                @RequestParam(required = false, name = "drivers2attach") Map<Long, String> drivers2attach,
-                                @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
-                                Model model) {
-        tour = getTourDriversForEdit(tour.getId());
-
-        setTotalDays(tour);
-
-        attachDrivers(drivers2attach, tour);
-
-        excludeDrivers(drivers2exclude, tour);
-
-        logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
-        tourService.createOrUpdateTour(tour);
-        model.addAttribute("tour", tour);
-        return "redirect:/tours/add";
-    }
+//    @RequestMapping(value = "/save", method = RequestMethod.POST)
+//    public String addTourAction(@ModelAttribute("tour") Tour tour,
+//                                @RequestParam(required = false, name = "drivers2attach") Map<Long, String> drivers2attach,
+//                                @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
+//                                Model model) {
+//        tour = getTourDriversForEdit(tour.getId());
+//
+//        setTotalDays(tour);
+//
+//        attachDrivers(drivers2attach, tour);
+//
+//        excludeDrivers(drivers2exclude, tour);
+//
+//        logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
+//        tourService.createOrUpdateTour(tour);
+//        model.addAttribute("tour", tour);
+//        return "redirect:/tours/add";
+//    }
 
     // todo : debug method. Remove for production
     @RequestMapping("/init")
