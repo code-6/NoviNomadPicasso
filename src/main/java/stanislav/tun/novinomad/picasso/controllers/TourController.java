@@ -96,7 +96,7 @@ public class TourController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addTourAction(@ModelAttribute("tour") Tour tour,
                                 @RequestParam(required = false, name = "drivers2attach") Map<Long, String> drivers2attach,
-                                @RequestParam(required = false, name = "drivers2exclude") Map<Long, String> drivers2exclude,
+                                @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                 Model model) {
         tour = getTourDriversForEdit(tour.getId());
 
