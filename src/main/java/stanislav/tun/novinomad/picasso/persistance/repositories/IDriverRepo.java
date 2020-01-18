@@ -6,5 +6,5 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 
 @Repository
 public interface IDriverRepo extends CrudRepository<Driver, Long> {
-
+    void findByFullName(String name);
 }

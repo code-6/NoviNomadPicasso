@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -45,9 +47,14 @@ public class Tour extends AbstractEntity implements Serializable {
 
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JsonManagedReference
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name="tours_drivers", joinColumns = {@JoinColumn(name = "tour_id")}, inverseJoinColumns = {@JoinColumn(name="driver_id")})
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="tours_drivers", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="driver_id"))
     private Set<Driver> drivers = new HashSet<>();
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany( mappedBy = "tour", orphanRemoval = true)
+    Set<DriverTourIntervals> intervals = new HashSet<DriverTourIntervals>();
 
     public void addDriver(Optional<Driver> driver){
         drivers.add(driver.get());
@@ -119,5 +126,13 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void setDrivers(Set<Driver> drivers) {
         this.drivers = drivers;
+    }
+
+    public Set<DriverTourIntervals> getIntervals() {
+        return intervals;
+    }
+
+    public void setIntervals(Set<DriverTourIntervals> intervals) {
+        this.intervals = intervals;
     }
 }
