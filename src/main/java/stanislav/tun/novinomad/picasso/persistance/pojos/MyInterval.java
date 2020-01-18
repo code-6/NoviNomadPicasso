@@ -11,7 +11,9 @@ import java.util.List;
 
 @JsonRootName(value = "interval")
 public class MyInterval {
+    @JsonProperty
     private LocalDateTime start, end;
+    @JsonProperty
     private int totalIntervalDays;
 
     public MyInterval(@NotNull LocalDateTime start, @NotNull LocalDateTime end) throws ValidationException {
@@ -27,7 +29,7 @@ public class MyInterval {
      * Where '--' double minus is separator for start and end date, and semicolon is separator for each interval.
      * @return List of interval objects.
      * */
-    @JsonProperty("intervals")
+    //@JsonProperty("intervals")
     public static List<MyInterval> parse(String intervals) throws ValidationException {
         intervals = intervals.trim();
         var list = new ArrayList<MyInterval>();

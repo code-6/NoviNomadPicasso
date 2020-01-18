@@ -3,6 +3,8 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,16 +28,23 @@ public class Driver extends AbstractEntity implements Serializable {
     @JsonIgnore
     private String middleName;
 
+    private String fullName;
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drivers")
     @JsonBackReference
+    @Fetch(FetchMode.JOIN)
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Tour> tours = new HashSet<>();
+
+    @OneToMany( mappedBy = "driver", orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
+    Set<DriverTourIntervals> intervals = new HashSet<DriverTourIntervals>();
 
     public Driver() {
 
     }
 
-    public Driver(String firstName, String lastName){
+    public Driver(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -65,7 +74,7 @@ public class Driver extends AbstractEntity implements Serializable {
     }
 
     public String getMiddleName() {
-        if(middleName == null)
+        if (middleName == null)
             return "";
 
         return middleName;
@@ -79,5 +88,11 @@ public class Driver extends AbstractEntity implements Serializable {
         return String.format("%s %s %s", firstName == null ? "" : firstName, middleName == null ? "" : middleName, lastName == null ? "" : lastName);
     }
 
+    public Set<DriverTourIntervals> getIntervals() {
+        return intervals;
+    }
 
+    public void setIntervals(Set<DriverTourIntervals> intervals) {
+        this.intervals = intervals;
+    }
 }

@@ -1,19 +1,22 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-        import javax.persistence.Entity;
-        import javax.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@JsonRootName(value = "driver_intervals")
 public class DriverTourIntervals extends AbstractIntervals {
 
-    @ManyToOne(targetEntity = Driver.class)
+    @NotNull
+    @ManyToOne
     private Driver driver;
 
     public DriverTourIntervals() {
-    }
-
-    public DriverTourIntervals(Driver driver) {
-        this.driver = driver;
     }
 
     public DriverTourIntervals(Tour tour, MyInterval interval, Driver driver) {

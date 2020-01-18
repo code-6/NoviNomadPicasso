@@ -6,6 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -56,7 +57,9 @@ public abstract class AbstractIntervals extends AbstractEntity {
         this.endDate = to;
     }
 
-    public MyInterval getInterval() {
+    public MyInterval getInterval() throws ValidationException {
+        if(interval == null)
+            return new MyInterval(startDate, endDate);
         return interval;
     }
 
