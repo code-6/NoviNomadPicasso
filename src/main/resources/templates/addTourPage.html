@@ -40,7 +40,7 @@
 
 						<!--/*@thymesVar id="id" type="java.lang.Long"*/-->
 						<option th:each="d : ${driversExclude}" th:value="${d.id}"
-								th:text="${d.id+' '+d.getFullName}">
+								th:text="${d.id+' '+d.fullName}">
 					</select>
 				</td>
 			</tr>

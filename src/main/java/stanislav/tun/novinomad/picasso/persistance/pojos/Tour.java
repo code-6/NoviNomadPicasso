@@ -3,13 +3,14 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import org.joda.time.LocalDateTime;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
