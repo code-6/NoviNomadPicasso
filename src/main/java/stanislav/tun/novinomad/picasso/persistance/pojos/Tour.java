@@ -54,6 +54,7 @@ public class Tour extends AbstractEntity implements Serializable {
 
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
+    @JsonIgnore
     Set<DriverTourIntervals> intervals = new HashSet<DriverTourIntervals>();
 
     public void addDriver(Optional<Driver> driver){

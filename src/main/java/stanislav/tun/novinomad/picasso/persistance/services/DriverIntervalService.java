@@ -20,6 +20,7 @@ import java.util.Optional;
 public class DriverIntervalService {
 
     Logger logger = LoggerFactory.getLogger(DriverIntervalService.class);
+
     @Autowired
     IDriverIntervalRepo repo;
 
