@@ -41,8 +41,8 @@ public class TourController {
 
     Logger logger = LoggerFactory.getLogger(TourController.class);
 
-    @RequestMapping("/add")
-    public ModelAndView getAddTourView(Model model) {
+    @GetMapping("/add")
+    public ModelAndView getAddTourView() {
         var map = new HashMap<String, Object>();
         var tour = new Tour();
         map.put("tour", tour);
@@ -79,11 +79,12 @@ public class TourController {
     }
 
     // todo ; refactor to big method. change logic of tour creation
-    @RequestMapping(value = "/save{adv}", method = RequestMethod.POST)
-    public String addTourAction(@ModelAttribute("tour") Tour tour,
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public ModelAndView addTourAction(@ModelAttribute("tour") Tour tour,
                                 @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,
                                 @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
-                                @PathVariable(value = "adv") String adv) {
+                                @RequestParam(required = false, name = "adv") boolean adv) {
+        var mav = new ModelAndView();
         var t = tourService.getTour(tour.getId());
         logger.debug("DEBUG tour optional isEmpty: " + t.isEmpty() + "; isPresent: " + t.isPresent());
 
@@ -102,12 +103,19 @@ public class TourController {
         tourService.createOrUpdateTour(tour);
         //model.addAttribute("tour", tour);
         System.out.println("ADV = "+adv);
-        if(Boolean.getBoolean(adv)){
-
-            return "redirect:/tours/advanced";
+        if(adv){
+            //return "redirect:/tours/advanced";
+            mav.setViewName("advancedTourPage.html");
+            var attachedDrivers = tour.getDrivers();
+            System.out.println("DEBUG Attached drivers = "+attachedDrivers.size());
+            mav.addObject("attachedDrivers", attachedDrivers);
+            //mav.addObject("driverIntervals", new DriverTourIntervals());
+            mav.addObject("tour", tour);
+        }else {
+            mav.setViewName("addTourPage.html");
         }
 
-        return "redirect:/tours/add";
+        return mav;
     }
 
 //    @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -170,7 +178,7 @@ public class TourController {
 //                    }
                     tour.addDriver(driver);
                     // set to full tour time by default
-                    addDriverIntervals(tour, driver.get(), drivers2attach.get(id));
+                    //addDriverInterval(tour, driver.get(), drivers2attach.get(id));
                 }
     }
 
@@ -212,7 +220,12 @@ public class TourController {
 //        return t.get();
 //    }
 
-    public void addDriverIntervals(Tour tour, Driver driver, LocalDateTime from, LocalDateTime to) {
+    @PostMapping(path = "/addInterval")
+    public ModelAndView addIntervals(){
+        return new ModelAndView();
+    }
+
+    private void addDriverInterval(Tour tour, Driver driver, LocalDateTime from, LocalDateTime to) {
         try {
             var i = new MyInterval(from, to);
             var driverInterval = new DriverTourIntervals(tour, i, driver);
@@ -223,7 +236,7 @@ public class TourController {
         }
     }
 
-    public void addDriverIntervals(Tour tour, Driver driver, String intervals) {
+    private void addDriverInterval(Tour tour, Driver driver, String intervals) {
         try {
             var list = MyInterval.parse(intervals);
             for (MyInterval i : list) {
