@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+<<<<<<< Updated upstream
 	<meta charset="UTF-8">
 	<title>Advanced</title>
 	<link href="../static/css/calendar.css" th:href="@{/css/calendar.css}" rel="stylesheet" />
@@ -31,4 +32,26 @@
 			<button type="submit">Confirm</button>
 		</form>
 	</body>
+=======
+    <meta charset="UTF-8">
+    <title>Advanced</title>
+    <link href="../static/css/calendar.css" th:href="@{/css/calendar.css}" rel="stylesheet"/>
+    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<p th:text="${tour.getTittle()}"></p>
+<form th:action="@{/tours/advanced}" th:object="${driverTourDays}" method="post">
+    <table>
+        <tr th:each="d: ${attachedDrivers}">
+            <td th:text="${d.getId()+' '+d.fullName}" th:value="${d.getId()}"/>
+            <td>
+                <input type="text" placeholder="Enter days"/>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" th:filed="${tour.getId()}">
+    <button type="submit">Confirm</button>
+</form>
+</body>
+>>>>>>> Stashed changes
 </html>

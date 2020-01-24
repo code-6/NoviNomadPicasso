@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Add/edit tour</title>
+	<title>Add new tour</title>
 </head>
 <body>
-<div align="left">
-	<h1>Add/edit tour</h1>
+<div align="center">
+	<h1>Add new tour</h1>
 	<br/>
 	<!--/*@thymesVar id="tour" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
 	<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
@@ -26,30 +25,22 @@
 				<td><input id="endDate" type="datetime-local" th:field="*{endDate}"/></td>
 			</tr>
 			<tr>
-				<!--<td>Attach a driver</td>-->
+				<td>Attach a driver</td>
 				<td>
-					<!--<script th:src="@{/js/openIntervalInput.js}" type="text/javascript"></script>-->
-					<p>Attach driver</p>
-					<!--th:onselect="'addInput();'"-->
-					<select th:name="drivers2attach" multiple="multiple" id="attachDrivers">
+					<select th:name="drivers2attach" multiple="multiple">
 						<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
-						<option th:each="d : ${drivers}" th:value="${d.id}"
+						<option th:each="d : ${drivers}" th:value="${d.getId()}"
 						        th:text="${d.getId()+' '+d.fullName}">
 						</option>
-
 					</select>
-					<!--					<form>-->
-					<!--						<div id="attachInterval"> </div>-->
-					<!--					</form>-->
 				</td>
-				<!--				<td>Exclude driver</td>-->
+				<td>Exclude driver</td>
 				<td>
-					<p>Exclude driver</p>
 					<select th:name="drivers2exclude" multiple="multiple">
 
 						<!--/*@thymesVar id="id" type="java.lang.Long"*/-->
 						<option th:each="d : ${driversExclude}" th:value="${d.id}"
-						        th:text="${d.id+' '+d.fullName}">
+								th:text="${d.id+' '+d.fullName}">
 					</select>
 				</td>
 			</tr>
@@ -59,30 +50,13 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<script th:src="@{/js/openIntervalInput.js}" type="text/javascript"></script>
-					<button id="advancedButton" type="submit" th:name="adv" th:value="true" class="link-button">advanced options</button>
-					<button type="submit">Confirm</button>
+					<button type="submit">Create</button>
 				</td>
 			</tr>
 		</table>
 		<input type="hidden" th:field="*{id}">
-
-		<dialog id="advancedDialog">
-			<p>This is an HTML dialog! Click the button to close it.</p>
-			<button id="close">close</button>
-		</dialog>
 	</form>
 	<a href="/tours/list">Back to tours list</a>
 </div>
 </body>
-<!--<script>-->
-<!--    var dialog = document.querySelector('dialog');-->
-
-<!--    document.querySelector('#advancedButton').onclick = function() {-->
-<!--        dialog.show();-->
-<!--    };-->
-<!--    document.querySelector('#close').onclick = function() {-->
-<!--        dialog.close();-->
-<!--    };-->
-<!--</script>-->
 </html>
