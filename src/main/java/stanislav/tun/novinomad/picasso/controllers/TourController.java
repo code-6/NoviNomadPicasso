@@ -127,6 +127,11 @@ public class TourController {
         return mav;
     }
 
+    @GetMapping("/")
+    public String testCalendar(){
+        return "pageWithCalendar.html";
+    }
+
 
 //    @RequestMapping(value = "/save", method = RequestMethod.POST)
 //    public String addTourAction(@ModelAttribute("tour") Tour tour,
