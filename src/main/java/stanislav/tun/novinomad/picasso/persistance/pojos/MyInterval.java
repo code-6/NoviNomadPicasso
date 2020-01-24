@@ -38,7 +38,12 @@ public class MyInterval {
         for (String date : i) {
             // start and end dates
             var di = date.split("--");
-            list.add(new MyInterval(LocalDateTime.parse(di[0]), LocalDateTime.parse(di[1]) ));
+            try{
+                var endDate = LocalDateTime.parse(di[1]);
+                list.add(new MyInterval(LocalDateTime.parse(di[0]), endDate));
+            }catch (Exception e){
+                list.add(new MyInterval(LocalDateTime.parse(di[0]), LocalDateTime.parse(di[0])));
+            }
         }
         return list;
     }
@@ -78,5 +83,5 @@ public class MyInterval {
         list.add(end);
         return list;
     }
-
+    // todo : create method that turns list of days to intervals;
 }

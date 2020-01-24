@@ -9,14 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import stanislav.tun.novinomad.picasso.persistance.pojos.DriverTourIntervals;
-import stanislav.tun.novinomad.picasso.persistance.pojos.MyInterval;
-import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
+import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverIntervalService;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
-
-import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 
 import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
@@ -109,8 +105,9 @@ public class TourController {
             var attachedDrivers = tour.getDrivers();
             System.out.println("DEBUG Attached drivers = "+attachedDrivers.size());
             mav.addObject("attachedDrivers", attachedDrivers);
-            //mav.addObject("driverIntervals", new DriverTourIntervals());
+            mav.addObject("driversDays", new DTDays());
             mav.addObject("tour", tour);
+            // todo: add DriverTourInterval object
         }else {
             mav.setViewName("addTourPage.html");
         }
@@ -168,36 +165,10 @@ public class TourController {
                 }
     }
 
-    private void attachDrivers(Map<Long, String> drivers2attach, Tour tour) {
-        if (drivers2attach != null)
-            if (drivers2attach.size() > 0)
-                for (Long id : drivers2attach.keySet()) {
-                    var driver = driverService.getDriver(id);
-//                    if(Validator.overlaps(driver.get(), start, end)){
-//                        // todo : show error to user
-//                    }
-                    tour.addDriver(driver);
-                    // set to full tour time by default
-                    //addDriverInterval(tour, driver.get(), drivers2attach.get(id));
-                }
-    }
-
     private void excludeDrivers(List<Long> drivers2exclude, Tour tour) {
         if (drivers2exclude != null)
             if (drivers2exclude.size() > 0)
                 for (Long id : drivers2exclude) {
-                    var driver = driverService.getDriver(id);
-//                    if(Validator.overlaps(driver.get(), start, end)){
-//                        // todo : show error to user
-//                    }
-                    tour.deleteDriver(driver.get());
-                }
-    }
-
-    private void excludeDrivers(Map<Long, String> drivers2exclude, Tour tour) {
-        if (drivers2exclude != null)
-            if (drivers2exclude.size() > 0)
-                for (Long id : drivers2exclude.keySet()) {
                     var driver = driverService.getDriver(id);
 //                    if(Validator.overlaps(driver.get(), start, end)){
 //                        // todo : show error to user
@@ -220,33 +191,6 @@ public class TourController {
 //        return t.get();
 //    }
 
-    @PostMapping(path = "/addInterval")
-    public ModelAndView addIntervals(){
-        return new ModelAndView();
-    }
 
-    private void addDriverInterval(Tour tour, Driver driver, LocalDateTime from, LocalDateTime to) {
-        try {
-            var i = new MyInterval(from, to);
-            var driverInterval = new DriverTourIntervals(tour, i, driver);
-            driverIntervalService.createOrUpdateInterval(driverInterval);
-        } catch (ValidationException e) {
-            // todo : display error to user
-            e.printStackTrace();
-        }
-    }
 
-    private void addDriverInterval(Tour tour, Driver driver, String intervals) {
-        try {
-            var list = MyInterval.parse(intervals);
-            for (MyInterval i : list) {
-                var driverInterval = new DriverTourIntervals(tour, i, driver);
-                driverIntervalService.createOrUpdateInterval(driverInterval);
-            }
-
-        } catch (ValidationException e) {
-            // todo : display error to user
-            e.printStackTrace();
-        }
-    }
 }

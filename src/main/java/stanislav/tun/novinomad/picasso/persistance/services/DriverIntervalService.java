@@ -4,14 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import stanislav.tun.novinomad.picasso.controllers.TourController;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.DriverTourIntervals;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverIntervalRepo;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
