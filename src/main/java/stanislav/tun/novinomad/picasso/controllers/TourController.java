@@ -3,7 +3,6 @@ package stanislav.tun.novinomad.picasso.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +13,7 @@ import stanislav.tun.novinomad.picasso.persistance.services.DriverIntervalServic
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
-import javax.xml.bind.ValidationException;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 
@@ -69,17 +63,18 @@ public class TourController {
         mav.setViewName("addTourPage.html");
         return mav;
     }
+
     @RequestMapping(value = "/advanced")
-    public String getAdvancedPage(){
+    public String getAdvancedPage() {
         return "advancedTourPage.html";
     }
 
     // todo ; refactor to big method. change logic of tour creation
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView addTourAction(@ModelAttribute("tour") Tour tour,
-                                @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,
-                                @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
-                                @RequestParam(required = false, name = "adv") boolean adv) {
+                                      @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,
+                                      @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
+                                      @RequestParam(required = false, name = "adv") boolean adv) {
         var mav = new ModelAndView();
         var t = tourService.getTour(tour.getId());
         logger.debug("DEBUG tour optional isEmpty: " + t.isEmpty() + "; isPresent: " + t.isPresent());
@@ -98,22 +93,40 @@ public class TourController {
         logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
         tourService.createOrUpdateTour(tour);
         //model.addAttribute("tour", tour);
-        System.out.println("ADV = "+adv);
-        if(adv){
+        System.out.println("ADV = " + adv);
+        if (adv) {
             //return "redirect:/tours/advanced";
             mav.setViewName("advancedTourPage.html");
             var attachedDrivers = tour.getDrivers();
-            System.out.println("DEBUG Attached drivers = "+attachedDrivers.size());
-            mav.addObject("attachedDrivers", attachedDrivers);
-            mav.addObject("driversDays", new DTDays());
+            var wrapper = new DriverMapWrapper();
+            for (Driver d : attachedDrivers) {
+                wrapper.getMap().put(d, "");
+            }
+            System.out.println("debug map size after add attached drivers as a key "+wrapper.getMap().size());
+            mav.addObject("driversWrapper", wrapper);
             mav.addObject("tour", tour);
             // todo: add DriverTourInterval object
-        }else {
+        } else {
             mav.setViewName("addTourPage.html");
         }
 
         return mav;
     }
+
+    @PostMapping("advanced/save")
+    public ModelAndView advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper){
+        System.out.println("map size "+wrapper.getMap().size());
+        for (Driver d : wrapper.getMap().keySet()) {
+            Driver driver = d;
+            System.out.println("key= "+driver.getFullName()+" value= "+wrapper.getMap().get(d));
+        }
+//        System.out.println("tour= "+tour.getTittle());
+        var mav = new ModelAndView();
+        mav.addObject("driversWrapper", wrapper);
+        mav.setViewName("toursListPage.html");
+        return mav;
+    }
+
 
 //    @RequestMapping(value = "/save", method = RequestMethod.POST)
 //    public String addTourAction(@ModelAttribute("tour") Tour tour,
@@ -190,7 +203,6 @@ public class TourController {
 //
 //        return t.get();
 //    }
-
 
 
 }

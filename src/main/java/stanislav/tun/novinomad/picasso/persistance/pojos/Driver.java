@@ -9,6 +9,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -94,5 +95,19 @@ public class Driver extends AbstractEntity implements Serializable {
 
     public void setIntervals(Set<DriverTourIntervals> intervals) {
         this.intervals = intervals;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Driver)) return false;
+        if (!super.equals(o)) return false;
+        Driver driver = (Driver) o;
+        return fullName.equals(driver.fullName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), fullName);
     }
 }
