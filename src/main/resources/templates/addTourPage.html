@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{fragments/mainLayout}">
 <head>
-	<meta charset="UTF-8">
-	<title>Add/edit tour</title>
-</head>
 <body>
-<div align="left">
+<div layout:fragment="content" class="container">
 	<h1>Add/edit tour</h1>
 	<br/>
 	<!--/*@thymesVar id="tour" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
 	<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
 	<form action="#" th:action="@{/tours/save}" th:object="${tour}" method="post">
-		<table border="0" cellpadding="10">
+		<table cellpadding="10">
 			<tr>
 				<td>Tittle:</td>
-				<td><input type="text" th:field="*{tittle}"/></td>
+				<td><input class="form-control form-control-sm" type="text" th:field="*{tittle}"/></td>
 			</tr>
 			<tr>
 				<td>Start date:</td>
-				<td><input id="startDate" type="date" th:field="*{startDate}"/></td>
+				<td><input class="form-control form-control-sm" id="startDate" type="date" th:field="*{startDate}"/></td>
 			</tr>
 			<tr>
 				<td>End date:</td>
-				<td><input id="endDate" type="date" th:field="*{endDate}"/></td>
+				<td><input class="form-control form-control-sm" id="endDate" type="date" th:field="*{endDate}"/></td>
 			</tr>
 			<tr>
 				<!--<td>Attach a driver</td>-->
@@ -31,21 +29,17 @@
 					<!--<script th:src="@{/js/openIntervalInput.js}" type="text/javascript"></script>-->
 					<p>Attach driver</p>
 					<!--th:onselect="'addInput();'"-->
-					<select th:name="drivers2attach" multiple="multiple" id="attachDrivers">
+					<select th:name="drivers2attach" multiple="multiple" id="attachDrivers" class="form-control">
 						<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
 						<option th:each="d : ${drivers}" th:value="${d.id}"
 						        th:text="${d.getId()+' '+d.fullName}">
 						</option>
 
 					</select>
-					<!--					<form>-->
-					<!--						<div id="attachInterval"> </div>-->
-					<!--					</form>-->
 				</td>
-				<!--				<td>Exclude driver</td>-->
 				<td>
 					<p>Exclude driver</p>
-					<select th:name="drivers2exclude" multiple="multiple">
+					<select th:name="drivers2exclude" multiple="multiple" class="form-control">
 
 						<!--/*@thymesVar id="id" type="java.lang.Long"*/-->
 						<option th:each="d : ${driversExclude}" th:value="${d.id}"
@@ -55,24 +49,23 @@
 			</tr>
 			<tr>
 				<td>Description:</td>
-				<td><input type="text" th:field="*{description}"/></td>
+				<td>
+					<input class="form-control form-control-sm" type="text" th:field="*{description}"/>
+<!--					<textarea class="form-control" id="exampleTextarea" rows="3" th:field="*{description}"></textarea>-->
+				</td>
 			</tr>
+
 			<tr>
 				<td colspan="2">
-					<script th:src="@{/js/openIntervalInput.js}" type="text/javascript"></script>
-					<button id="advancedButton" type="submit" th:name="adv" th:value="true" class="link-button">advanced options</button>
-					<button type="submit">Confirm</button>
+<!--					<script th:src="@{/js/openIntervalInput.js}" type="text/javascript"></script>-->
+					<button id="advancedButton" type="submit" th:name="adv" th:value="true" class="btn btn-outline-warning">advanced options</button>
+					<button type="submit" class="btn btn-outline-success">Confirm</button>
 				</td>
 			</tr>
 		</table>
 		<input type="hidden" th:field="*{id}">
-
-		<dialog id="advancedDialog">
-			<p>This is an HTML dialog! Click the button to close it.</p>
-			<button id="close">close</button>
-		</dialog>
 	</form>
-	<a href="/tours/list">Back to tours list</a>
+
 </div>
 </body>
 <!--<script>-->

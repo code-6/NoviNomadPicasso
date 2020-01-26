@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mainLayout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Drivers</title>
+
 </head>
 
 <body>
-<div align="left">
-    <a href="/tours/list">Tours</a>
+<div layout:fragment="content" class="container">
     <h1>Drivers</h1>
     <br/>
-    <table border="1">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
@@ -25,15 +25,18 @@
                 <td th:text="${driver.getId()}"></td>
                 <td th:text="${driver.getFullName()}"></td>
                 <td>
-                    <a th:href="@{/drivers/edit{id}(id=${driver.getId()})}">edit</a>
+                    <a th:href="@{/drivers/edit{id}(id=${driver.getId()})}">
+                        <button type="button" class="btn btn-outline-secondary" >edit</button>
+                    </a>
+<!--                    <button th:target="@{/drivers/edit{id}(id=${driver.getId()})}" type="button" class="btn btn-outline-secondary">edit</button>-->
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <a href="/drivers/add">Add new driver</a>
-
-
+    <a href="/drivers/add">
+        <button type="button" class="btn btn-outline-success">add new driver</button>
+    </a>
 </div>
 
 </body>

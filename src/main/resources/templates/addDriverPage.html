@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mainLayout}">
 <head>
     <meta charset="UTF-8">
     <title>Add/edit driver</title>
 </head>
 <body>
-    <div align="left">
+    <div layout:fragment="content" class="container">
         <h1>Add/edit driver</h1>
         <br/>
         <!--/*@thymesVar id="driver" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
@@ -28,7 +30,7 @@
 
                 <tr>
                     <td colspan="2">
-                        <button type="submit">Confirm</button>
+                        <button type="submit" class="btn btn-outline-success">Confirm</button>
                     </td>
                 </tr>
 
@@ -36,7 +38,7 @@
             <!--need for edit function, to auto populate fields with data of driver taken by given id-->
             <input type="hidden" th:field="*{id}">
         </form>
-        <a href="/drivers/list">Back to list of drivers</a>
+
     </div>
 </body>
 </html>

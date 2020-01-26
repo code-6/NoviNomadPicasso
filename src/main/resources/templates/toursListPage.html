@@ -9,7 +9,7 @@
 <div layout:fragment="content" class="container">
     <h1>Tours</h1>
     <br/>
-    <table border="1">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>Id</th>
@@ -22,7 +22,7 @@
         </tr>
         </thead>
 
-        <tbody>
+        <tbody >
         <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
         <tr th:each="tour:${toursList}">
             <td th:text="${tour.id}"></td>
@@ -39,12 +39,17 @@
 
             <td th:text="${tour.description}"></td>
             <td>
-                <a th:href="@{/tours/edit{id}(id=${tour.id})}">edit</a>
+                <a th:href="@{/tours/edit{id}(id=${tour.id})}">
+                    <button type="button" class="btn btn-outline-secondary" >edit</button>
+                </a>
+<!--                <button th:href="@{/tours/edit{id}(id=${tour.id})}" type="button" class="btn btn-outline-secondary">edit</button>-->
             </td>
         </tr>
         </tbody>
     </table>
-    <a href="/tours/add">Add new tour</a>
+    <a href="/tours/add">
+        <button type="button" class="btn btn-outline-success">add new tour</button>
+    </a>
 </div>
 </body>
 </html>
