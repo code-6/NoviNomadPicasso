@@ -3,8 +3,10 @@ package stanislav.tun.novinomad.picasso.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,7 +14,12 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverIntervalService;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
+import stanislav.tun.novinomad.picasso.util.IntervalResolver;
 
+import javax.validation.Valid;
+import javax.xml.bind.ValidationException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
@@ -71,7 +78,7 @@ public class TourController {
 
     // todo ; refactor to big method. change logic of tour creation
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView addTourAction(@ModelAttribute("tour") Tour tour,
+    public ModelAndView addTourAction(@ModelAttribute("tour") @Valid Tour tour,
                                       @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,
                                       @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
@@ -82,6 +89,7 @@ public class TourController {
         if (!t.isEmpty() && t.isPresent()) {
             Set<Driver> tDrivers = t.get().getDrivers();
             t.get().addDriver(tDrivers);
+            tour = t.get();
         }
 
         setTotalDays(tour);
@@ -94,41 +102,79 @@ public class TourController {
         tourService.createOrUpdateTour(tour);
         //model.addAttribute("tour", tour);
         System.out.println("ADV = " + adv);
+        var attachedDrivers = tour.getDrivers();
         if (adv) {
             //return "redirect:/tours/advanced";
             mav.setViewName("advancedTourPage.html");
-            var attachedDrivers = tour.getDrivers();
+
             var wrapper = new DriverMapWrapper();
             for (Driver d : attachedDrivers) {
                 wrapper.getMap().put(d, "");
             }
-            System.out.println("debug map size after add attached drivers as a key "+wrapper.getMap().size());
+            System.out.println("debug map size after add attached drivers as a key " + wrapper.getMap().size());
             mav.addObject("driversWrapper", wrapper);
             mav.addObject("tour", tour);
-            // todo: add DriverTourInterval object
         } else {
+            // todo: set default time interval for whole tour to each driver
+
+            try {
+                if (tour.getStartDate() != null && tour.getEndDate() != null) {
+                    for (Driver d : attachedDrivers) {
+                        var dti = new DriverTourIntervals(tour, new MyInterval(tour.getStartDate(), tour.getEndDate()), d);
+                        driverIntervalService.createOrUpdateInterval(dti);
+                    }
+                }
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            }
             mav.setViewName("addTourPage.html");
         }
 
         return mav;
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Date.class,
+                new CustomDateEditor(new SimpleDateFormat("dd-MM-yyyy"), true, 10));
+    }
+
+
     @PostMapping("advanced/save")
-    public ModelAndView advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper){
-        System.out.println("map size "+wrapper.getMap().size());
+    public String advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper,
+                               @RequestParam(name = "tourId") Long tourId) {
+        var tour = tourService.getTour(tourId).get();
+        //var dtiList = new ArrayList<DriverTourIntervals>();
+        System.out.println("map size " + wrapper.getMap().size());
         for (Driver d : wrapper.getMap().keySet()) {
-            Driver driver = d;
-            System.out.println("key= "+driver.getFullName()+" value= "+wrapper.getMap().get(d));
+
+            var dates = wrapper.getMap().get(d);
+            try {
+                var listIntervals = IntervalResolver.toIntervals(IntervalResolver.parseDays(dates));
+                for (MyInterval i : listIntervals) {
+                    var dti = new DriverTourIntervals();
+                    dti.setDriver(d);
+                    dti.setTour(tour);
+                    dti.setInterval(i);
+                    driverIntervalService.createOrUpdateInterval(dti);
+                }
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
+
 //        System.out.println("tour= "+tour.getTittle());
-        var mav = new ModelAndView();
-        mav.addObject("driversWrapper", wrapper);
-        mav.setViewName("toursListPage.html");
-        return mav;
+//        var mav = new ModelAndView();
+//        mav.addObject("driversWrapper", wrapper);
+//        mav.setViewName("toursListPage.html");
+        return "redirect:/tours/list";
     }
 
     @GetMapping("/")
-    public String testCalendar(){
+    public String testCalendar() {
         return "pageWithCalendar.html";
     }
 

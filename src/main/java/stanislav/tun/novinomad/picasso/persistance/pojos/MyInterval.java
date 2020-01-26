@@ -5,23 +5,23 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @JsonRootName(value = "interval")
 public class MyInterval {
     @JsonProperty
-    private LocalDateTime start, end;
+    private LocalDate start, end;
     @JsonProperty
-    private int totalIntervalDays;
+    private int totalDays;
 
-    public MyInterval(@NotNull LocalDateTime start, @NotNull LocalDateTime end) throws ValidationException {
+    public MyInterval(@NotNull LocalDate start, @NotNull LocalDate end) throws ValidationException {
         this.start = start;
         this.end = end;
         if(start.isAfter(end))
             throw new ValidationException("Wrong interval format. Start date cannot be larger than end date.");
-        totalIntervalDays = end.getDayOfYear() - start.getDayOfYear();
+        totalDays = (end.getDayOfYear() - start.getDayOfYear())+1;
     }
 
     /**
@@ -39,16 +39,16 @@ public class MyInterval {
             // start and end dates
             var di = date.split("--");
             try{
-                var endDate = LocalDateTime.parse(di[1]);
-                list.add(new MyInterval(LocalDateTime.parse(di[0]), endDate));
+                var endDate = LocalDate.parse(di[1]);
+                list.add(new MyInterval(LocalDate.parse(di[0]), endDate));
             }catch (Exception e){
-                list.add(new MyInterval(LocalDateTime.parse(di[0]), LocalDateTime.parse(di[0])));
+                list.add(new MyInterval(LocalDate.parse(di[0]), LocalDate.parse(di[0])));
             }
         }
         return list;
     }
 
-    public boolean overlaps(LocalDateTime from, LocalDateTime to){
+    public boolean overlaps(LocalDate from, LocalDate to){
         return ( (start.isBefore(to) || start.isEqual(to))&&(end.isAfter(from) || end.isEqual(from)) );
     }
 
@@ -56,24 +56,24 @@ public class MyInterval {
         return ( (start.isBefore(interval.getEnd()) || start.isEqual(interval.getEnd()))&&(end.isAfter(interval.getStart()) || end.isEqual(interval.getStart())) );
     }
 
-    public LocalDateTime getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public LocalDateTime getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public int getTotalIntervalDays() {
-        return totalIntervalDays + 1;
+    public int getTotalDays() {
+        return totalDays;
     }
 
     /**
      * @return List of interval days. Example: if start date = 01.01.2020 and end date = 04.01.2020 then result will be
      * [01.01.2020, 02.01.2020, 03.01.2020, 04.01.2020]
      * */
-    public List<LocalDateTime> toDaysList(){
-        var list = new ArrayList<LocalDateTime>();
+    public List<LocalDate> toDaysList(){
+        var list = new ArrayList<LocalDate>();
         list.add(start);
         var s = start;
         while(s.plusDays(1).isBefore(end)){
@@ -83,5 +83,15 @@ public class MyInterval {
         list.add(end);
         return list;
     }
+
+    @Override
+    public String toString() {
+        return "Interval{" +
+                "start=" + start +
+                ", end=" + end +
+                ", totalDays=" + totalDays +
+                '}';
+    }
+
     // todo : create method that turns list of days to intervals;
 }

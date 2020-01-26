@@ -3,7 +3,7 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 import org.junit.Test;
 
 import javax.xml.bind.ValidationException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -11,30 +11,30 @@ public class MyIntervalTest {
 
     @Test
     public void overlaps() throws ValidationException {
-        var i = new MyInterval(LocalDateTime.now(), LocalDateTime.now().plusDays(10));
-        var res = i.overlaps(new MyInterval(LocalDateTime.now().plusDays(11), LocalDateTime.now().plusDays(15)));
+        var i = new MyInterval(LocalDate.now(), LocalDate.now().plusDays(10));
+        var res = i.overlaps(new MyInterval(LocalDate.now().plusDays(11), LocalDate.now().plusDays(15)));
         assertFalse(res);
     }
 
     @Test
     public void overlaps2() throws ValidationException {
-        var i = new MyInterval(LocalDateTime.now(), LocalDateTime.now().plusDays(10));
-        var res = i.overlaps(new MyInterval(LocalDateTime.now().plusDays(9), LocalDateTime.now().plusDays(15)));
+        var i = new MyInterval(LocalDate.now(), LocalDate.now().plusDays(10));
+        var res = i.overlaps(new MyInterval(LocalDate.now().plusDays(9), LocalDate.now().plusDays(15)));
         assertTrue(res);
     }
 
     @Test
     public void toDaysList() throws ValidationException {
-        var d = LocalDateTime.now().plusDays(10);
-        d.plusHours(12);
-        var i = new MyInterval(LocalDateTime.now(), d);
+        var d = LocalDate.now().plusDays(10);
+        //d.plusHours(12);
+        var i = new MyInterval(LocalDate.now(), d);
         var days = i.toDaysList();
         var counter = 0;
-        for (LocalDateTime date : days) {
+        for (LocalDate date : days) {
             counter++;
             System.out.println(counter+" "+date.toString());
         }
-        System.out.println("Total days = "+i.getTotalIntervalDays());
+        System.out.println("Total days = "+i.getTotalDays());
         assertEquals(11,days.size());
 
     }
@@ -52,8 +52,8 @@ public class MyIntervalTest {
 
     @Test(expected = ValidationException.class)
     public void testConstructor() throws ValidationException {
-        var start = LocalDateTime.now();
-        var end = LocalDateTime.now().minusDays(5);
+        var start = LocalDate.now();
+        var end = LocalDate.now().minusDays(5);
         new MyInterval(start,end);
     }
 }

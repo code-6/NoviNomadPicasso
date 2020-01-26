@@ -1,54 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mainLayout}">
 <head>
-	<meta charset="UTF-8">
-	<title>Tours</title>
-	<link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet" />
-	<link href="../static/css/bootstrap-grid.css" th:href="@{/css/bootstrap-grid.css}" rel="stylesheet" />
-	<link href="../static/css/bootstrap-reboot.css" th:href="@{/css/bootstrap-reboot.css}" rel="stylesheet" />
+
 </head>
 <body>
-<div align="left">
-	<a href="/drivers/list">Drivers</a>
-	<a href="/tours/init">setup</a>
-	<h1>Tours</h1>
-	<br/>
-	<table border="1">
-		<thead>
-		<tr>
-			<th>Id</th>
-			<th>Tittle</th>
-			<th>Start date</th>
-			<th>End date</th>
-			<th>Total days</th>
-			<th>Drivers</th>
-			<th>Description</th>
-		</tr>
-		</thead>
+<div layout:fragment="content" class="container">
+    <h1>Tours</h1>
+    <br/>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tittle</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Total days</th>
+            <th>Drivers</th>
+            <th>Description</th>
+        </tr>
+        </thead>
 
-		<tbody>
-		<!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
-		<tr th:each="tour:${toursList}">
-			<td th:text="${tour.id}"></td>
-			<td th:text="${tour.tittle}"></td>
-			<td th:text="${tour.getStartDate()}"></td>
-			<td th:text="${tour.getEndDate()}"></td>
-			<td th:text="${tour.days}"></td>
-			<td>
+        <tbody>
+        <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
+        <tr th:each="tour:${toursList}">
+            <td th:text="${tour.id}"></td>
+            <td th:text="${tour.tittle}"></td>
+            <td th:text="${tour.getStartDate()}"></td>
+            <td th:text="${tour.getEndDate()}"></td>
+            <td th:text="${tour.days}"></td>
+            <td>
                 <span th:each="d: ${tour.drivers}">
                     <span th:text="${d.fullName}"></span>
 					<br/>
                 </span>
-			</td>
+            </td>
 
-			<td th:text="${tour.description}"></td>
-			<td>
-				<a th:href="@{/tours/edit{id}(id=${tour.id})}">edit</a>
-			</td>
-		</tr>
-		</tbody>
-	</table>
-	<a href="/tours/add">Add new tour</a>
+            <td th:text="${tour.description}"></td>
+            <td>
+                <a th:href="@{/tours/edit{id}(id=${tour.id})}">edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/tours/add">Add new tour</a>
 </div>
 </body>
 </html>

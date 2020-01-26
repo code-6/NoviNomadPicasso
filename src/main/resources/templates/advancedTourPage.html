@@ -515,7 +515,7 @@
 				<tr th:each="entry : ${driversWrapper.map.entrySet()}">
 					<td th:text="${entry.key.fullName}" ></td>
 					<td>
-						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{map[__${entry.key.id}__]}">
+						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{map[__${entry.key.id}__]}" th:value="*{map[__${entry.key.id}__]}">
 
 					</td>
 				</tr>
@@ -525,7 +525,7 @@
 <!-- row invokes error	Error during execution of processor 'org.thymeleaf.spring5.processor.SpringInputGeneralFieldTagProcessor'				<td><input type="text" th:field="*{map['__${entry.key.id}__']}"></td>-->
 
 			</table>
-<!--			<input type="hidden" th:name="tour" th:value="${tour}">-->
+			<input type="hidden" th:name="tourId" th:value="${tour.getId()}">
 			<button type="submit">send to controller</button>
 <!--			<div th:each="entry:${driversWrapper.map.entrySet()}">-->
 <!--				<label th:for="*{map['__${entry.key}__']}" th:text="${netry.key.fullName}"></label>-->

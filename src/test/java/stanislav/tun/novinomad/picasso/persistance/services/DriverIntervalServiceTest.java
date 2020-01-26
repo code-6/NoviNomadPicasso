@@ -16,7 +16,7 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.xml.bind.ValidationException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,25 +54,25 @@ class DriverIntervalServiceTest {
         tour2 = new Tour();
 
         tour1.setTittle("Test tour");
-        tour1.setStartDate(LocalDateTime.now());
-        tour1.setEndDate(LocalDateTime.now().plusDays(10));
+        tour1.setStartDate(LocalDate.now());
+        tour1.setEndDate(LocalDate.now().plusDays(10));
         tour1.addDriver(Optional.of(driver2));
 
         tour2.setTittle("Test tour 2");
-        tour2.setStartDate(LocalDateTime.now().plusDays(11));
-        tour2.setEndDate(LocalDateTime.now().plusDays(6));
+        tour2.setStartDate(LocalDate.now().plusDays(11));
+        tour2.setEndDate(LocalDate.now().plusDays(6));
         tour2.addDriver(Optional.of(driver1));
         tour2.addDriver(Optional.of(driver3));
 
         tourService.createOrUpdateTour(tour1);
         tourService.createOrUpdateTour(tour2);
 
-        var i1 = new MyInterval(LocalDateTime.now(), LocalDateTime.now().plusDays(3));
+        var i1 = new MyInterval(LocalDate.now(), LocalDate.now().plusDays(3));
         var di = new DriverTourIntervals(tour1, i1, driver2);
         driverIntervalService.createOrUpdateInterval(di);
 
-        var i2 = new MyInterval(LocalDateTime.now().plusDays(11), LocalDateTime.now().plusDays(14));
-        var i3 = new MyInterval(LocalDateTime.now().plusDays(14), LocalDateTime.now().plusDays(17));
+        var i2 = new MyInterval(LocalDate.now().plusDays(11), LocalDate.now().plusDays(14));
+        var i3 = new MyInterval(LocalDate.now().plusDays(14), LocalDate.now().plusDays(17));
         var di2 = new DriverTourIntervals(tour2, i2, driver1);
         var di3 = new DriverTourIntervals(tour2, i3, driver3);
 

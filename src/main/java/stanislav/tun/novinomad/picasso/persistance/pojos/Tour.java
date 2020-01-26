@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -23,19 +23,21 @@ import java.util.Set;
 public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
-    private static final String datePattern = "yyyy-MM-dd'T'HH:mm";
+    private static final String datePattern = "dd-mm-yyyy";
 
     @JsonIgnore
     @Transient
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
 
     @Column
-    @DateTimeFormat(pattern = datePattern)
-    private LocalDateTime startDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    //@Temporal(TemporalType.DATE)
+    private LocalDate startDate;
 
     @Column
-    @DateTimeFormat(pattern = datePattern)
-    private LocalDateTime endDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    //@Temporal(TemporalType.DATE)
+    private LocalDate endDate;
 
     @Column
     private int days;
@@ -85,19 +87,19 @@ public class Tour extends AbstractEntity implements Serializable {
         return days;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

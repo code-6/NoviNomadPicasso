@@ -7,7 +7,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalDate;
 
 @MappedSuperclass
 public abstract class AbstractIntervals extends AbstractEntity {
@@ -15,9 +16,9 @@ public abstract class AbstractIntervals extends AbstractEntity {
     @ManyToOne
     private Tour tour;
     @JsonIgnore
-    private LocalDateTime startDate;
+    private LocalDate startDate;
     @JsonIgnore
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @NotNull
     @Transient
@@ -41,19 +42,19 @@ public abstract class AbstractIntervals extends AbstractEntity {
         this.tour = tour;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime from) {
+    public void setStartDate(LocalDate from) {
         this.startDate = from;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime to) {
+    public void setEndDate(LocalDate to) {
         this.endDate = to;
     }
 
@@ -65,5 +66,7 @@ public abstract class AbstractIntervals extends AbstractEntity {
 
     public void setInterval(MyInterval interval) {
         this.interval = interval;
+        startDate = interval.getStart();
+        endDate = interval.getEnd();
     }
 }
