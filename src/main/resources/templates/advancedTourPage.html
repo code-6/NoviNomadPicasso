@@ -7,10 +7,6 @@
 
 <!--	<meta charset="UTF-8"><link rel="apple-touch-icon" type="image/png" href="https://static.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png">-->
 <!--	<meta name="apple-mobile-web-app-title" content="CodePen">-->
-	<link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
-	<link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">
-	<title>CodePen - Bootstrap Multi Select Date Picker</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/datepicker.css">
 	<script>
         window.console = window.console || function(t) {};
@@ -23,7 +19,7 @@
 </head>
 	<body>
 	<div layout:fragment="content" class="container">
-		<form th:action="@{/tours/advanced/save}" th:object="${driversWrapper}" method="post">
+		<form th:action="@{/tours/advanced/save}" th:object="${driversWrapper}" method="post" autocomplete="off">
 			<h1 th:text="${'Tour id: '+tour.id+' tittle: '+tour.tittle}"></h1>
 			<table>
 				<tr>
@@ -44,7 +40,7 @@
 
 			</table>
 			<input type="hidden" th:name="tourId" th:value="${tour.getId()}">
-			<button type="submit" class="btn btn-outline-success">send to controller</button>
+			<button type="submit" class="btn btn-outline-success">confirm</button>
 <!--			<div th:each="entry:${driversWrapper.map.entrySet()}">-->
 <!--				<label th:for="*{map['__${entry.key}__']}" th:text="${netry.key.fullName}"></label>-->
 <!--			</div>-->

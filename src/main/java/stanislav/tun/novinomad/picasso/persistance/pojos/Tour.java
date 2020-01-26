@@ -9,6 +9,7 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class Tour extends AbstractEntity implements Serializable {
     @Column
     private int days;
     @Column
+    @NotNull
     private String tittle;
     @Column
     @JsonIgnore
