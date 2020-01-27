@@ -58,15 +58,15 @@ public class TourController {
 
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
-        var tour = tourService.getTour(tourId);
-        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour.get()));
+        var tour = tourService.getTour(tourId).get();
+        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
         // exclude already attached drivers from view
-        allDrivers.removeAll(tour.get().getDrivers());
+        allDrivers.removeAll(tour.getDrivers());
         mav.addObject("drivers", allDrivers);
-        mav.addObject("driversExclude", tour.get().getDrivers());
+        mav.addObject("driversExclude", tour.getDrivers());
         mav.setViewName("addTourPage.html");
         return mav;
     }
@@ -83,40 +83,22 @@ public class TourController {
                                       @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
         var mav = new ModelAndView();
-        var t = tourService.getTour(tour.getId());
-        logger.debug("DEBUG tour optional isEmpty: " + t.isEmpty() + "; isPresent: " + t.isPresent());
-
-        if (!t.isEmpty() && t.isPresent()) {
-            Set<Driver> tDrivers = t.get().getDrivers();
-            t.get().addDriver(tDrivers);
-            tour = t.get();
-        }
-
         setTotalDays(tour);
-
         attachDrivers(drivers2attach, tour);
-
         excludeDrivers(drivers2exclude, tour);
 
         logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
         tourService.createOrUpdateTour(tour);
-        //model.addAttribute("tour", tour);
-        System.out.println("ADV = " + adv);
         var attachedDrivers = tour.getDrivers();
+        mav.addObject("tour", tour);
         if (adv) {
-            //return "redirect:/tours/advanced";
-            mav.setViewName("advancedTourPage.html");
-
             var wrapper = new DriverMapWrapper();
             for (Driver d : attachedDrivers) {
                 wrapper.getMap().put(d, "");
             }
-            System.out.println("debug map size after add attached drivers as a key " + wrapper.getMap().size());
             mav.addObject("driversWrapper", wrapper);
-            mav.addObject("tour", tour);
+            mav.setViewName("advancedTourPage.html");
         } else {
-            // todo: set default time interval for whole tour to each driver
-
             try {
                 if (tour.getStartDate() != null && tour.getEndDate() != null) {
                     for (Driver d : attachedDrivers) {
@@ -127,7 +109,7 @@ public class TourController {
             } catch (ValidationException e) {
                 e.printStackTrace();
             }
-            mav.setViewName("addTourPage.html");
+            mav.setViewName("redirect:/tours/add");
         }
 
         return mav;
@@ -138,7 +120,6 @@ public class TourController {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("dd-MM-yyyy"), true, 10));
     }
-
 
     @PostMapping("advanced/save")
     public String advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper,
@@ -165,38 +146,8 @@ public class TourController {
             }
 
         }
-
-//        System.out.println("tour= "+tour.getTittle());
-//        var mav = new ModelAndView();
-//        mav.addObject("driversWrapper", wrapper);
-//        mav.setViewName("toursListPage.html");
         return "redirect:/tours/list";
     }
-
-    @GetMapping("/")
-    public String testCalendar() {
-        return "pageWithCalendar.html";
-    }
-
-
-//    @RequestMapping(value = "/save", method = RequestMethod.POST)
-//    public String addTourAction(@ModelAttribute("tour") Tour tour,
-//                                @RequestParam(required = false, name = "drivers2attach") Map<Long, String> drivers2attach,
-//                                @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
-//                                Model model) {
-//        tour = getTourDriversForEdit(tour.getId());
-//
-//        setTotalDays(tour);
-//
-//        attachDrivers(drivers2attach, tour);
-//
-//        excludeDrivers(drivers2exclude, tour);
-//
-//        logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
-//        tourService.createOrUpdateTour(tour);
-//        model.addAttribute("tour", tour);
-//        return "redirect:/tours/add";
-//    }
 
     // todo : debug method. Remove for production
     @RequestMapping("/init")
@@ -216,6 +167,7 @@ public class TourController {
     }
 
     private void attachDrivers(List<Long> drivers2attach, Tour tour) {
+        tour.addDriver(tourService.getAttachedDrivers(tour.getId()));
         if (drivers2attach != null)
             if (drivers2attach.size() > 0)
                 for (Long id : drivers2attach) {
@@ -224,8 +176,6 @@ public class TourController {
 //                        // todo : show error to user
 //                    }
                     tour.addDriver(driver);
-                    // set to full tour time by default
-                    //addDriverIntervals(tour, driver.get(), tour.getStartDate(), tour.getEndDate());
                 }
     }
 
@@ -249,11 +199,4 @@ public class TourController {
             tour.setDays(end.getDayOfYear() - start.getDayOfYear());
         }
     }
-
-//    private Tour getTourDriversForEdit(long tourId) {
-//
-//        return t.get();
-//    }
-
-
 }

@@ -20,7 +20,7 @@
 	<body>
 	<div layout:fragment="content" class="container">
 		<form th:action="@{/tours/advanced/save}" th:object="${driversWrapper}" method="post" autocomplete="off">
-			<h1 th:text="${'Tour id: '+tour.id+' tittle: '+tour.tittle}"></h1>
+			<h1 th:text="${tour.tittle}"></h1>
 			<table>
 				<tr>
 					<th>Drivers:</th>

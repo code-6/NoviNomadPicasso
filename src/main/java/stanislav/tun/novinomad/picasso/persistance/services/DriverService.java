@@ -3,9 +3,12 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
+import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,13 +39,25 @@ public class  DriverService {
      * */
     @Transactional
     public Driver getDriver(String name){
-        var drivers = getDriversList();
-        for (Driver d: drivers) {
-            if(d.getFirstName().equals(name) || d.getMiddleName().equals(name) || d.getLastName().equals(name))
-                return d;
+        return repo.findByFullName(name);
+    }
+
+    public List<Tour> getToursRelatedTo(Long driverId){
+        var driver = getDriver(driverId);
+        return (List<Tour>) driver.get().getTours();
+    }
+
+    public List<Tour> getToursRelatedTo(Long driverId, LocalDate from, LocalDate to){
+        var driver = getDriver(driverId);
+        var tours = (List<Tour>) driver.get().getTours();
+        var list = new ArrayList<Tour>();
+        for (Tour t : tours) {
+            if ( (t.getStartDate().isEqual(from) || t.getStartDate().isAfter(from)) &&
+                    (t.getEndDate().isEqual(to) || t.getEndDate().isBefore(to)) ){
+                list.add(t);
+            }
         }
-        // todo: return null or throw an exception?
-        return null;
+        return list;
     }
 
 }

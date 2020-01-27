@@ -74,7 +74,8 @@ public class Tour extends AbstractEntity implements Serializable {
     }
 
     public void addDriver(Set<Driver> _drivers){
-        drivers.addAll(_drivers);
+        if(_drivers != null)
+            drivers.addAll(_drivers);
     }
 
     public void deleteDriver(Driver driver){
