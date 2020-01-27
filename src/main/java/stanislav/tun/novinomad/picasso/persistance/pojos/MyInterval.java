@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +84,20 @@ public class MyInterval {
         }
         list.add(end);
         return list;
+    }
+
+    public String toDaysStringList(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        var list = toDaysList();
+        var result = "";
+        for( int i = 0; i < list.size(); i++ ){
+            LocalDate date = list.get(i);
+            if(i == list.size()-1)
+                result += date.format(formatter);
+            else
+                result += date.format(formatter)+",";
+        }
+        return result;
     }
 
     @Override

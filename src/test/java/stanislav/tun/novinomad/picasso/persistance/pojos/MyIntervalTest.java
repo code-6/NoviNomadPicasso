@@ -56,4 +56,11 @@ public class MyIntervalTest {
         var end = LocalDate.now().minusDays(5);
         new MyInterval(start,end);
     }
+
+    @Test
+    public void toDaysStringList() throws ValidationException {
+        var i = new MyInterval(LocalDate.now(), LocalDate.now().plusDays(5));
+        var str = i.toDaysStringList();
+        System.out.println(str);
+    }
 }

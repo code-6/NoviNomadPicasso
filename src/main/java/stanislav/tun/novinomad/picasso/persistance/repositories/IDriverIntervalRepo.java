@@ -13,4 +13,5 @@ public interface IDriverIntervalRepo extends CrudRepository<DriverTourIntervals,
     Collection<DriverTourIntervals> findByDriverEquals(Driver driver);
     Collection<DriverTourIntervals> findByDriverAndTourEquals(Driver driver, Tour tour);
     Collection<DriverTourIntervals> findByTourEquals(Tour tour);
+
 }
