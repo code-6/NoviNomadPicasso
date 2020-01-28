@@ -71,44 +71,13 @@ public class TourController {
         return mav;
     }
 
-
-    private void getAdvancedPage(Tour tour, ModelAndView mav) {
-        // advanced view is dynamic, it contains list of attached drivers to the tour.
-        // also input field opposite each driver, to input days
-        var attachedDrivers = tour.getDrivers();
-        // this is wrapper to map values entered to input fields to related drivers. Used as a model for view, but not for DB
-        var wrapper = new DriverMapWrapper();
-        // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
-        for (Driver d : attachedDrivers) {
-            // this object is used for DB representation of specific attached days
-            var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
-            var allDays = "";
-            for (Iterator<DriverTourIntervals> iterator = driverTourIntervals.iterator(); iterator.hasNext(); ) {
-                var driverTourInterval = iterator.next();
-                //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
-                try {
-                    var intervalDays = driverTourInterval.getInterval().toDaysStringList();
-                    if (iterator.hasNext())
-                        allDays += intervalDays + ",";
-                    else
-                        allDays += intervalDays;
-                } catch (ValidationException e) {
-                    e.printStackTrace();
-                }
-            }
-            // in case of new intervals, value will be empty string
-            wrapper.getMap().put(d, allDays);
-        }
-        mav.addObject("driversWrapper", wrapper);
-        mav.setViewName("advancedTourPage.html");
-    }
-
     private void setDefaultIntervals(Tour tour, ModelAndView mav){
         try {
             Set<Driver> attachedDrivers = tour.getDrivers();
             if (tour.getStartDate() != null && tour.getEndDate() != null) {
                 for (Driver d : attachedDrivers) {
                     var dti = new DriverTourIntervals(tour, new MyInterval(tour.getStartDate(), tour.getEndDate()), d);
+                    //todo: why it not updates already existing rows in DB?
                     driverIntervalService.createOrUpdateInterval(dti);
                 }
             }
@@ -145,6 +114,37 @@ public class TourController {
                 new CustomDateEditor(new SimpleDateFormat("dd-MM-yyyy"), true, 10));
     }
 
+    private void getAdvancedPage(Tour tour, ModelAndView mav) {
+        // advanced view is dynamic, it contains list of attached drivers to the tour.
+        // also input field opposite each driver, to input days
+        var attachedDrivers = tour.getDrivers();
+        // this is wrapper to map values entered to input fields to related drivers. Used as a model for view, but not for DB
+        var wrapper = new DriverMapWrapper();
+        // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
+        for (Driver d : attachedDrivers) {
+            // this object is used for DB representation of specific attached days
+            var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
+            var allDays = "";
+            for (Iterator<DriverTourIntervals> iterator = driverTourIntervals.iterator(); iterator.hasNext(); ) {
+                var driverTourInterval = iterator.next();
+                //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
+                try {
+                    var intervalDays = driverTourInterval.getInterval().toDaysStringList();
+                    if (iterator.hasNext())
+                        allDays += intervalDays + ",";
+                    else
+                        allDays += intervalDays;
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+            // in case of new intervals, value will be empty string
+            wrapper.getMap().put(d, allDays);
+        }
+        mav.addObject("driversWrapper", wrapper);
+        mav.setViewName("advancedTourPage.html");
+    }
+
     @PostMapping("advanced/save")
     public ModelAndView advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper,
                                      @RequestParam(name = "tourId") Long tourId) {
@@ -167,6 +167,7 @@ public class TourController {
                 for (MyInterval i : listIntervals) {
                     //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
                     var dti = new DriverTourIntervals(tour, i, d);
+                    // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
                     driverIntervalService.createOrUpdateInterval(dti);
                 }
             } catch (ValidationException e) {
