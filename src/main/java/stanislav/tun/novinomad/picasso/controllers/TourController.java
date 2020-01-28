@@ -94,7 +94,22 @@ public class TourController {
         if (adv) {
             var wrapper = new DriverMapWrapper();
             for (Driver d : attachedDrivers) {
-                wrapper.getMap().put(d, "");
+                var dti = driverIntervalService.getAllRelatedToTourAndDriver(tour,d);
+                var value = "";
+                for (Iterator<DriverTourIntervals> iterator = dti.iterator(); iterator.hasNext(); ) {
+                    DriverTourIntervals mi = iterator.next();
+                    try {
+                        var v = mi.getInterval().toDaysStringList();
+                        if(iterator.hasNext()){
+                            value += v+",";
+                        }else{
+                            value += v;
+                        }
+                    } catch (ValidationException e) {
+                        e.printStackTrace();
+                    }
+                }
+                wrapper.getMap().put(d, value);
             }
             mav.addObject("driversWrapper", wrapper);
             mav.setViewName("advancedTourPage.html");
@@ -122,14 +137,20 @@ public class TourController {
     }
 
     @PostMapping("advanced/save")
-    public String advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper,
-                               @RequestParam(name = "tourId") Long tourId) {
+    public ModelAndView advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper,
+                                     @RequestParam(name = "tourId") Long tourId) {
+        var mav = new ModelAndView();
+        mav.addObject("driversWrapper", wrapper);
         var tour = tourService.getTour(tourId).get();
-        //var dtiList = new ArrayList<DriverTourIntervals>();
-        System.out.println("map size " + wrapper.getMap().size());
         for (Driver d : wrapper.getMap().keySet()) {
-
             var dates = wrapper.getMap().get(d);
+            // todo : fix this hodgie code (updating set didn't helps)
+            var setDti = d.getIntervals();
+            if (setDti.size() > 0) {
+                for (DriverTourIntervals dti : setDti) {
+                    driverIntervalService.delete(dti);
+                }
+            }
             try {
                 var listIntervals = IntervalResolver.toIntervals(IntervalResolver.parseDays(dates));
                 for (MyInterval i : listIntervals) {
@@ -146,7 +167,8 @@ public class TourController {
             }
 
         }
-        return "redirect:/tours/list";
+        mav.setViewName("redirect:/tours/list");
+        return mav;
     }
 
     // todo : debug method. Remove for production
@@ -167,6 +189,7 @@ public class TourController {
     }
 
     private void attachDrivers(List<Long> drivers2attach, Tour tour) {
+        // for edit purposes
         tour.addDriver(tourService.getAttachedDrivers(tour.getId()));
         if (drivers2attach != null)
             if (drivers2attach.size() > 0)

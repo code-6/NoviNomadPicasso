@@ -49,4 +49,12 @@ public class DriverIntervalService {
     public Collection<DriverTourIntervals> getAllIntervals() {
         return (Collection<DriverTourIntervals>) repo.findAll();
     }
+
+    public void delete(DriverTourIntervals driverTourIntervals){
+        repo.delete(driverTourIntervals);
+    }
+
+    public void delete(Long id){
+        repo.deleteById(id);
+    }
 }
