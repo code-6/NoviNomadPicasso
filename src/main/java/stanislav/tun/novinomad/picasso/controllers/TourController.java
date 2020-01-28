@@ -92,6 +92,7 @@ public class TourController {
         var attachedDrivers = tour.getDrivers();
         mav.addObject("tour", tour);
         if (adv) {
+            // todo : can be created separate method for this action
             var wrapper = new DriverMapWrapper();
             for (Driver d : attachedDrivers) {
                 var dti = driverIntervalService.getAllRelatedToTourAndDriver(tour,d);
@@ -144,7 +145,7 @@ public class TourController {
         var tour = tourService.getTour(tourId).get();
         for (Driver d : wrapper.getMap().keySet()) {
             var dates = wrapper.getMap().get(d);
-            // todo : fix this hodgie code (updating set didn't helps)
+            // todo : fix this hodgie code (updating set didn't helps) find another way to update intervals
             var setDti = d.getIntervals();
             if (setDti.size() > 0) {
                 for (DriverTourIntervals dti : setDti) {
