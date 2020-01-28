@@ -11,7 +11,7 @@ import java.util.*;
 
 public abstract class IntervalResolver {
 
-    private static SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
+    private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
     /**
      * @param dates should contain list of days in format: 01.01.2020;02.01.2020;...dd.mm.yyyy

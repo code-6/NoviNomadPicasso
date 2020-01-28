@@ -15,6 +15,7 @@ import stanislav.tun.novinomad.picasso.persistance.services.DriverIntervalServic
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
@@ -72,8 +73,14 @@ public class TourController {
     }
 
     @RequestMapping(value = "/advanced")
-    public String getAdvancedPage() {
-        return "advancedTourPage.html";
+    public ModelAndView getAdvancedPage() {
+        var mav = new ModelAndView();
+        mav.setViewName("advancedTourPage.html");
+        var wrapper = new DriverMapWrapper();
+        mav.addObject("driversWrapper", wrapper);
+        // fill if edit and new if create
+        // what is needed for fill model?
+        return mav;
     }
 
     // todo ; refactor to big method. change logic of tour creation
@@ -91,21 +98,21 @@ public class TourController {
         tourService.createOrUpdateTour(tour);
         var attachedDrivers = tour.getDrivers();
         mav.addObject("tour", tour);
+        // todo : put out of this method to getAdvancedPage()
         if (adv) {
-            // todo : can be created separate method for this action
             var wrapper = new DriverMapWrapper();
             for (Driver d : attachedDrivers) {
-                var dti = driverIntervalService.getAllRelatedToTourAndDriver(tour,d);
+                var dti = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
                 var value = "";
                 for (Iterator<DriverTourIntervals> iterator = dti.iterator(); iterator.hasNext(); ) {
-                    DriverTourIntervals mi = iterator.next();
+                    var mi = iterator.next();
+                    //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
                     try {
                         var v = mi.getInterval().toDaysStringList();
-                        if(iterator.hasNext()){
-                            value += v+",";
-                        }else{
+                        if (iterator.hasNext())
+                            value += v + ",";
+                         else
                             value += v;
-                        }
                     } catch (ValidationException e) {
                         e.printStackTrace();
                     }
@@ -114,7 +121,7 @@ public class TourController {
             }
             mav.addObject("driversWrapper", wrapper);
             mav.setViewName("advancedTourPage.html");
-        } else {
+        } else { // set to whole tour by default
             try {
                 if (tour.getStartDate() != null && tour.getEndDate() != null) {
                     for (Driver d : attachedDrivers) {
@@ -145,7 +152,8 @@ public class TourController {
         var tour = tourService.getTour(tourId).get();
         for (Driver d : wrapper.getMap().keySet()) {
             var dates = wrapper.getMap().get(d);
-            // todo : fix this hodgie code (updating set didn't helps) find another way to update intervals
+            // todo : fix this hodgie code (updating set didn't helps)
+            //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setDti = d.getIntervals();
             if (setDti.size() > 0) {
                 for (DriverTourIntervals dti : setDti) {
@@ -153,12 +161,11 @@ public class TourController {
                 }
             }
             try {
-                var listIntervals = IntervalResolver.toIntervals(IntervalResolver.parseDays(dates));
+                var listDates = IntervalResolver.parseDays(dates);
+                var listIntervals = IntervalResolver.toIntervals(listDates);
                 for (MyInterval i : listIntervals) {
-                    var dti = new DriverTourIntervals();
-                    dti.setDriver(d);
-                    dti.setTour(tour);
-                    dti.setInterval(i);
+                    //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
+                    var dti = new DriverTourIntervals(tour, i, d);
                     driverIntervalService.createOrUpdateInterval(dti);
                 }
             } catch (ValidationException e) {
