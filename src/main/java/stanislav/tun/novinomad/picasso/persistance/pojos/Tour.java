@@ -22,13 +22,13 @@ import java.util.Set;
 @Entity(name = "tours")
 @JsonRootName(value = "tour")
 public class Tour extends AbstractEntity implements Serializable {
-    @JsonIgnore
-    @Transient
-    private static final String datePattern = "dd-mm-yyyy";
-
-    @JsonIgnore
-    @Transient
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
+//    @JsonIgnore
+//    @Transient
+//    private static final String datePattern = "dd-mm-yyyy";
+//
+//    @JsonIgnore
+//    @Transient
+//    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -96,6 +96,8 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+        if(endDate != null)
+            days = endDate.getDayOfYear() - this.startDate.getDayOfYear()+1;
     }
 
     public LocalDate getEndDate() {
@@ -104,6 +106,8 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+        if(startDate != null)
+            days = this.endDate.getDayOfYear() - startDate.getDayOfYear()+1;
     }
 
     public void setDays(int days) {

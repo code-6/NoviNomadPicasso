@@ -15,7 +15,6 @@ import stanislav.tun.novinomad.picasso.persistance.services.DriverIntervalServic
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
-import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
@@ -72,15 +71,51 @@ public class TourController {
         return mav;
     }
 
-    @RequestMapping(value = "/advanced")
-    public ModelAndView getAdvancedPage() {
-        var mav = new ModelAndView();
-        mav.setViewName("advancedTourPage.html");
+
+    private void getAdvancedPage(Tour tour, ModelAndView mav) {
+        // advanced view is dynamic, it contains list of attached drivers to the tour.
+        // also input field opposite each driver, to input days
+        var attachedDrivers = tour.getDrivers();
+        // this is wrapper to map values entered to input fields to related drivers. Used as a model for view, but not for DB
         var wrapper = new DriverMapWrapper();
+        // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
+        for (Driver d : attachedDrivers) {
+            // this object is used for DB representation of specific attached days
+            var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
+            var allDays = "";
+            for (Iterator<DriverTourIntervals> iterator = driverTourIntervals.iterator(); iterator.hasNext(); ) {
+                var driverTourInterval = iterator.next();
+                //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
+                try {
+                    var intervalDays = driverTourInterval.getInterval().toDaysStringList();
+                    if (iterator.hasNext())
+                        allDays += intervalDays + ",";
+                    else
+                        allDays += intervalDays;
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+            // in case of new intervals, value will be empty string
+            wrapper.getMap().put(d, allDays);
+        }
         mav.addObject("driversWrapper", wrapper);
-        // fill if edit and new if create
-        // what is needed for fill model?
-        return mav;
+        mav.setViewName("advancedTourPage.html");
+    }
+
+    private void setDefaultIntervals(Tour tour, ModelAndView mav){
+        try {
+            Set<Driver> attachedDrivers = tour.getDrivers();
+            if (tour.getStartDate() != null && tour.getEndDate() != null) {
+                for (Driver d : attachedDrivers) {
+                    var dti = new DriverTourIntervals(tour, new MyInterval(tour.getStartDate(), tour.getEndDate()), d);
+                    driverIntervalService.createOrUpdateInterval(dti);
+                }
+            }
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+        mav.setViewName("redirect:/tours/add");
     }
 
     // todo ; refactor to big method. change logic of tour creation
@@ -90,51 +125,17 @@ public class TourController {
                                       @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
         var mav = new ModelAndView();
-        setTotalDays(tour);
+        //setTotalDays(tour);
         attachDrivers(drivers2attach, tour);
         excludeDrivers(drivers2exclude, tour);
-
         logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
         tourService.createOrUpdateTour(tour);
-        var attachedDrivers = tour.getDrivers();
         mav.addObject("tour", tour);
-        // todo : put out of this method to getAdvancedPage()
         if (adv) {
-            var wrapper = new DriverMapWrapper();
-            for (Driver d : attachedDrivers) {
-                var dti = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
-                var value = "";
-                for (Iterator<DriverTourIntervals> iterator = dti.iterator(); iterator.hasNext(); ) {
-                    var mi = iterator.next();
-                    //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
-                    try {
-                        var v = mi.getInterval().toDaysStringList();
-                        if (iterator.hasNext())
-                            value += v + ",";
-                         else
-                            value += v;
-                    } catch (ValidationException e) {
-                        e.printStackTrace();
-                    }
-                }
-                wrapper.getMap().put(d, value);
-            }
-            mav.addObject("driversWrapper", wrapper);
-            mav.setViewName("advancedTourPage.html");
+            getAdvancedPage(tour, mav);
         } else { // set to whole tour by default
-            try {
-                if (tour.getStartDate() != null && tour.getEndDate() != null) {
-                    for (Driver d : attachedDrivers) {
-                        var dti = new DriverTourIntervals(tour, new MyInterval(tour.getStartDate(), tour.getEndDate()), d);
-                        driverIntervalService.createOrUpdateInterval(dti);
-                    }
-                }
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            }
-            mav.setViewName("redirect:/tours/add");
+            setDefaultIntervals(tour, mav);
         }
-
         return mav;
     }
 
@@ -203,9 +204,7 @@ public class TourController {
             if (drivers2attach.size() > 0)
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
-//                    if(Validator.overlaps(driver.get(), start, end)){
-//                        // todo : show error to user
-//                    }
+                    // todo : before attach driver to the tour, check if driver already attached for this date in another tours
                     tour.addDriver(driver);
                 }
     }
@@ -221,13 +220,14 @@ public class TourController {
                     tour.deleteDriver(driver.get());
                 }
     }
-
-    private void setTotalDays(Tour tour) {
-        var start = tour.getStartDate();
-        var end = tour.getEndDate();
-
-        if (start != null && end != null) {
-            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
-        }
-    }
+//    // todo : better to put this logic to Tour class in setters and getters
+//    private void setTotalDays(Tour tour) {
+//        var start = tour.getStartDate();
+//        var end = tour.getEndDate();
+//
+//        if (start != null && end != null) {
+//            // todo : check, possible wrong count of days, maybe +1 shall be added
+//            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
+//        }
+//    }
 }
