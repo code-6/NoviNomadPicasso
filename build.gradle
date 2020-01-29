@@ -46,6 +46,8 @@ dependencies {
     implementation 'junit:junit:4.12'
     implementation 'org.testng:testng:6.9.6'
     implementation 'junit:junit:4.12'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
