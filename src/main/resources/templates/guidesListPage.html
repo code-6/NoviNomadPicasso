@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mainLayout}">
+<head>
+
+</head>
+
+<body>
+<div layout:fragment="content" class="container">
+    <h1>Guides</h1>
+    <br/>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <!--/*@thymesVar id="guides" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.guide>"*/-->
+        <tr th:each="guide:${guides}">
+            <td th:text="${guide.getId()}"></td>
+            <td th:text="${guide.getFullName()}"></td>
+            <td>
+                <a th:href="@{/guides/edit{id}(id=${guide.getId()})}">
+                    <button type="button" class="btn btn-outline-secondary" >edit</button>
+                </a>
+                <!--                    <button th:target="@{/guides/edit{id}(id=${guide.getId()})}" type="button" class="btn btn-outline-secondary">edit</button>-->
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/guides/add">
+        <button type="button" class="btn btn-outline-success">add new guide</button>
+    </a>
+</div>
+
+</body>
+</html>
