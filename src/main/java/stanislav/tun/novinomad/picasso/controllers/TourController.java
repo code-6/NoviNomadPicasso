@@ -155,7 +155,7 @@ public class TourController {
             var dates = wrapper.getMap().get(d);
             // todo : fix this hodgie code (updating set didn't helps)
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
-            var setDti = d.getIntervals();
+            var setDti = d.getDriverTourIntervals();
             if (setDti.size() > 0) {
                 for (DriverTourIntervals dti : setDti) {
                     driverIntervalService.delete(dti);

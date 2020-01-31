@@ -19,27 +19,27 @@ public class Driver extends AbstractEntity implements Serializable {
 
     @Column
     @JsonIgnore
-    private String lastName;
+    protected String lastName;
 
     @Column
     @JsonIgnore
-    private String firstName;
+    protected String firstName;
 
     @Column
     @JsonIgnore
-    private String middleName;
+    protected String middleName;
 
-    private String fullName;
+    protected String fullName;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drivers")
     @JsonBackReference
     @Fetch(FetchMode.JOIN)
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private Set<Tour> tours = new HashSet<>();
+    protected Set<Tour> tours = new HashSet<>();
 
     @OneToMany( mappedBy = "driver", orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
-    Set<DriverTourIntervals> intervals = new HashSet<DriverTourIntervals>();
+    private Set<DriverTourIntervals> driverTourIntervals = new HashSet<DriverTourIntervals>();
 
     public Driver() {
 
@@ -89,12 +89,12 @@ public class Driver extends AbstractEntity implements Serializable {
         return String.format("%s %s %s", firstName == null ? "" : firstName, middleName == null ? "" : middleName, lastName == null ? "" : lastName);
     }
 
-    public Set<DriverTourIntervals> getIntervals() {
-        return intervals;
+    public Set<DriverTourIntervals> getDriverTourIntervals() {
+        return driverTourIntervals;
     }
 
-    public void setIntervals(Set<DriverTourIntervals> intervals) {
-        this.intervals = intervals;
+    public void setDriverTourIntervals(Set<DriverTourIntervals> driverTourIntervals) {
+        this.driverTourIntervals = driverTourIntervals;
     }
 
     @Override

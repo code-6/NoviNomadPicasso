@@ -56,6 +56,12 @@ public class Tour extends AbstractEntity implements Serializable {
     @JoinTable(name="tours_drivers", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="driver_id"))
     private Set<Driver> drivers = new HashSet<>();
 
+    @JsonManagedReference
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="tours_guides", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="guide_id"))
+    private Set<Driver> guides = new HashSet<>();
+
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
     @JsonIgnore
@@ -144,5 +150,13 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void setIntervals(Set<DriverTourIntervals> intervals) {
         this.intervals = intervals;
+    }
+
+    public Set<Driver> getGuides() {
+        return guides;
+    }
+
+    public void setGuides(Set<Driver> guides) {
+        this.guides = guides;
     }
 }
