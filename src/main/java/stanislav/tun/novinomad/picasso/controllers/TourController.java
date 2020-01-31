@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverIntervalService;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
+import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
 
@@ -29,6 +30,9 @@ import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 public class TourController {
     @Autowired
     TourService tourService;
+
+    @Autowired
+    GuideService guideService;
 
     @Autowired
     DriverService driverService;
@@ -194,6 +198,12 @@ public class TourController {
         driverService.createOrUpdateDriver(d3);
         driverService.createOrUpdateDriver(d4);
         driverService.createOrUpdateDriver(new Driver("Carroll", "Shelby"));
+
+        guideService.createOrUpdateGuide(new Guide("Guide1","Guide1"));
+        guideService.createOrUpdateGuide(new Guide("Guide2","Guide2"));
+        guideService.createOrUpdateGuide(new Guide("Guide3","Guide3"));
+        guideService.createOrUpdateGuide(new Guide("Guide4","Guide4"));
+        guideService.createOrUpdateGuide(new Guide("Guide5","Guide5"));
 
         return "redirect:/tours/add";
     }
