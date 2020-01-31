@@ -60,7 +60,7 @@ public class Tour extends AbstractEntity implements Serializable {
     @Fetch(FetchMode.JOIN)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="tours_guides", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="guide_id"))
-    private Set<Driver> guides = new HashSet<>();
+    private Set<Guide> guides = new HashSet<>();
 
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
@@ -71,6 +71,10 @@ public class Tour extends AbstractEntity implements Serializable {
         drivers.add(driver.get());
     }
 
+    public void addGuide(Optional<Guide> guide){
+        guides.add(guide.get());
+    }
+
     public void addDriver(String firstName, String middleName, String lastName){
         var driver = new Driver();
         driver.setFirstName(firstName);
@@ -79,9 +83,22 @@ public class Tour extends AbstractEntity implements Serializable {
         drivers.add(driver);
     }
 
+    public void addGuide(String firstName, String middleName, String lastName){
+        var guide = new Guide();
+        guide.setFirstName(firstName);
+        guide.setMiddleName(middleName);
+        guide.setLastName(lastName);
+        guides.add(guide);
+    }
+
     public void addDriver(Set<Driver> _drivers){
         if(_drivers != null)
             drivers.addAll(_drivers);
+    }
+
+    public void addGuide(Set<Guide> _guides){
+        if(_guides != null)
+            guides.addAll(_guides);
     }
 
     public void deleteDriver(Driver driver){
@@ -90,6 +107,14 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void deleteDriver(Collection<Driver> _drivers){
         drivers.removeAll(_drivers);
+    }
+
+    public void deleteGuide(Guide guide){
+        guides.remove(guide);
+    }
+
+    public void deleteGuide(Collection<Guide> _guides){
+        guides.removeAll(_guides);
     }
 
     public int getDays() {
@@ -152,11 +177,11 @@ public class Tour extends AbstractEntity implements Serializable {
         this.intervals = intervals;
     }
 
-    public Set<Driver> getGuides() {
+    public Set<Guide> getGuides() {
         return guides;
     }
 
-    public void setGuides(Set<Driver> guides) {
+    public void setGuides(Set<Guide> guides) {
         this.guides = guides;
     }
 }

@@ -50,6 +50,9 @@ public class TourController {
         // todo : get drivers list from cash data
         map.put("drivers", driverService.getDriversList());
         map.put("driversExclude", tour.getDrivers());
+
+        map.put("guides", guideService.getGuidesList());
+        map.put("guidesExclude", tour.getGuides());
         return new ModelAndView("addTourPage.html", map);
     }
 
@@ -67,10 +70,17 @@ public class TourController {
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
+        var allGuides = guideService.getGuidesList();
         // exclude already attached drivers from view
         allDrivers.removeAll(tour.getDrivers());
+        // exclude already attached drivers from view
+        allGuides.removeAll(tour.getGuides());
+
         mav.addObject("drivers", allDrivers);
         mav.addObject("driversExclude", tour.getDrivers());
+
+        mav.addObject("guides", allGuides);
+        mav.addObject("guidesExclude", tour.getGuides());
         mav.setViewName("addTourPage.html");
         return mav;
     }
@@ -96,11 +106,17 @@ public class TourController {
     public ModelAndView addTourAction(@ModelAttribute("tour") @Valid Tour tour,
                                       @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,
                                       @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
+                                      @RequestParam(required = false, name = "guides2attach") List<Long> guides2attach,
+                                      @RequestParam(required = false, name = "guides2exclude") List<Long> guides2exclude,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
         var mav = new ModelAndView();
         //setTotalDays(tour);
         attachDrivers(drivers2attach, tour);
         excludeDrivers(drivers2exclude, tour);
+
+        attachGuides(guides2attach, tour);
+        excludeGuides(guides2exclude, tour);
+
         logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
         tourService.createOrUpdateTour(tour);
         mav.addObject("tour", tour);
@@ -220,6 +236,18 @@ public class TourController {
                 }
     }
 
+    private void attachGuides(List<Long> guides2attach, Tour tour) {
+        // for edit purposes
+        tour.addGuide(tourService.getAttachedGuides(tour.getId()));
+        if (guides2attach != null)
+            if (guides2attach.size() > 0)
+                for (Long id : guides2attach) {
+                    var guide = guideService.getGuide(id);
+                    // todo : before attach driver to the tour, check if driver already attached for this date in another tours
+                    tour.addGuide(guide);
+                }
+    }
+
     private void excludeDrivers(List<Long> drivers2exclude, Tour tour) {
         if (drivers2exclude != null)
             if (drivers2exclude.size() > 0)
@@ -229,6 +257,18 @@ public class TourController {
 //                        // todo : show error to user
 //                    }
                     tour.deleteDriver(driver.get());
+                }
+    }
+
+    private void excludeGuides(List<Long> guides2exclude, Tour tour) {
+        if (guides2exclude != null)
+            if (guides2exclude.size() > 0)
+                for (Long id : guides2exclude) {
+                    var guide = guideService.getGuide(id);
+//                    if(Validator.overlaps(driver.get(), start, end)){
+//                        // todo : show error to user
+//                    }
+                    tour.deleteGuide(guide.get());
                 }
     }
 //    // todo : better to put this logic to Tour class in setters and getters

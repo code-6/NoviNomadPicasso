@@ -18,6 +18,7 @@
             <th>End date</th>
             <th>Total days</th>
             <th>Drivers</th>
+            <th>Guides</th>
             <th>Description</th>
         </tr>
         </thead>
@@ -36,7 +37,12 @@
 					<br/>
                 </span>
             </td>
-
+            <td>
+                <span th:each="g: ${tour.guides}">
+                    <span th:text="${g.fullName}"></span>
+					<br/>
+                </span>
+            </td>
             <td th:text="${tour.description}"></td>
             <td>
                 <a th:href="@{/tours/edit{id}(id=${tour.id})}">
