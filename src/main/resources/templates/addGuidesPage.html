@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add/edit guide</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h1>Add/edit guide</h1>
+    <br/>
+    <!--/*@thymesVar id="guide" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
+    <form action="#" th:action="@{/guides/save}" th:object="${guide}" method="post">
+        <table border="0" cellpadding="10">
+            <tr>
+                <td>First name:</td>
+                <td><input type="text" th:field="*{firstName}"/></td>
+            </tr>
+
+            <tr>
+                <td>Middle name:</td>
+                <td><input type="text" th:field="*{middleName}"/></td>
+            </tr>
+
+            <tr>
+                <td>Last name:</td>
+                <td><input type="text" th:field="*{lastName}"/></td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-outline-success">Confirm</button>
+                </td>
+            </tr>
+
+        </table>
+        <!--need for edit function, to auto populate fields with data of guide taken by given id-->
+        <input type="hidden" th:field="*{id}">
+    </form>
+
+</div>
+</body>
+</html>
