@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
-import stanislav.tun.novinomad.picasso.persistance.services.DriverIntervalService;
-import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
-import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
-import stanislav.tun.novinomad.picasso.persistance.services.TourService;
+import stanislav.tun.novinomad.picasso.persistance.services.*;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
 
 import javax.validation.Valid;
@@ -39,6 +36,9 @@ public class TourController {
 
     @Autowired
     DriverIntervalService driverIntervalService;
+
+    @Autowired
+    GuideIntervalService guideIntervalService;
 
     Logger logger = LoggerFactory.getLogger(TourController.class);
 
@@ -142,10 +142,10 @@ public class TourController {
         // this is wrapper to map values entered to input fields to related drivers. Used as a model for view, but not for DB
         var wrapper = new MapWrapper();
         // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
-
         wrapDrivers(attachedDrivers, tour, wrapper);
+        wrapGuides(attachedGuides, tour, wrapper);
 
-        mav.addObject("driversWrapper", wrapper);
+        mav.addObject("wrapper", wrapper);
         mav.setViewName("advancedTourPage.html");
     }
 
@@ -172,28 +172,28 @@ public class TourController {
         }
     }
 
-//    private void wrapGuides(Set<Guide> attachedGuides, Tour tour, MapWrapper wrapper) {
-//        for (Guide guide : attachedGuides) {
-//            // this object is used for DB representation of specific attached days
-//            var guideTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, guide);
-//            var allDays = "";
-//            for (Iterator<DriverTourIntervals> iterator = guideTourIntervals.iterator(); iterator.hasNext(); ) {
-//                var driverTourInterval = iterator.next();
-//                //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
-//                try {
-//                    var intervalDays = driverTourInterval.getInterval().toDaysStringList();
-//                    if (iterator.hasNext())
-//                        allDays += intervalDays + ",";
-//                    else
-//                        allDays += intervalDays;
-//                } catch (ValidationException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            // in case of new intervals, value will be empty string
-//            wrapper.getDriverMap().put(guide, allDays);
-//        }
-//    }
+    private void wrapGuides(Set<Guide> attachedGuides, Tour tour, MapWrapper wrapper) {
+        for (Guide guide : attachedGuides) {
+            // this object is used for DB representation of specific attached days
+            var guideTourIntervals = guideIntervalService.getAllRelatedToTourAndGuide(tour, guide);
+            var allDays = "";
+            for (Iterator<GuideTourIntervals> iterator = guideTourIntervals.iterator(); iterator.hasNext(); ) {
+                var guideTourInterval = iterator.next();
+                //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
+                try {
+                    var intervalDays = guideTourInterval.getInterval().toDaysStringList();
+                    if (iterator.hasNext())
+                        allDays += intervalDays + ",";
+                    else
+                        allDays += intervalDays;
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+            // in case of new intervals, value will be empty string
+            wrapper.getGuideMap().put(guide, allDays);
+        }
+    }
 
 
     @PostMapping("advanced/save")
