@@ -11,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -65,7 +64,12 @@ public class Tour extends AbstractEntity implements Serializable {
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
     @JsonIgnore
-    Set<DriverTourIntervals> intervals = new HashSet<DriverTourIntervals>();
+    Set<DriverTourIntervals> driverIntervals = new HashSet<DriverTourIntervals>();
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany( mappedBy = "tour", orphanRemoval = true)
+    @JsonIgnore
+    Set<GuideTourIntervals> guideIntervals = new HashSet<>();
 
     public void addDriver(Optional<Driver> driver){
         drivers.add(driver.get());
@@ -169,12 +173,12 @@ public class Tour extends AbstractEntity implements Serializable {
         this.drivers = drivers;
     }
 
-    public Set<DriverTourIntervals> getIntervals() {
-        return intervals;
+    public Set<DriverTourIntervals> getDriverIntervals() {
+        return driverIntervals;
     }
 
-    public void setIntervals(Set<DriverTourIntervals> intervals) {
-        this.intervals = intervals;
+    public void setDriverIntervals(Set<DriverTourIntervals> driverIntervals) {
+        this.driverIntervals = driverIntervals;
     }
 
     public Set<Guide> getGuides() {
@@ -183,5 +187,13 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void setGuides(Set<Guide> guides) {
         this.guides = guides;
+    }
+
+    public Set<GuideTourIntervals> getGuideIntervals() {
+        return guideIntervals;
+    }
+
+    public void setGuideIntervals(Set<GuideTourIntervals> guideIntervals) {
+        this.guideIntervals = guideIntervals;
     }
 }

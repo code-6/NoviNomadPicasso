@@ -29,7 +29,7 @@
 				<tr th:each="entry : ${wrapper.driverMap.entrySet()}">
 					<td th:text="${entry.key.fullName}" ></td>
 					<td>
-						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{map[__${entry.key.id}__]}" th:value="*{map[__${entry.key.id}__]}">
+						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{driverMap[__${entry.key.id}__]}" th:value="*{driverMap[__${entry.key.id}__]}">
 
 					</td>
 				</tr>
@@ -40,7 +40,7 @@
 				<tr th:each="entry : ${wrapper.guideMap.entrySet()}">
 					<td th:text="${entry.key.fullName}" ></td>
 					<td>
-						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{map[__${entry.key.id}__]}" th:value="*{map[__${entry.key.id}__]}">
+						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{guideMap[__${entry.key.id}__]}" th:value="*{guideMap[__${entry.key.id}__]}">
 
 					</td>
 				</tr>

@@ -3,18 +3,22 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-
+    <script type="text/javascript" th:src="@{/js/sortScript.js}"></script>
 </head>
 
 <body>
 <div layout:fragment="content" class="container">
     <h1>Guides</h1>
     <br/>
-    <table class="table table-striped">
+    <table class="table table-striped" id="guidesList">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
+            <th onclick="sortTable(0,'guidesList')">
+                <button type="button" class="btn btn-outline-info btn-sm">ID</button>
+            </th>
+            <th onclick="sortTable(1,'guidesList')">
+                <button type="button" class="btn btn-outline-info btn-sm">NAME</button>
+            </th>
             <th></th>
         </tr>
         </thead>
@@ -26,7 +30,7 @@
             <td th:text="${guide.getFullName()}"></td>
             <td>
                 <a th:href="@{/guides/edit{id}(id=${guide.getId()})}">
-                    <button type="button" class="btn btn-outline-secondary" >edit</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" >edit</button>
                 </a>
                 <!--                    <button th:target="@{/guides/edit{id}(id=${guide.getId()})}" type="button" class="btn btn-outline-secondary">edit</button>-->
             </td>
