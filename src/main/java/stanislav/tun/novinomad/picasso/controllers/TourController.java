@@ -197,11 +197,20 @@ public class TourController {
 
 
     @PostMapping("advanced/save")
-    public ModelAndView advancedSave(@ModelAttribute("driversWrapper") MapWrapper wrapper,
+    public ModelAndView advancedSave(@ModelAttribute("wrapper") MapWrapper wrapper,
                                      @RequestParam(name = "tourId") Long tourId) {
         var mav = new ModelAndView();
-        mav.addObject("driversWrapper", wrapper);
+        mav.addObject("wrapper", wrapper);
         var tour = tourService.getTour(tourId).get();
+
+        saveAdvancedDrivers(wrapper, tour);
+        saveAdvancedGuides(wrapper, tour);
+
+        mav.setViewName("redirect:/tours/list");
+        return mav;
+    }
+
+    private void saveAdvancedDrivers(MapWrapper wrapper, Tour tour){
         for (Driver d : wrapper.getDriverMap().keySet()) {
             var dates = wrapper.getDriverMap().get(d);
             // todo : fix this hodgie code (updating set didn't helps)
@@ -228,10 +237,36 @@ public class TourController {
             }
 
         }
-        mav.setViewName("redirect:/tours/list");
-        return mav;
     }
 
+    private void saveAdvancedGuides(MapWrapper wrapper, Tour tour){
+        for (Guide guide : wrapper.getGuideMap().keySet()) {
+            var dates = wrapper.getDriverMap().get(guide);
+            // todo : fix this hodgie code (updating set didn't helps)
+            //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
+            var setGti = guide.getGuideTourIntervals();
+            if (setGti.size() > 0) {
+                for (GuideTourIntervals gti : setGti) {
+                    guideIntervalService.delete(gti);
+                }
+            }
+            try {
+                var listDates = IntervalResolver.parseDays(dates);
+                var listIntervals = IntervalResolver.toIntervals(listDates);
+                for (MyInterval i : listIntervals) {
+                    //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
+                    var gti = new GuideTourIntervals(tour, i, guide);
+                    // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
+                    guideIntervalService.createOrUpdateInterval(gti);
+                }
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
     // todo : debug method. Remove for production
     @RequestMapping("/init")
     public String init() {

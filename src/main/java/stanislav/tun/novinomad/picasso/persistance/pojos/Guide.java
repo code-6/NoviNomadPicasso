@@ -35,9 +35,9 @@ public class Guide extends AbstractEntity {
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected Set<Tour> tours = new HashSet<>();
 
-//    @OneToMany( mappedBy = "guide", orphanRemoval = true)
-//    @Fetch(FetchMode.JOIN)
-//    private Set<GuideTourIntervals> guideTourIntervals = new HashSet<GuideTourIntervals>();
+    @OneToMany( mappedBy = "guide", orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
+    private Set<GuideTourIntervals> guideTourIntervals = new HashSet<>();
 
     public Guide() {
 
@@ -87,13 +87,13 @@ public class Guide extends AbstractEntity {
         return String.format("%s %s %s", firstName == null ? "" : firstName, middleName == null ? "" : middleName, lastName == null ? "" : lastName);
     }
 
-//    public Set<GuideTourIntervals> getGuideTourIntervals() {
-//        return guideTourIntervals;
-//    }
-//
-//    public void setGuideTourIntervals(Set<GuideTourIntervals> guideTourIntervals) {
-//        this.guideTourIntervals = guideTourIntervals;
-//    }
+    public Set<GuideTourIntervals> getGuideTourIntervals() {
+        return guideTourIntervals;
+    }
+
+    public void setGuideTourIntervals(Set<GuideTourIntervals> guideTourIntervals) {
+        this.guideTourIntervals = guideTourIntervals;
+    }
 
     @Override
     public boolean equals(Object o) {
