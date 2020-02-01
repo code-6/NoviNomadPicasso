@@ -139,7 +139,7 @@ public class TourController {
         // also input field opposite each driver, to input days
         var attachedDrivers = tour.getDrivers();
         // this is wrapper to map values entered to input fields to related drivers. Used as a model for view, but not for DB
-        var wrapper = new DriverMapWrapper();
+        var wrapper = new MapWrapper();
         // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
         for (Driver d : attachedDrivers) {
             // this object is used for DB representation of specific attached days
@@ -159,20 +159,20 @@ public class TourController {
                 }
             }
             // in case of new intervals, value will be empty string
-            wrapper.getMap().put(d, allDays);
+            wrapper.getDriverMap().put(d, allDays);
         }
         mav.addObject("driversWrapper", wrapper);
         mav.setViewName("advancedTourPage.html");
     }
 
     @PostMapping("advanced/save")
-    public ModelAndView advancedSave(@ModelAttribute("driversWrapper") DriverMapWrapper wrapper,
+    public ModelAndView advancedSave(@ModelAttribute("driversWrapper") MapWrapper wrapper,
                                      @RequestParam(name = "tourId") Long tourId) {
         var mav = new ModelAndView();
         mav.addObject("driversWrapper", wrapper);
         var tour = tourService.getTour(tourId).get();
-        for (Driver d : wrapper.getMap().keySet()) {
-            var dates = wrapper.getMap().get(d);
+        for (Driver d : wrapper.getDriverMap().keySet()) {
+            var dates = wrapper.getDriverMap().get(d);
             // todo : fix this hodgie code (updating set didn't helps)
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setDti = d.getDriverTourIntervals();
