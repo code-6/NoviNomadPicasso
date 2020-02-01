@@ -85,7 +85,7 @@ public class TourController {
         return mav;
     }
 
-    private void setDefaultIntervals(Tour tour, ModelAndView mav){
+    private void setDefaultIntervals(Tour tour, ModelAndView mav) {
         try {
             Set<Driver> attachedDrivers = tour.getDrivers();
             if (tour.getStartDate() != null && tour.getEndDate() != null) {
@@ -138,9 +138,18 @@ public class TourController {
         // advanced view is dynamic, it contains list of attached drivers to the tour.
         // also input field opposite each driver, to input days
         var attachedDrivers = tour.getDrivers();
+        var attachedGuides = tour.getGuides();
         // this is wrapper to map values entered to input fields to related drivers. Used as a model for view, but not for DB
         var wrapper = new MapWrapper();
         // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
+
+        wrapDrivers(attachedDrivers, tour, wrapper);
+
+        mav.addObject("driversWrapper", wrapper);
+        mav.setViewName("advancedTourPage.html");
+    }
+
+    private void wrapDrivers(Set<Driver> attachedDrivers, Tour tour, MapWrapper wrapper) {
         for (Driver d : attachedDrivers) {
             // this object is used for DB representation of specific attached days
             var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
@@ -161,9 +170,31 @@ public class TourController {
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
-        mav.addObject("driversWrapper", wrapper);
-        mav.setViewName("advancedTourPage.html");
     }
+
+//    private void wrapGuides(Set<Guide> attachedGuides, Tour tour, MapWrapper wrapper) {
+//        for (Guide guide : attachedGuides) {
+//            // this object is used for DB representation of specific attached days
+//            var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, guide);
+//            var allDays = "";
+//            for (Iterator<DriverTourIntervals> iterator = driverTourIntervals.iterator(); iterator.hasNext(); ) {
+//                var driverTourInterval = iterator.next();
+//                //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
+//                try {
+//                    var intervalDays = driverTourInterval.getInterval().toDaysStringList();
+//                    if (iterator.hasNext())
+//                        allDays += intervalDays + ",";
+//                    else
+//                        allDays += intervalDays;
+//                } catch (ValidationException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            // in case of new intervals, value will be empty string
+//            wrapper.getDriverMap().put(guide, allDays);
+//        }
+//    }
+
 
     @PostMapping("advanced/save")
     public ModelAndView advancedSave(@ModelAttribute("driversWrapper") MapWrapper wrapper,
@@ -215,11 +246,11 @@ public class TourController {
         driverService.createOrUpdateDriver(d4);
         driverService.createOrUpdateDriver(new Driver("Carroll", "Shelby"));
 
-        guideService.createOrUpdateGuide(new Guide("Guide1","Guide1"));
-        guideService.createOrUpdateGuide(new Guide("Guide2","Guide2"));
-        guideService.createOrUpdateGuide(new Guide("Guide3","Guide3"));
-        guideService.createOrUpdateGuide(new Guide("Guide4","Guide4"));
-        guideService.createOrUpdateGuide(new Guide("Guide5","Guide5"));
+        guideService.createOrUpdateGuide(new Guide("Guide1", "Guide1"));
+        guideService.createOrUpdateGuide(new Guide("Guide2", "Guide2"));
+        guideService.createOrUpdateGuide(new Guide("Guide3", "Guide3"));
+        guideService.createOrUpdateGuide(new Guide("Guide4", "Guide4"));
+        guideService.createOrUpdateGuide(new Guide("Guide5", "Guide5"));
 
         return "redirect:/tours/add";
     }
