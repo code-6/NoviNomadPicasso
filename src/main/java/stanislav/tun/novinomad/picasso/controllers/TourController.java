@@ -175,9 +175,9 @@ public class TourController {
 //    private void wrapGuides(Set<Guide> attachedGuides, Tour tour, MapWrapper wrapper) {
 //        for (Guide guide : attachedGuides) {
 //            // this object is used for DB representation of specific attached days
-//            var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, guide);
+//            var guideTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, guide);
 //            var allDays = "";
-//            for (Iterator<DriverTourIntervals> iterator = driverTourIntervals.iterator(); iterator.hasNext(); ) {
+//            for (Iterator<DriverTourIntervals> iterator = guideTourIntervals.iterator(); iterator.hasNext(); ) {
 //                var driverTourInterval = iterator.next();
 //                //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
 //                try {
