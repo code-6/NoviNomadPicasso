@@ -195,7 +195,6 @@ public class TourController {
         }
     }
 
-
     @PostMapping("advanced/save")
     public ModelAndView advancedSave(@ModelAttribute("wrapper") MapWrapper wrapper,
                                      @RequestParam(name = "tourId") Long tourId) {
@@ -211,8 +210,9 @@ public class TourController {
     }
 
     private void saveAdvancedDrivers(MapWrapper wrapper, Tour tour){
-        for (Driver d : wrapper.getDriverMap().keySet()) {
-            var dates = wrapper.getDriverMap().get(d);
+        var driversMap = wrapper.getDriverMap();
+        for (Driver d : driversMap.keySet()) {
+            var dates = driversMap.get(d);
             // todo : fix this hodgie code (updating set didn't helps)
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setDti = d.getDriverTourIntervals();
@@ -240,8 +240,9 @@ public class TourController {
     }
 
     private void saveAdvancedGuides(MapWrapper wrapper, Tour tour){
-        for (Guide guide : wrapper.getGuideMap().keySet()) {
-            var dates = wrapper.getDriverMap().get(guide);
+        var guidesMap = wrapper.getGuideMap();
+        for (Guide guide : guidesMap.keySet()) {
+            var dates = guidesMap.get(guide);
             // todo : fix this hodgie code (updating set didn't helps)
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setGti = guide.getGuideTourIntervals();

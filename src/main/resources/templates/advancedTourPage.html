@@ -19,14 +19,25 @@
 </head>
 	<body>
 	<div layout:fragment="content" class="container">
-		<form th:action="@{/tours/advanced/save}" th:object="${driversWrapper}" method="post" autocomplete="off">
+		<form th:action="@{/tours/advanced/save}" th:object="${wrapper}" method="post" autocomplete="off">
 			<h1 th:text="${tour.tittle}"></h1>
 			<table>
 				<tr>
 					<th>Drivers:</th>
 					<th>Days:</th>
 				</tr>
-				<tr th:each="entry : ${driversWrapper.map.entrySet()}">
+				<tr th:each="entry : ${wrapper.driverMap.entrySet()}">
+					<td th:text="${entry.key.fullName}" ></td>
+					<td>
+						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{map[__${entry.key.id}__]}" th:value="*{map[__${entry.key.id}__]}">
+
+					</td>
+				</tr>
+				<tr>
+					<th>Guides:</th>
+					<th>Days:</th>
+				</tr>
+				<tr th:each="entry : ${wrapper.guideMap.entrySet()}">
 					<td th:text="${entry.key.fullName}" ></td>
 					<td>
 						<input type="text" class="form-control date" placeholder="Pick the multiple dates" th:field="*{map[__${entry.key.id}__]}" th:value="*{map[__${entry.key.id}__]}">
