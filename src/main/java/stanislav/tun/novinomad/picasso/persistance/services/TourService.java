@@ -3,6 +3,7 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
+import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
 
@@ -42,6 +43,13 @@ public class TourService {
         var tour = getTour(id);
         if(!tour.isEmpty() && tour.isPresent())
             return tour.get().getDrivers();
+        return null;
+    }
+
+    public Set<Guide> getAttachedGuides(long id) {
+        var tour = getTour(id);
+        if(!tour.isEmpty() && tour.isPresent())
+            return tour.get().getGuides();
         return null;
     }
 }

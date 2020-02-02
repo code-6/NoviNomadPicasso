@@ -14,10 +14,11 @@ import java.time.LocalDate;
 public abstract class AbstractIntervals extends AbstractEntity {
     @NotNull
     @ManyToOne
+    @JsonIgnore
     private Tour tour;
-    @JsonIgnore
+
     private LocalDate startDate;
-    @JsonIgnore
+
     private LocalDate endDate;
 
     @NotNull

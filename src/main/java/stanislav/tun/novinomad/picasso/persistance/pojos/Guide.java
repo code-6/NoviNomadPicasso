@@ -7,16 +7,14 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
-@Entity(name = "drivers")
-@JsonRootName(value = "driver")
-public class Driver extends AbstractEntity implements Serializable {
-
+// todo; fix inheritance bug
+@Entity(name = "guides")
+@JsonRootName(value = "guide")
+public class Guide extends AbstractEntity {
     @Column
     @JsonIgnore
     protected String lastName;
@@ -31,21 +29,21 @@ public class Driver extends AbstractEntity implements Serializable {
 
     protected String fullName;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drivers")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "guides")
     @JsonBackReference
     @Fetch(FetchMode.JOIN)
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected Set<Tour> tours = new HashSet<>();
 
-    @OneToMany( mappedBy = "driver", orphanRemoval = true)
+    @OneToMany( mappedBy = "guide", orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
-    private Set<DriverTourIntervals> driverTourIntervals = new HashSet<DriverTourIntervals>();
+    private Set<GuideTourIntervals> guideTourIntervals = new HashSet<>();
 
-    public Driver() {
+    public Guide() {
 
     }
 
-    public Driver(String firstName, String lastName) {
+    public Guide(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -89,21 +87,21 @@ public class Driver extends AbstractEntity implements Serializable {
         return String.format("%s %s %s", firstName == null ? "" : firstName, middleName == null ? "" : middleName, lastName == null ? "" : lastName);
     }
 
-    public Set<DriverTourIntervals> getDriverTourIntervals() {
-        return driverTourIntervals;
+    public Set<GuideTourIntervals> getGuideTourIntervals() {
+        return guideTourIntervals;
     }
 
-    public void setDriverTourIntervals(Set<DriverTourIntervals> driverTourIntervals) {
-        this.driverTourIntervals = driverTourIntervals;
+    public void setGuideTourIntervals(Set<GuideTourIntervals> guideTourIntervals) {
+        this.guideTourIntervals = guideTourIntervals;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Driver)) return false;
+        if (!(o instanceof Guide)) return false;
         if (!super.equals(o)) return false;
-        Driver driver = (Driver) o;
-        return fullName.equals(driver.fullName);
+        Guide guide = (Guide) o;
+        return fullName.equals(guide.fullName);
     }
 
     @Override

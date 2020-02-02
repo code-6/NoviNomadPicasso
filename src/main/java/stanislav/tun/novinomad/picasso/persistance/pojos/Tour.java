@@ -11,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -56,13 +55,28 @@ public class Tour extends AbstractEntity implements Serializable {
     @JoinTable(name="tours_drivers", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="driver_id"))
     private Set<Driver> drivers = new HashSet<>();
 
+    @JsonManagedReference
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="tours_guides", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="guide_id"))
+    private Set<Guide> guides = new HashSet<>();
+
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
     @JsonIgnore
-    Set<DriverTourIntervals> intervals = new HashSet<DriverTourIntervals>();
+    Set<DriverTourIntervals> driverIntervals = new HashSet<DriverTourIntervals>();
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany( mappedBy = "tour", orphanRemoval = true)
+    @JsonIgnore
+    Set<GuideTourIntervals> guideIntervals = new HashSet<>();
 
     public void addDriver(Optional<Driver> driver){
         drivers.add(driver.get());
+    }
+
+    public void addGuide(Optional<Guide> guide){
+        guides.add(guide.get());
     }
 
     public void addDriver(String firstName, String middleName, String lastName){
@@ -73,9 +87,22 @@ public class Tour extends AbstractEntity implements Serializable {
         drivers.add(driver);
     }
 
+    public void addGuide(String firstName, String middleName, String lastName){
+        var guide = new Guide();
+        guide.setFirstName(firstName);
+        guide.setMiddleName(middleName);
+        guide.setLastName(lastName);
+        guides.add(guide);
+    }
+
     public void addDriver(Set<Driver> _drivers){
         if(_drivers != null)
             drivers.addAll(_drivers);
+    }
+
+    public void addGuide(Set<Guide> _guides){
+        if(_guides != null)
+            guides.addAll(_guides);
     }
 
     public void deleteDriver(Driver driver){
@@ -84,6 +111,14 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void deleteDriver(Collection<Driver> _drivers){
         drivers.removeAll(_drivers);
+    }
+
+    public void deleteGuide(Guide guide){
+        guides.remove(guide);
+    }
+
+    public void deleteGuide(Collection<Guide> _guides){
+        guides.removeAll(_guides);
     }
 
     public int getDays() {
@@ -138,11 +173,27 @@ public class Tour extends AbstractEntity implements Serializable {
         this.drivers = drivers;
     }
 
-    public Set<DriverTourIntervals> getIntervals() {
-        return intervals;
+    public Set<DriverTourIntervals> getDriverIntervals() {
+        return driverIntervals;
     }
 
-    public void setIntervals(Set<DriverTourIntervals> intervals) {
-        this.intervals = intervals;
+    public void setDriverIntervals(Set<DriverTourIntervals> driverIntervals) {
+        this.driverIntervals = driverIntervals;
+    }
+
+    public Set<Guide> getGuides() {
+        return guides;
+    }
+
+    public void setGuides(Set<Guide> guides) {
+        this.guides = guides;
+    }
+
+    public Set<GuideTourIntervals> getGuideIntervals() {
+        return guideIntervals;
+    }
+
+    public void setGuideIntervals(Set<GuideTourIntervals> guideIntervals) {
+        this.guideIntervals = guideIntervals;
     }
 }
