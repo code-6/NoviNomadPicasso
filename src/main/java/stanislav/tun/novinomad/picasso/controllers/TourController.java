@@ -117,7 +117,6 @@ public class TourController {
         attachGuides(guides2attach, tour);
         excludeGuides(guides2exclude, tour);
 
-        logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
         tourService.createOrUpdateTour(tour);
         mav.addObject("tour", tour);
         if (adv) {
@@ -204,7 +203,11 @@ public class TourController {
 
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
-
+        logger.debug("Advanced save tour = " + getString(tour));
+        var drivers = tour.getDrivers();
+        for (Driver d : drivers) {
+            logger.debug("Collection is empty? "+d.getDriverTourIntervals().isEmpty());
+        }
         mav.setViewName("redirect:/tours/list");
         return mav;
     }
@@ -219,6 +222,7 @@ public class TourController {
             if (setDti.size() > 0) {
                 for (DriverTourIntervals dti : setDti) {
                     driverIntervalService.delete(dti);
+                    tour.getDriverIntervals().clear();
                 }
             }
             try {
@@ -227,6 +231,7 @@ public class TourController {
                 for (MyInterval i : listIntervals) {
                     //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
                     var dti = new DriverTourIntervals(tour, i, d);
+                    d.getDriverTourIntervals().add(dti);
                     // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
                     driverIntervalService.createOrUpdateInterval(dti);
                 }

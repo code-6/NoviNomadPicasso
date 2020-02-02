@@ -17,7 +17,7 @@ import java.util.Objects;
         property = "id")
 public abstract class AbstractEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     public long getId() {

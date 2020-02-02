@@ -2,6 +2,7 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -34,6 +35,7 @@ public class Guide extends AbstractEntity {
     @Fetch(FetchMode.JOIN)
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected Set<Tour> tours = new HashSet<>();
+
 
     @OneToMany( mappedBy = "guide", orphanRemoval = true)
     @Fetch(FetchMode.JOIN)

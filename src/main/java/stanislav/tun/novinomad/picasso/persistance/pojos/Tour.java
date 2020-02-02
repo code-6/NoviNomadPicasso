@@ -61,14 +61,16 @@ public class Tour extends AbstractEntity implements Serializable {
     @JoinTable(name="tours_guides", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="guide_id"))
     private Set<Guide> guides = new HashSet<>();
 
+
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
     @JsonIgnore
     Set<DriverTourIntervals> driverIntervals = new HashSet<DriverTourIntervals>();
 
+
+    @JsonIgnore
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
-    @JsonIgnore
     Set<GuideTourIntervals> guideIntervals = new HashSet<>();
 
     public void addDriver(Optional<Driver> driver){

@@ -5,17 +5,16 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonRootName(value = "interval")
+//@JsonRootName(value = "interval")
 public class MyInterval {
-    @JsonProperty
+    //@JsonProperty
     private LocalDate start, end;
-    @JsonProperty
+    //@JsonProperty
     private int totalDays;
 
     public MyInterval(@NotNull LocalDate start, @NotNull LocalDate end) throws ValidationException {

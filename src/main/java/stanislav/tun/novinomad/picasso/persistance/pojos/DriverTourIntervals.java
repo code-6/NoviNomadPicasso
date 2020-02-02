@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-@JsonRootName(value = "driver_intervals")
+//@JsonRootName(value = "driver_intervals")
 public class DriverTourIntervals extends AbstractIntervals {
     @NotNull
     @ManyToOne

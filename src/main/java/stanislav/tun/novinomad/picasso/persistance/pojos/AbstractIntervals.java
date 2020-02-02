@@ -1,6 +1,7 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -14,15 +15,16 @@ import java.time.LocalDate;
 public abstract class AbstractIntervals extends AbstractEntity {
     @NotNull
     @ManyToOne
-    @JsonIgnore
+    //@JsonIgnore
     private Tour tour;
-
+    //@JsonIgnore
     private LocalDate startDate;
-
+    //@JsonIgnore
     private LocalDate endDate;
 
     @NotNull
     @Transient
+   // @JsonProperty
     private MyInterval interval;
 
     public AbstractIntervals() {
