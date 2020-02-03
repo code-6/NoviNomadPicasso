@@ -10,6 +10,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import stanislav.tun.novinomad.picasso.NovinomadPicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
@@ -25,6 +26,7 @@ import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 @Controller
 @RequestMapping("/tours")
 public class TourController {
+
     @Autowired
     TourService tourService;
 
@@ -40,7 +42,7 @@ public class TourController {
     @Autowired
     GuideIntervalService guideIntervalService;
 
-    Logger logger = LoggerFactory.getLogger(TourController.class);
+    Logger logger = LoggerFactory.getLogger(NovinomadPicassoApp.class);
 
     @GetMapping("/add")
     public ModelAndView getAddTourView() {
@@ -66,7 +68,7 @@ public class TourController {
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
         var tour = tourService.getTour(tourId).get();
-        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
+
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
@@ -82,6 +84,7 @@ public class TourController {
         mav.addObject("guides", allGuides);
         mav.addObject("guidesExclude", tour.getGuides());
         mav.setViewName("addTourPage.html");
+        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
         return mav;
     }
 
@@ -100,6 +103,8 @@ public class TourController {
         }
         mav.setViewName("redirect:/tours/add");
     }
+
+    //todo : add default intervals for guides
 
     // todo ; refactor to big method. change logic of tour creation
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -272,28 +277,6 @@ public class TourController {
             }
 
         }
-    }
-    // todo : debug method. Remove for production
-    @RequestMapping("/init")
-    public String init() {
-        var d1 = new Driver("Ryan", "Cooper");
-        var d2 = new Driver("Ken", "Miles");
-        var d3 = new Driver("Michael", "Schumacher");
-        var d4 = new Driver("Ken", "Block");
-
-        driverService.createOrUpdateDriver(d1);
-        driverService.createOrUpdateDriver(d2);
-        driverService.createOrUpdateDriver(d3);
-        driverService.createOrUpdateDriver(d4);
-        driverService.createOrUpdateDriver(new Driver("Carroll", "Shelby"));
-
-        guideService.createOrUpdateGuide(new Guide("Guide1", "Guide1"));
-        guideService.createOrUpdateGuide(new Guide("Guide2", "Guide2"));
-        guideService.createOrUpdateGuide(new Guide("Guide3", "Guide3"));
-        guideService.createOrUpdateGuide(new Guide("Guide4", "Guide4"));
-        guideService.createOrUpdateGuide(new Guide("Guide5", "Guide5"));
-
-        return "redirect:/tours/add";
     }
 
     private void attachDrivers(List<Long> drivers2attach, Tour tour) {
