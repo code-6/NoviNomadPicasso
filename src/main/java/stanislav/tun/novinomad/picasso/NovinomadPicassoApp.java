@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Bean;
 import stanislav.tun.novinomad.picasso.controllers.TourController;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
+import stanislav.tun.novinomad.picasso.persistance.pojos.User;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
+import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -26,6 +28,9 @@ public class NovinomadPicassoApp {
 
 	@Autowired
 	private DriverService driverService;
+
+	@Autowired
+	private UserService userService;
 
 	Logger logger = LoggerFactory.getLogger(NovinomadPicassoApp.class);
 
@@ -52,6 +57,17 @@ public class NovinomadPicassoApp {
 		guideService.createOrUpdateGuide(new Guide("Alfredo", "Meneses"));
 		guideService.createOrUpdateGuide(new Guide("Peter", "Hillary"));
 		guideService.createOrUpdateGuide(new Guide("Nikolai", "Drozdov"));
+
+		var user1 = new User("user","qwerty");
+		user1.addAuthority("USER");
+		user1.setEnabled(true);
+
+		var user2 = new User("admin","asdasdasd");
+		user2.addAuthority("ADMIN");
+		user2.setEnabled(true);
+
+		userService.createUser(user1);
+		userService.createUser(user2);
 
 		logger.debug("initialize app data finished");
 	}
