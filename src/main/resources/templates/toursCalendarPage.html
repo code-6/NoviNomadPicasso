@@ -29,9 +29,9 @@
 			<tr>
 				<th>GUIDES</th>
 				<th>DRIVERS</th>
-				<th th:each="d: ${days}">
-					<label th:text="${d.getDay()}"></label>
-				</th>
+				<div th:each="d: ${days}">
+					<th th:text="${d.getLabel()+'\n'+d.getDay()}"></th>
+				</div>
 			</tr>
 			</thead>
 
