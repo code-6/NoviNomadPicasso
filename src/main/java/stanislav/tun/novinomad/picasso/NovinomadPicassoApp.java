@@ -58,12 +58,12 @@ public class NovinomadPicassoApp {
 		guideService.createOrUpdateGuide(new Guide("Peter", "Hillary"));
 		guideService.createOrUpdateGuide(new Guide("Nikolai", "Drozdov"));
 
-		var user1 = new User("user","qwerty");
-		user1.addAuthority("USER");
+		var user1 = new User("visitor","visitor");
+		user1.addAuthority("VISITOR");
 		user1.setEnabled(true);
 
-		var user2 = new User("admin","asdasdasd");
-		user2.addAuthority("ADMIN");
+		var user2 = new User("user","user");
+		user2.addAuthority("USER");
 		user2.setEnabled(true);
 
 		userService.createUser(user1);
