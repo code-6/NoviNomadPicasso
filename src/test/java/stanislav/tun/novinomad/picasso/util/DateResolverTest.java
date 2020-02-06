@@ -25,4 +25,10 @@ public class DateResolverTest {
             System.out.println(dw.toString());
         }
     }
+
+    @Test
+    public void testDayOfWeek(){
+        System.out.println(LocalDate.now().getDayOfWeek().name().substring(0,2));
+        LocalDate.now().isEqual(LocalDate.now());
+    }
 }

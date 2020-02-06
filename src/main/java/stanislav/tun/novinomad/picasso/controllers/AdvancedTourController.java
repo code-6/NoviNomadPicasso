@@ -42,10 +42,13 @@ public class AdvancedTourController {
 
         var ym = YearMonth.of(Integer.valueOf(year), month);
         var totalDays = ym.lengthOfMonth();
-        var days = new MyDayOfWeek[totalDays];
+        var days = new LocalDate[totalDays];
         // fill dates
         for (int i = 0; i < totalDays; i++) {
-            days[i] = new MyDayOfWeek(LocalDate.of(ym.getYear(), ym.getMonthValue(), i + 1).getDayOfWeek(), i + 1);
+            days[i] = LocalDate.of(Integer.parseInt(year), month, i+1);
+            //days[i].getDayOfWeek().name().substring(0,1);
+//            days[i] = new MyDayOfWeek(LocalDate.of(ym.getYear(), ym.getMonthValue(), i + 1).getDayOfWeek(), i + 1);
+//            days[i].setMonth(month);
         }
         // put days of month with days of week
         mav.addObject("days", days);

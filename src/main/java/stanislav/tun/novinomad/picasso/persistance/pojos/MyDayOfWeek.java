@@ -6,6 +6,8 @@ public class MyDayOfWeek {
     private DayOfWeek dayOfWeek;
     private int day;
     private String label;
+    private int month;
+    private int year;
 
     public MyDayOfWeek(DayOfWeek dayOfWeek, int day) {
         this.dayOfWeek = dayOfWeek;
@@ -33,5 +35,13 @@ public class MyDayOfWeek {
                 ", day=" + day +
                 ", label='" + label + '\'' +
                 '}';
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 }
