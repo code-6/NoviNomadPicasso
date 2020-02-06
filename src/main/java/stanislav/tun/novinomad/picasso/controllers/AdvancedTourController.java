@@ -31,12 +31,12 @@ public class AdvancedTourController {
     @GetMapping("/getview")
     public ModelAndView getView(@RequestParam(required = false, name = "month") Integer month,
                                 @RequestParam(required = false, name = "year") String year) {
-        System.out.println("parameter on input month = "+month+" year = "+year);
+
         if(month == null && year == null){
             month = LocalDate.now().getMonthValue();
             year = String.valueOf(LocalDate.now().getYear());
         }
-
+        System.out.println("parameter on input month = "+month+" year = "+year);
         var mav = new ModelAndView();
         mav.setViewName("toursCalendarPage");
 
