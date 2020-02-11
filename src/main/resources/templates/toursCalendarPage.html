@@ -40,8 +40,8 @@
 					<span th:style="${d.getDayOfWeek().name().substring(0,2) == 'SA' || d.getDayOfWeek().name().substring(0,2) == 'SU' } ? ${'color: green;'}"
 					      th:text="${d.getDayOfWeek().name().substring(0,2)}"></span>
 					<br/>
-					<!--					<span th:text="${d.getDayOfMonth() > 9} ? ${' '+d.getDayOfMonth()} : ${d.getDayOfMonth()}"></span>-->
-					<span th:text="${d.getDayOfMonth()}"></span>
+						<span th:text="${d.getDayOfMonth() > 9} ? ${d.getDayOfMonth()} : ${'0'+d.getDayOfMonth()}"></span>
+<!--					<span th:text="${d.getDayOfMonth()}"></span>-->
 				</th>
 
 				<th>TOTAL DAYS</th>
@@ -70,9 +70,9 @@
 				<td th:each="d: ${days}">
 					<!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
 					<!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
-					<span th:if="${d.isAfter(t.startDate) && d.isBefore(t.endDate)}">___</span>
-					<span th:if="${d.isEqual(t.startDate)}">|__</span>
-					<span th:if="${d.isEqual(t.endDate)}">__|</span>
+					<span th:if="${d.isAfter(t.startDate) && d.isBefore(t.endDate)}">__</span>
+					<span th:if="${d.isEqual(t.startDate) || d.isEqual(t.endDate)}">|</span>
+<!--					<span th:if="${d.isEqual(t.endDate)}">|</span>-->
 				</td>
 
 				<td th:text="${t.days}"></td>

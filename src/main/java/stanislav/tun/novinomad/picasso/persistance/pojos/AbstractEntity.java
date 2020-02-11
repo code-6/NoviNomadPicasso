@@ -2,12 +2,14 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Indexed;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Indexed
@@ -15,10 +17,21 @@ import java.util.Objects;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
-public abstract class AbstractEntity {
+@EntityListeners(AuditingEntityListener.class)
+public abstract class AbstractEntity<U> {
+    @CreatedBy
+    protected U createdBy;
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date creationDate;
+    @LastModifiedBy
+    protected U lastModifiedBy;
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date lasModifyDate;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    protected long id;
 
     public long getId() {
         return id;
