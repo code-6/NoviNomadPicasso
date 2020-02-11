@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
+import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;

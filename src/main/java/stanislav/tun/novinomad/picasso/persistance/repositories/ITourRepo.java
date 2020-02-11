@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface ITourRepo extends JpaRepository<Tour, Long> {
     Tour findByTittle(String tittle);
-    @Query("select t from tours t where extract(MONTH FROM t.startDate) = :month or extract(month from t.endDate) = :month order by t.startDate asc")
-    Collection<Tour> findToursByMonth(@Param("month") int month);
+    @Query("select t from tours t where (extract(MONTH FROM t.startDate) = :month or extract(month from t.endDate) = :month) and extract(YEAR from t.startDate) = :year order by t.startDate asc")
+    Collection<Tour> findToursByMonthAndYear(@Param("month") int month, @Param("year") int year);
+
 }
