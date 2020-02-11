@@ -36,6 +36,9 @@
             <th>
                 <button type="button" class="btn btn-outline-info btn-sm">DESCRIPTION</button>
             </th>
+            <th>
+                <button type="button" class="btn btn-outline-info btn-sm">CREATED BY</button>
+            </th>
         </tr>
         </thead>
 
@@ -60,12 +63,16 @@
                 </span>
             </td>
             <td th:text="${tour.description}"></td>
+
+            <td th:text="${tour.createdBy}"></td>
+
             <td>
                 <a th:href="@{/tours/edit{id}(id=${tour.id})}">
                     <button type="button" class="btn btn-outline-secondary btn-sm" >edit</button>
                 </a>
 <!--                <button th:href="@{/tours/edit{id}(id=${tour.id})}" type="button" class="btn btn-outline-secondary">edit</button>-->
             </td>
+
         </tr>
         </tbody>
     </table>

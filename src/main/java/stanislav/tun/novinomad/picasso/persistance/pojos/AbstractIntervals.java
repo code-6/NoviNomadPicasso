@@ -3,16 +3,20 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @MappedSuperclass
-public abstract class AbstractIntervals extends AbstractEntity {
+public abstract class AbstractIntervals {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
+
     @NotNull
     @ManyToOne
     //@JsonIgnore
@@ -35,6 +39,29 @@ public abstract class AbstractIntervals extends AbstractEntity {
         this.interval = interval;
         startDate = interval.getStart();
         endDate = interval.getEnd();
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractIntervals)) return false;
+        AbstractIntervals that = (AbstractIntervals) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public Tour getTour() {

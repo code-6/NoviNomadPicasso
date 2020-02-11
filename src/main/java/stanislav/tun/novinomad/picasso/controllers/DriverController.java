@@ -1,16 +1,14 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import stanislav.tun.novinomad.picasso.NovinomadPicassoApp;
+import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.util.JsonPrinter;
@@ -22,7 +20,7 @@ public class DriverController {
     @Autowired
     DriverService driverService;
 
-    Logger logger = LoggerFactory.getLogger(NovinomadPicassoApp.class);
+    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     @RequestMapping("/list")
     public ModelAndView getDriversListView() {

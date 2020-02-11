@@ -3,15 +3,17 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "users")
 @JsonRootName(value = "user")
-public class User extends AbstractEntity{
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
+
     private String userName;
     private String password;
     private boolean enabled = false;
@@ -31,6 +33,14 @@ public class User extends AbstractEntity{
         this.password = password;
         this.enabled = enabled;
         this.authorities = authorities;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void addAuthority(SimpleGrantedAuthority authority){

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.Set;
 // todo; fix inheritance bug
 @Entity(name = "guides")
 @JsonRootName(value = "guide")
+@EntityListeners(AuditingEntityListener.class)
 public class Guide extends AbstractEntity {
     @Column
     @JsonIgnore

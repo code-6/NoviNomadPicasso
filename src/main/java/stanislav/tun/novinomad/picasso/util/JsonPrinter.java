@@ -7,13 +7,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import stanislav.tun.novinomad.picasso.NovinomadPicassoApp;
+import stanislav.tun.novinomad.picasso.PicassoApp;
 
 
 public abstract class JsonPrinter {
 
     private static ObjectMapper mapper = new ObjectMapper();
-    static Logger logger = LoggerFactory.getLogger(NovinomadPicassoApp.class);
+    static Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     static {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);

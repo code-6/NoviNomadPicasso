@@ -10,7 +10,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import stanislav.tun.novinomad.picasso.NovinomadPicassoApp;
+import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
@@ -42,7 +42,7 @@ public class TourController {
     @Autowired
     GuideIntervalService guideIntervalService;
 
-    Logger logger = LoggerFactory.getLogger(NovinomadPicassoApp.class);
+    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     @GetMapping("/add")
     public ModelAndView getAddTourView() {

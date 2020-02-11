@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 @Entity(name = "tours")
 @JsonRootName(value = "tour")
+@EntityListeners(AuditingEntityListener.class)
 public class Tour extends AbstractEntity implements Serializable {
 //    @JsonIgnore
 //    @Transient

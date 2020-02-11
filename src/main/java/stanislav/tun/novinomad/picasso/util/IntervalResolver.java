@@ -2,7 +2,7 @@ package stanislav.tun.novinomad.picasso.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import stanislav.tun.novinomad.picasso.NovinomadPicassoApp;
+import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.MyInterval;
 
 import javax.xml.bind.ValidationException;
@@ -15,7 +15,7 @@ import java.util.*;
 public abstract class IntervalResolver {
 
     private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-    Logger logger = LoggerFactory.getLogger(NovinomadPicassoApp.class);
+    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     /**
      * @param dates should contain list of days in format: 01.01.2020;02.01.2020;...dd.mm.yyyy

@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import stanislav.tun.novinomad.picasso.controllers.TourController;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
@@ -16,15 +17,17 @@ import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 import stanislav.tun.novinomad.picasso.persistance.services.UserService;
+import stanislav.tun.novinomad.picasso.security.audit.AuditorAwareImpl;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 
 @SpringBootApplication
-public class NovinomadPicassoApp {
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+public class PicassoApp {
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     @Autowired
     private GuideService guideService;
@@ -38,15 +41,20 @@ public class NovinomadPicassoApp {
     @Autowired
     private TourService tourService;
 
-    Logger logger = LoggerFactory.getLogger(NovinomadPicassoApp.class);
+    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return new AuditorAwareImpl();
+    }
+
     public static void main(String[] args) {
-        SpringApplication.run(NovinomadPicassoApp.class, args);
+        SpringApplication.run(PicassoApp.class, args);
     }
 
     @PostConstruct
@@ -59,8 +67,13 @@ public class NovinomadPicassoApp {
         user2.addAuthority("USER");
         user2.setEnabled(true);
 
+        var user3 = new User("testuser", "testuser");
+        user3.addAuthority("TEST_USER");
+        user3.setEnabled(true);
+
         userService.createUser(user1);
         userService.createUser(user2);
+        userService.createUser(user3);
 
         var d1 = new Driver("Ryan", "Cooper");
         var d2 = new Driver("Michael", "Schumacher");
