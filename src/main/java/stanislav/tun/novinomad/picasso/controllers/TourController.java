@@ -326,14 +326,5 @@ public class TourController {
                     tour.deleteGuide(guide.get());
                 }
     }
-//    // todo : better to put this logic to Tour class in setters and getters
-//    private void setTotalDays(Tour tour) {
-//        var start = tour.getStartDate();
-//        var end = tour.getEndDate();
-//
-//        if (start != null && end != null) {
-//            // todo : check, possible wrong count of days, maybe +1 shall be added
-//            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
-//        }
-//    }
+
 }
