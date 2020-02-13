@@ -7,7 +7,7 @@
 	<title>Title</title>
 </head>
 <body>
-<div layout:fragment="content" class="container" style="display: block; max-width: 100%">
+<div layout:fragment="content">
 	<form th:object="${month}">
 		<select th:name="month" onchange="this.form.submit()" id="months">
 			<option th:selected="${selectedMonth}" selected disabled hidden th:text="${selectedMonth}"></option>
@@ -36,7 +36,7 @@
 
 				<th >DRIVERS</th>
 
-				<th th:each="d: ${days}" >
+				<th th:each="d: ${days}" th:style="${'width: 2%; text-align: center;'}">
 					<span th:style="${d.getDayOfWeek().name().substring(0,2) == 'SA' || d.getDayOfWeek().name().substring(0,2) == 'SU' } ? ${'color: green;'}"
 					      th:text="${d.getDayOfWeek().name().substring(0,2)}"></span>
 					<br/>
@@ -68,10 +68,10 @@
                 </span>
 				</td>
 
-				<td th:each="d: ${days}" >
+				<td th:each="d: ${days}" th:style="${'width: 2%; text-align: center;'}">
 					<!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
 					<!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
-					<span th:if="${d.isAfter(t.startDate) && d.isBefore(t.endDate)}">__</span>
+					<span th:if="${d.isAfter(t.startDate) && d.isBefore(t.endDate)}">____</span>
 					<span th:if="${d.isEqual(t.startDate) || d.isEqual(t.endDate)}">|</span>
 <!--					<span th:if="${d.isEqual(t.endDate)}">|</span>-->
 				</td>
