@@ -27,7 +27,9 @@
         <!--/*@thymesVar id="guides" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.guide>"*/-->
         <tr th:each="guide:${guides}">
             <td th:text="${guide.getId()}"></td>
-            <td th:text="${guide.getFullName()}"></td>
+            <td>
+                <a th:href="@{/getViewRelatedToGuide{guideId}(guideId=${guide.id})}" th:text="${guide.fullName}"></a>
+            </td>
             <td>
                 <a th:href="@{/guides/edit{id}(id=${guide.getId()})}">
                     <button type="button" class="btn btn-outline-secondary btn-sm" >edit</button>
