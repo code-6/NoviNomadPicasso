@@ -7,7 +7,7 @@
 	<title>Title</title>
 </head>
 <body>
-<div layout:fragment="content" class="container" style="display: block; max-width: 100%">
+<div layout:fragment="content" class="container">
 	<form th:object="${month}">
 		<select th:name="month" onchange="this.form.submit()" id="months">
 			<option th:selected="${selectedMonth}" selected disabled hidden th:text="${selectedMonth}"></option>
@@ -27,16 +27,16 @@
 
 		<input th:name="year" type="text" th:value="${selectedYear}" placeholder="ENTER YEAR">
 
-		<table class="table-striped" style="display: block; width: 100%">
+		<table class="table-striped">
 			<thead>
 			<tr>
-				<th style="width: 76px">TITTLE</th>
+				<th>TITTLE</th>
 
-				<th style="width: 76px">GUIDES</th>
+				<th>GUIDES</th>
 
-				<th style="width: 76px">DRIVERS</th>
+				<th>DRIVERS</th>
 
-				<th th:each="d: ${days}" style="width: 40px; height: 40px; float: left">
+				<th th:each="d: ${days}">
 					<span th:style="${d.getDayOfWeek().name().substring(0,2) == 'SA' || d.getDayOfWeek().name().substring(0,2) == 'SU' } ? ${'color: green;'}"
 					      th:text="${d.getDayOfWeek().name().substring(0,2)}"></span>
 					<br/>
@@ -48,7 +48,7 @@
 			</tr>
 			</thead>
 
-			<tbody style="display: block;margin-top: 16px;width: 100%;">
+			<tbody>
 			<tr th:each="t: ${tours}">
 				<td th:text="${t.tittle}"></td>
 
@@ -67,7 +67,7 @@
                 </span>
 				</td>
 
-				<td th:each="d: ${days}" style="width: 25px; height: 30px; float: left">
+				<td th:each="d: ${days}">
 					<!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
 					<!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
 					<span th:if="${d.isAfter(t.startDate) && d.isBefore(t.endDate)}">__</span>

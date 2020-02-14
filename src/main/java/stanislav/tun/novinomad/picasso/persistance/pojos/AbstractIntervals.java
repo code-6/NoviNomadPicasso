@@ -14,7 +14,7 @@ import java.util.Objects;
 public abstract class AbstractIntervals {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     @NotNull
