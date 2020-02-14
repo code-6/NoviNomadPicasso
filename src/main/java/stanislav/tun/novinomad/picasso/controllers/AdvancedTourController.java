@@ -33,11 +33,11 @@ public class AdvancedTourController {
     public ModelAndView getView(@RequestParam(required = false, name = "month") Integer month,
                                 @RequestParam(required = false, name = "year") String year) {
         // set default values for month and year. Current date by default
-        logger.debug(" call getView() INPUT DATA month = "+month+" year = "+year);
-        if(month == null)
+        logger.debug(" call getView() INPUT DATA month = " + month + " year = " + year);
+        if (month == null)
             month = LocalDate.now().getMonthValue();
 
-        if(year == null)
+        if (year == null)
             year = String.valueOf(LocalDate.now().getYear());
 
         var mav = new ModelAndView();
@@ -48,10 +48,7 @@ public class AdvancedTourController {
         var days = new LocalDate[totalDays];
         // fill dates
         for (int i = 0; i < totalDays; i++) {
-            days[i] = LocalDate.of(Integer.parseInt(year), month, i+1);
-            //days[i].getDayOfWeek().name().substring(0,1);
-//            days[i] = new MyDayOfWeek(LocalDate.of(ym.getYear(), ym.getMonthValue(), i + 1).getDayOfWeek(), i + 1);
-//            days[i].setMonth(month);
+            days[i] = LocalDate.of(Integer.parseInt(year), month, i + 1);
         }
         // put days of month with days of week
         mav.addObject("days", days);
@@ -64,17 +61,16 @@ public class AdvancedTourController {
         return mav;
     }
 
-    @GetMapping("/getViewRelatedTo{driverId}")
+    @GetMapping("/getViewRelatedToDriver{driverId}")
     public ModelAndView getView(@RequestParam(required = false, name = "month") Integer month,
-                                         @RequestParam(required = false, name = "year") String year,
-                                         @PathVariable(value = "driverId") Long driverId){
-
-        logger.debug(" call second getView() INPUT DATA month = "+month+" year = "+year+" driver id = "+driverId);
+                                @RequestParam(required = false, name = "year") String year,
+                                @PathVariable(value = "driverId") Long driverId) {
+        logger.debug(" call second getView() INPUT DATA month = " + month + " year = " + year + " driver id = " + driverId);
         // set default values for month and year. Current date by default
-        if(month == null)
+        if (month == null)
             month = LocalDate.now().getMonthValue();
 
-        if(year == null)
+        if (year == null)
             year = String.valueOf(LocalDate.now().getYear());
 
         var mav = new ModelAndView();
@@ -85,10 +81,7 @@ public class AdvancedTourController {
         var days = new LocalDate[totalDays];
         // fill dates
         for (int i = 0; i < totalDays; i++) {
-            days[i] = LocalDate.of(Integer.parseInt(year), month, i+1);
-            //days[i].getDayOfWeek().name().substring(0,1);
-//            days[i] = new MyDayOfWeek(LocalDate.of(ym.getYear(), ym.getMonthValue(), i + 1).getDayOfWeek(), i + 1);
-//            days[i].setMonth(month);
+            days[i] = LocalDate.of(Integer.parseInt(year), month, i + 1);
         }
         // put days of month with days of week
         mav.addObject("days", days);
@@ -98,43 +91,96 @@ public class AdvancedTourController {
 
         var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
         // get only where driver is specified
-//        for (Tour t : tours) {
-//            for (Driver d : t.getDrivers()) {
-//                if(d.getId() != driverId)
-//                    tours.remove(t);
-//            }
-//        }
-        var iterator = tours.iterator();
-        while (iterator.hasNext()){
-            var tour = iterator.next();
-            var i = tour.getDrivers().iterator();
-            while(i.hasNext()){
-                var driver = i.next();
-                if(driver.getId() != driverId)
-                    iterator.remove();
+        var ti = tours.iterator();
+        while (ti.hasNext()) {
+            var tour = ti.next();
+            var di = tour.getDrivers().iterator();
+            // if empty driver also delete tour
+            if (!di.hasNext())
+                ti.remove();
+            while (di.hasNext()) {
+                var driver = di.next();
+                if (driver.getId() != driverId)
+                    ti.remove();
             }
         }
-
         mav.addObject("tours", tours);
         return mav;
-
-
     }
 
-    private String num2month(int month){
-        switch (month){
-            case 1:return "January";
-            case 2:return "February";
-            case 3:return "March";
-            case 4:return "April";
-            case 5:return "May";
-            case 6:return "June";
-            case 7:return "July";
-            case 8:return "August";
-            case 9:return "September";
-            case 10:return "November";
-            case 11:return "October";
-            case 12:return "December";
+    @GetMapping("/getViewRelatedToGuide{guideId}")
+    public ModelAndView getView2(@RequestParam(required = false, name = "month") Integer month,
+                                 @RequestParam(required = false, name = "year") String year,
+                                 @PathVariable(value = "guideId") Long guideId) {
+        logger.debug(" call third getView2() INPUT DATA month = " + month + " year = " + year + " guide id = " + guideId);
+        // set default values for month and year. Current date by default
+        if (month == null)
+            month = LocalDate.now().getMonthValue();
+
+        if (year == null)
+            year = String.valueOf(LocalDate.now().getYear());
+
+        var mav = new ModelAndView();
+        mav.setViewName("toursCalendarPage");
+
+        var ym = YearMonth.of(Integer.valueOf(year), month);
+        var totalDays = ym.lengthOfMonth();
+        var days = new LocalDate[totalDays];
+        // fill dates
+        for (int i = 0; i < totalDays; i++) {
+            days[i] = LocalDate.of(Integer.parseInt(year), month, i + 1);
+        }
+        // put days of month with days of week
+        mav.addObject("days", days);
+        // remember user selected month and year to display after refresh page
+        mav.addObject("selectedMonth", num2month(month));
+        mav.addObject("selectedYear", year);
+        var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
+        // get only where driver is specified
+        var ti = tours.iterator();
+        while (ti.hasNext()) {
+            var tour = ti.next();
+            var gi = tour.getGuides().iterator();
+            if (!gi.hasNext())
+                ti.remove();
+            while (gi.hasNext()) {
+                var guide = gi.next();
+                long id = guide.getId();
+                if (id != guideId)
+                    ti.remove();
+            }
+        }
+        logger.debug("tours size after remove " + tours.size());
+        mav.addObject("tours", tours);
+        return mav;
+    }
+
+    private String num2month(int month) {
+        switch (month) {
+            case 1:
+                return "January";
+            case 2:
+                return "February";
+            case 3:
+                return "March";
+            case 4:
+                return "April";
+            case 5:
+                return "May";
+            case 6:
+                return "June";
+            case 7:
+                return "July";
+            case 8:
+                return "August";
+            case 9:
+                return "September";
+            case 10:
+                return "November";
+            case 11:
+                return "October";
+            case 12:
+                return "December";
         }
         throw new IllegalArgumentException("Can accept only integers in range 1-12");
     }
