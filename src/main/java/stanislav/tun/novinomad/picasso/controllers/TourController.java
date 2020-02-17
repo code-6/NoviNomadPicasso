@@ -86,6 +86,12 @@ public class TourController {
 
         mav.addObject("guides", allGuides);
         mav.addObject("guidesExclude", tour.getGuides());
+
+        try {
+            mav.addObject("tourRange", new DateTimeRange(tour.getStartDate(), tour.getEndDate()).toString());
+        } catch (ValidationException e) {
+            logger.error("Unable to add tour range for view "+e.getMessage());
+        }
         mav.setViewName("addTourPage.html");
         logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
         return mav;

@@ -31,7 +31,8 @@
 			<tr>
 				<td>Date Time Range: </td>
 				<td>
-					<input readonly th:name="tourDateTimeRange" type="text" class="datetimes" th:style="${'width: 260px;padding-left: 5px;'}"/>
+					<input readonly th:name="tourDateTimeRange" type="text" class="datetimes" th:style="${'width: 260px;padding-left: 5px;'}" th:value="${tourRange
+					}"/>
 					<script>
                         $(function() {
                             $('.datetimes').daterangepicker({
