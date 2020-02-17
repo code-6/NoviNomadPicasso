@@ -9,6 +9,7 @@ import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +49,7 @@ public class  DriverService {
         return (List<Tour>) driver.get().getTours();
     }
 
-    public List<Tour> getToursRelatedTo(Long driverId, LocalDate from, LocalDate to){
+    public List<Tour> getToursRelatedTo(Long driverId, LocalDateTime from, LocalDateTime to){
         var driver = getDriver(driverId);
         var tours = (List<Tour>) driver.get().getTours();
         var list = new ArrayList<Tour>();

@@ -1,13 +1,10 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -22,19 +19,19 @@ public abstract class AbstractIntervals {
     //@JsonIgnore
     private Tour tour;
     //@JsonIgnore
-    private LocalDate startDate;
+    private LocalDateTime startDate;
     //@JsonIgnore
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @NotNull
     @Transient
-   // @JsonProperty
-    private MyInterval interval;
+    // @JsonProperty
+    private DateTimeRange interval;
 
     public AbstractIntervals() {
     }
 
-    public AbstractIntervals(Tour tour, MyInterval interval) {
+    public AbstractIntervals(Tour tour, DateTimeRange interval) {
         this.tour = tour;
         this.interval = interval;
         startDate = interval.getStart();
@@ -72,29 +69,29 @@ public abstract class AbstractIntervals {
         this.tour = tour;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate from) {
+    public void setStartDate(LocalDateTime from) {
         this.startDate = from;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate to) {
+    public void setEndDate(LocalDateTime to) {
         this.endDate = to;
     }
 
-    public MyInterval getInterval() throws ValidationException {
-        if(interval == null)
-            return new MyInterval(startDate, endDate);
+    public DateTimeRange getInterval() throws ValidationException {
+        if (interval == null)
+            return new DateTimeRange(startDate, endDate);
         return interval;
     }
 
-    public void setInterval(MyInterval interval) {
+    public void setInterval(DateTimeRange interval) {
         this.interval = interval;
         startDate = interval.getStart();
         endDate = interval.getEnd();

@@ -1,6 +1,5 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
@@ -16,7 +15,7 @@ public class DriverTourIntervals extends AbstractIntervals {
     public DriverTourIntervals() {
     }
 
-    public DriverTourIntervals(Tour tour, MyInterval interval, Driver driver) {
+    public DriverTourIntervals(Tour tour, DateTimeRange interval, Driver driver) {
         super(tour, interval);
         this.driver = driver;
     }

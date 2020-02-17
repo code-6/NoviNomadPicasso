@@ -3,6 +3,11 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{fragments/mainLayout}">
 <head>
+	<script type="text/javascript" th:src="@{../js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/moment.min.js}" src="../static/js/moment.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}" src="../static/js/daterangepicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/daterangepicker.css}" href="../static/css/daterangepicker.css"/>
+</head>
 <body>
 <div layout:fragment="content" class="container">
 	<h1>Add/edit tour</h1>
@@ -15,13 +20,35 @@
 				<td>Tittle:</td>
 				<td><input required="required" class="form-control form-control-sm" type="text" th:field="*{tittle}"/></td>
 			</tr>
+<!--			<tr>-->
+<!--				<td>Start date:</td>-->
+<!--				<td><input class="form-control form-control-sm" id="startDate" type="date" th:field="*{startDate}"/></td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td>End date:</td>-->
+<!--				<td><input class="form-control form-control-sm" id="endDate" type="date" th:field="*{endDate}"/></td>-->
+<!--			</tr>-->
 			<tr>
-				<td>Start date:</td>
-				<td><input class="form-control form-control-sm" id="startDate" type="date" th:field="*{startDate}"/></td>
-			</tr>
-			<tr>
-				<td>End date:</td>
-				<td><input class="form-control form-control-sm" id="endDate" type="date" th:field="*{endDate}"/></td>
+				<td>Date Time Range: </td>
+				<td>
+					<input readonly th:name="tourDateTimeRange" type="text" class="datetimes" th:style="${'width: 260px;padding-left: 5px;'}"/>
+					<script>
+                        $(function() {
+                            $('.datetimes').daterangepicker({
+
+                                timePicker: true,
+                                timePicker24Hour: true,
+                                timePickerIncrement: 5,
+                                autoApply: true,
+                                // startDate: moment().startOf('hour'),
+                                // endDate: moment().startOf('hour').add(32, 'hour'),
+                                locale: {
+                                    format: 'DD.MM.YYYY HH:mm'
+                                }
+                            });
+                        });
+					</script>
+				</td>
 			</tr>
 			<tr>
 				<!--<td>Attach a driver</td>-->

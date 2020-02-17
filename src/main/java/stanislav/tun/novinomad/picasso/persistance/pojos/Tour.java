@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -34,12 +35,12 @@ public class Tour extends AbstractEntity implements Serializable {
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     //@Temporal(TemporalType.DATE)
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     //@Temporal(TemporalType.DATE)
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @Column
     private int days;
@@ -129,21 +130,21 @@ public class Tour extends AbstractEntity implements Serializable {
         return days;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
         if(endDate != null)
             days = endDate.getDayOfYear() - this.startDate.getDayOfYear()+1;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
         if(startDate != null)
             days = this.endDate.getDayOfYear() - startDate.getDayOfYear()+1;

@@ -19,6 +19,9 @@ import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.*;
 
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
@@ -42,7 +45,7 @@ public class TourController {
     @Autowired
     GuideIntervalService guideIntervalService;
 
-    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
+    Logger logger = LoggerFactory.getLogger(TourController.class);
 
     @GetMapping("/add")
     public ModelAndView getAddTourView() {
@@ -93,7 +96,7 @@ public class TourController {
             Set<Driver> attachedDrivers = tour.getDrivers();
             if (tour.getStartDate() != null && tour.getEndDate() != null) {
                 for (Driver d : attachedDrivers) {
-                    var dti = new DriverTourIntervals(tour, new MyInterval(tour.getStartDate(), tour.getEndDate()), d);
+                    var dti = new DriverTourIntervals(tour, new DateTimeRange(tour.getStartDate(), tour.getEndDate()), d);
                     //todo: why it not updates already existing rows in DB?
                     driverIntervalService.createOrUpdateInterval(dti);
                 }
@@ -113,7 +116,16 @@ public class TourController {
                                       @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                       @RequestParam(required = false, name = "guides2attach") List<Long> guides2attach,
                                       @RequestParam(required = false, name = "guides2exclude") List<Long> guides2exclude,
+                                      @RequestParam(name="tourDateTimeRange") String tourDateTimeRange,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
+        try {
+            var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
+            tour.setStartDate(dtr.getStart());
+            tour.setEndDate(dtr.getEnd());
+        } catch (ValidationException e) {
+            logger.error("Unable to set tour start/end date time "+e.getMessage());
+        }
+
         var mav = new ModelAndView();
         //setTotalDays(tour);
         attachDrivers(drivers2attach, tour);
@@ -135,7 +147,7 @@ public class TourController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Date.class,
-                new CustomDateEditor(new SimpleDateFormat("dd-MM-yyyy"), true, 10));
+                new CustomDateEditor(new SimpleDateFormat("dd.MM.yyyy"), true, 10));
     }
 
     private void getAdvancedPage(Tour tour, ModelAndView mav) {
@@ -162,11 +174,8 @@ public class TourController {
                 var driverTourInterval = iterator.next();
                 //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
                 try {
-                    var intervalDays = driverTourInterval.getInterval().toDaysStringList();
-                    if (iterator.hasNext())
-                        allDays += intervalDays + ",";
-                    else
-                        allDays += intervalDays;
+                    var intervalDays = driverTourInterval.getInterval().toString();
+                    allDays += intervalDays;
                 } catch (ValidationException e) {
                     e.printStackTrace();
                 }
@@ -185,11 +194,8 @@ public class TourController {
                 var guideTourInterval = iterator.next();
                 //logger.debug("Fill Driver tour inter" + JsonPrinter.getString(mi));
                 try {
-                    var intervalDays = guideTourInterval.getInterval().toDaysStringList();
-                    if (iterator.hasNext())
-                        allDays += intervalDays + ",";
-                    else
-                        allDays += intervalDays;
+                    var intervalDays = guideTourInterval.getInterval().toString();
+                    allDays += intervalDays;
                 } catch (ValidationException e) {
                     e.printStackTrace();
                 }
@@ -209,18 +215,19 @@ public class TourController {
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
         logger.debug("Advanced save tour = " + getString(tour));
-        var drivers = tour.getDrivers();
-        for (Driver d : drivers) {
-            logger.debug("Collection is empty? "+d.getDriverTourIntervals().isEmpty());
-        }
+//        var drivers = tour.getDrivers();
+//        for (Driver d : drivers) {
+//            logger.debug("Collection is empty? "+d.getDriverTourIntervals().isEmpty());
+//        }
         mav.setViewName("redirect:/tours/list");
         return mav;
     }
 
-    private void saveAdvancedDrivers(MapWrapper wrapper, Tour tour){
+    private void saveAdvancedDrivers(MapWrapper wrapper, Tour tour) {
         var driversMap = wrapper.getDriverMap();
         for (Driver d : driversMap.keySet()) {
             var dates = driversMap.get(d);
+            logger.debug("dates + time from view "+dates);
             // todo : fix this hodgie code (updating set didn't helps)
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setDti = d.getDriverTourIntervals();
@@ -231,25 +238,20 @@ public class TourController {
                 }
             }
             try {
-                var listDates = IntervalResolver.parseDays(dates);
-                var listIntervals = IntervalResolver.toIntervals(listDates);
-                for (MyInterval i : listIntervals) {
-                    //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
-                    var dti = new DriverTourIntervals(tour, i, d);
-                    d.getDriverTourIntervals().add(dti);
-                    // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
-                    driverIntervalService.createOrUpdateInterval(dti);
-                }
+                var dateTimeRange = DateTimeRange.parseSingle(dates);
+                var dti = new DriverTourIntervals(tour, dateTimeRange, d);
+                d.getDriverTourIntervals().add(dti);
+                // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
+                driverIntervalService.createOrUpdateInterval(dti);
+
             } catch (ValidationException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
                 e.printStackTrace();
             }
 
         }
     }
 
-    private void saveAdvancedGuides(MapWrapper wrapper, Tour tour){
+    private void saveAdvancedGuides(MapWrapper wrapper, Tour tour) {
         var guidesMap = wrapper.getGuideMap();
         for (Guide guide : guidesMap.keySet()) {
             var dates = guidesMap.get(guide);
@@ -260,24 +262,83 @@ public class TourController {
                 for (GuideTourIntervals gti : setGti) {
                     guideIntervalService.delete(gti);
                 }
+                guide.getGuideTourIntervals().clear();
             }
             try {
-                var listDates = IntervalResolver.parseDays(dates);
-                var listIntervals = IntervalResolver.toIntervals(listDates);
-                for (MyInterval i : listIntervals) {
-                    //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
-                    var gti = new GuideTourIntervals(tour, i, guide);
-                    // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
-                    guideIntervalService.createOrUpdateInterval(gti);
-                }
+                var dateTimeRange = DateTimeRange.parseSingle(dates);
+                var gti = new GuideTourIntervals(tour, dateTimeRange, guide);
+                guide.getGuideTourIntervals().add(gti);
+                // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
+                guideIntervalService.createOrUpdateInterval(gti);
+
             } catch (ValidationException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
                 e.printStackTrace();
             }
 
         }
     }
+
+//    private void saveAdvancedDrivers(MapWrapper wrapper, Tour tour){
+//        var driversMap = wrapper.getDriverMap();
+//        for (Driver d : driversMap.keySet()) {
+//            var dates = driversMap.get(d);
+//            // todo : fix this hodgie code (updating set didn't helps)
+//            //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
+//            var setDti = d.getDriverTourIntervals();
+//            if (setDti.size() > 0) {
+//                for (DriverTourIntervals dti : setDti) {
+//                    driverIntervalService.delete(dti);
+//                    tour.getDriverIntervals().clear();
+//                }
+//            }
+//            try {
+//                var listDates = IntervalResolver.parseDays(dates);
+//                var listIntervals = IntervalResolver.toIntervals(listDates);
+//                for (DateRange i : listIntervals) {
+//                    //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
+//                    var dti = new DriverTourIntervals(tour, i, d);
+//                    d.getDriverTourIntervals().add(dti);
+//                    // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
+//                    driverIntervalService.createOrUpdateInterval(dti);
+//                }
+//            } catch (ValidationException e) {
+//                e.printStackTrace();
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//    }
+
+//    private void saveAdvancedGuides(MapWrapper wrapper, Tour tour) {
+//        var guidesMap = wrapper.getGuideMap();
+//        for (Guide guide : guidesMap.keySet()) {
+//            var dates = guidesMap.get(guide);
+//            // todo : fix this hodgie code (updating set didn't helps)
+//            //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
+//            var setGti = guide.getGuideTourIntervals();
+//            if (setGti.size() > 0) {
+//                for (GuideTourIntervals gti : setGti) {
+//                    guideIntervalService.delete(gti);
+//                }
+//            }
+//            try {
+//                var listDates = IntervalResolver.parseDays(dates);
+//                var listIntervals = IntervalResolver.toIntervals(listDates);
+//                for (DateRange i : listIntervals) {
+//                    //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
+//                    var gti = new GuideTourIntervals(tour, i, guide);
+//                    // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
+//                    guideIntervalService.createOrUpdateInterval(gti);
+//                }
+//            } catch (ValidationException e) {
+//                e.printStackTrace();
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//    }
 
     private void attachDrivers(List<Long> drivers2attach, Tour tour) {
         // for edit purposes

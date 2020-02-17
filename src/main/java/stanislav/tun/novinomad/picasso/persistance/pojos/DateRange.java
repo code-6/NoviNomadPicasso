@@ -1,23 +1,22 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 //@JsonRootName(value = "interval")
-public class MyInterval {
+public class DateRange {
     //@JsonProperty
     private LocalDate start, end;
     //@JsonProperty
     private int totalDays;
 
-    public MyInterval(@NotNull LocalDate start, @NotNull LocalDate end) throws ValidationException {
+    public DateRange(@NotNull LocalDate start, @NotNull LocalDate end) throws ValidationException {
         this.start = start;
         this.end = end;
         if(start.isAfter(end))
@@ -31,9 +30,9 @@ public class MyInterval {
      * @return List of interval objects.
      * */
     //@JsonProperty("intervals")
-    public static List<MyInterval> parse(String intervals) throws ValidationException {
+    public static List<DateRange> parse(String intervals) throws ValidationException {
         intervals = intervals.trim();
-        var list = new ArrayList<MyInterval>();
+        var list = new ArrayList<DateRange>();
         // store {start date} -- {end date}
         var i = intervals.split(";");
         for (String date : i) {
@@ -41,9 +40,9 @@ public class MyInterval {
             var di = date.split("--");
             try{
                 var endDate = LocalDate.parse(di[1]);
-                list.add(new MyInterval(LocalDate.parse(di[0]), endDate));
+                list.add(new DateRange(LocalDate.parse(di[0]), endDate));
             }catch (Exception e){
-                list.add(new MyInterval(LocalDate.parse(di[0]), LocalDate.parse(di[0])));
+                list.add(new DateRange(LocalDate.parse(di[0]), LocalDate.parse(di[0])));
             }
         }
         return list;
@@ -53,7 +52,7 @@ public class MyInterval {
         return ( (start.isBefore(to) || start.isEqual(to))&&(end.isAfter(from) || end.isEqual(from)) );
     }
 
-    public boolean overlaps(MyInterval interval){
+    public boolean overlaps(DateRange interval){
         return ( (start.isBefore(interval.getEnd()) || start.isEqual(interval.getEnd()))&&(end.isAfter(interval.getStart()) || end.isEqual(interval.getStart())) );
     }
 

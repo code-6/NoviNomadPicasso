@@ -20,7 +20,7 @@
 			<tr th:each="entry : ${wrapper.driverMap.entrySet()}">
 				<td th:text="${entry.key.fullName}"></td>
 				<td>
-					<input type="text" class="datetimes" th:field="*{driverMap[__${entry.key.id}__]}" th:value="*{driverMap[__${entry.key.id}__]}" th:style="${'width: 260px;padding-left: 5px;'}"/>
+					<input readonly type="text" class="datetimes" th:field="*{driverMap[__${entry.key.id}__]}" th:value="*{driverMap[__${entry.key.id}__]}" th:style="${'width: 260px;padding-left: 5px;'}"/>
 				</td>
 			</tr>
 			<tr>
@@ -30,7 +30,7 @@
 			<tr th:each="entry : ${wrapper.guideMap.entrySet()}">
 				<td th:text="${entry.key.fullName}"></td>
 				<td>
-					<input type="text" class="datetimes" th:field="*{guideMap[__${entry.key.id}__]}" th:value="*{guideMap[__${entry.key.id}__]}" th:style="${'width: 260px;padding-left: 5px;'}"/>
+					<input readonly type="text" class="datetimes" th:field="*{guideMap[__${entry.key.id}__]}" th:value="*{guideMap[__${entry.key.id}__]}" th:style="${'width: 260px;padding-left: 5px;'}"/>
 				</td>
 			</tr>
 			<script>
@@ -44,7 +44,7 @@
                         // startDate: moment().startOf('hour'),
                         // endDate: moment().startOf('hour').add(32, 'hour'),
                         locale: {
-                            format: 'DD-MM-YYYY HH:mm'
+                            format: 'DD.MM.YYYY HH:mm'
                         }
                     });
                 });
