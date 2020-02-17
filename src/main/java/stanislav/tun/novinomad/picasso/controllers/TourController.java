@@ -90,7 +90,7 @@ public class TourController {
         try {
             mav.addObject("tourRange", new DateTimeRange(tour.getStartDate(), tour.getEndDate()).toString());
         } catch (ValidationException e) {
-            logger.error("Unable to add tour range for view "+e.getMessage());
+            logger.error("Unable to add tour range for view " + e.getMessage());
         }
         mav.setViewName("addTourPage.html");
         logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
@@ -99,12 +99,18 @@ public class TourController {
 
     private void setDefaultIntervals(Tour tour, ModelAndView mav) {
         try {
-            Set<Driver> attachedDrivers = tour.getDrivers();
+            var attachedDrivers = tour.getDrivers();
+            var attachedGuides = tour.getGuides();
             if (tour.getStartDate() != null && tour.getEndDate() != null) {
                 for (Driver d : attachedDrivers) {
                     var dti = new DriverTourIntervals(tour, new DateTimeRange(tour.getStartDate(), tour.getEndDate()), d);
                     //todo: why it not updates already existing rows in DB?
                     driverIntervalService.createOrUpdateInterval(dti);
+                }
+
+                for (Guide g : attachedGuides) {
+                    var gti = new GuideTourIntervals(tour, new DateTimeRange(tour.getStartDate(), tour.getEndDate()), g);
+                    guideIntervalService.createOrUpdateInterval(gti);
                 }
             }
         } catch (ValidationException e) {
@@ -122,14 +128,14 @@ public class TourController {
                                       @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                       @RequestParam(required = false, name = "guides2attach") List<Long> guides2attach,
                                       @RequestParam(required = false, name = "guides2exclude") List<Long> guides2exclude,
-                                      @RequestParam(name="tourDateTimeRange") String tourDateTimeRange,
+                                      @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
         try {
             var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
             tour.setStartDate(dtr.getStart());
             tour.setEndDate(dtr.getEnd());
         } catch (ValidationException e) {
-            logger.error("Unable to set tour start/end date time "+e.getMessage());
+            logger.error("Unable to set tour start/end date time " + e.getMessage());
         }
 
         var mav = new ModelAndView();
@@ -186,6 +192,7 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
+            System.out.println("all days = "+allDays+" for driver "+d.getFullName());
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
@@ -233,7 +240,7 @@ public class TourController {
         var driversMap = wrapper.getDriverMap();
         for (Driver d : driversMap.keySet()) {
             var dates = driversMap.get(d);
-            logger.debug("dates + time from view "+dates);
+            logger.debug("dates + time from view " + dates);
             // todo : fix this hodgie code (updating set didn't helps)
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setDti = d.getDriverTourIntervals();

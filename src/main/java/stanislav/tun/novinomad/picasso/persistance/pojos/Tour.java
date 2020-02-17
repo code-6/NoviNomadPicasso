@@ -12,8 +12,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -132,6 +136,18 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public LocalDateTime getStartDate() {
         return startDate;
+    }
+
+    @JsonIgnore
+    @Transient
+    public String getStartDateForPicker(){
+        return "\""+startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+"\"";
+    }
+
+    @JsonIgnore
+    @Transient
+    public String getEndDateForPicker(){
+        return "\""+endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+"\"";
     }
 
     public void setStartDate(LocalDateTime startDate) {

@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,10 +25,18 @@ public class DateTimeRange {
             .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
             .toFormatter();
 
+    private static DateTimeFormatter f2 = new DateTimeFormatterBuilder()
+            .appendPattern("MM/DD/YYYY")
+            .optionalStart()
+            .appendPattern(" HH:mm")
+            .optionalEnd()
+            .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+            .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+            .toFormatter();
+
     public DateTimeRange(@NotNull LocalDateTime start, @NotNull LocalDateTime end) throws ValidationException {
         this.start = start;
         this.end = end;
-
         if(start.isAfter(end))
             throw new ValidationException("Wrong interval format. Start date cannot be larger than end date.");
 
