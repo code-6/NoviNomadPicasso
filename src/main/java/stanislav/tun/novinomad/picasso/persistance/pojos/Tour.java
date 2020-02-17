@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 @Entity(name = "tours")
 @JsonRootName(value = "tour")
+@EntityListeners(AuditingEntityListener.class)
 public class Tour extends AbstractEntity implements Serializable {
 //    @JsonIgnore
 //    @Transient
@@ -61,14 +63,16 @@ public class Tour extends AbstractEntity implements Serializable {
     @JoinTable(name="tours_guides", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="guide_id"))
     private Set<Guide> guides = new HashSet<>();
 
+
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
     @JsonIgnore
     Set<DriverTourIntervals> driverIntervals = new HashSet<DriverTourIntervals>();
 
+
+    @JsonIgnore
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
-    @JsonIgnore
     Set<GuideTourIntervals> guideIntervals = new HashSet<>();
 
     public void addDriver(Optional<Driver> driver){

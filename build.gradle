@@ -38,16 +38,19 @@ dependencies {
     //compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: '2.10.1'
     // https://mvnrepository.com/artifact/org.webjars.bower/jquery
     compile group: 'org.webjars.bower', name: 'jquery', version: '3.4.1'
-// https://mvnrepository.com/artifact/org.webjars/webjars-locator
+    // https://mvnrepository.com/artifact/org.webjars/webjars-locator
     compile group: 'org.webjars', name: 'webjars-locator', version: '0.38'
-// https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
+    // https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
     compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
+    // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
+    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     implementation 'junit:junit:4.12'
     implementation 'org.testng:testng:6.9.6'
     implementation 'junit:junit:4.12'
-    //implementation 'org.springframework.boot:spring-boot-starter-security'
-    //testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {

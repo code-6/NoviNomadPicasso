@@ -10,6 +10,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
@@ -25,6 +26,7 @@ import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 @Controller
 @RequestMapping("/tours")
 public class TourController {
+
     @Autowired
     TourService tourService;
 
@@ -40,7 +42,7 @@ public class TourController {
     @Autowired
     GuideIntervalService guideIntervalService;
 
-    Logger logger = LoggerFactory.getLogger(TourController.class);
+    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     @GetMapping("/add")
     public ModelAndView getAddTourView() {
@@ -66,7 +68,7 @@ public class TourController {
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
         var tour = tourService.getTour(tourId).get();
-        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
+
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
@@ -82,6 +84,7 @@ public class TourController {
         mav.addObject("guides", allGuides);
         mav.addObject("guidesExclude", tour.getGuides());
         mav.setViewName("addTourPage.html");
+        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
         return mav;
     }
 
@@ -101,6 +104,8 @@ public class TourController {
         mav.setViewName("redirect:/tours/add");
     }
 
+    //todo : add default intervals for guides
+
     // todo ; refactor to big method. change logic of tour creation
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView addTourAction(@ModelAttribute("tour") @Valid Tour tour,
@@ -117,7 +122,6 @@ public class TourController {
         attachGuides(guides2attach, tour);
         excludeGuides(guides2exclude, tour);
 
-        logger.debug("addTourAction TOUR BEFORE INSERT = " + getString(tour));
         tourService.createOrUpdateTour(tour);
         mav.addObject("tour", tour);
         if (adv) {
@@ -204,7 +208,11 @@ public class TourController {
 
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
-
+        logger.debug("Advanced save tour = " + getString(tour));
+        var drivers = tour.getDrivers();
+        for (Driver d : drivers) {
+            logger.debug("Collection is empty? "+d.getDriverTourIntervals().isEmpty());
+        }
         mav.setViewName("redirect:/tours/list");
         return mav;
     }
@@ -219,6 +227,7 @@ public class TourController {
             if (setDti.size() > 0) {
                 for (DriverTourIntervals dti : setDti) {
                     driverIntervalService.delete(dti);
+                    tour.getDriverIntervals().clear();
                 }
             }
             try {
@@ -227,6 +236,7 @@ public class TourController {
                 for (MyInterval i : listIntervals) {
                     //logger.debug("INSERT driver tour inter " + JsonPrinter.getString(i));
                     var dti = new DriverTourIntervals(tour, i, d);
+                    d.getDriverTourIntervals().add(dti);
                     // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
                     driverIntervalService.createOrUpdateInterval(dti);
                 }
@@ -267,28 +277,6 @@ public class TourController {
             }
 
         }
-    }
-    // todo : debug method. Remove for production
-    @RequestMapping("/init")
-    public String init() {
-        var d1 = new Driver("Ryan", "Cooper");
-        var d2 = new Driver("Ken", "Miles");
-        var d3 = new Driver("Michael", "Schumacher");
-        var d4 = new Driver("Ken", "Block");
-
-        driverService.createOrUpdateDriver(d1);
-        driverService.createOrUpdateDriver(d2);
-        driverService.createOrUpdateDriver(d3);
-        driverService.createOrUpdateDriver(d4);
-        driverService.createOrUpdateDriver(new Driver("Carroll", "Shelby"));
-
-        guideService.createOrUpdateGuide(new Guide("Guide1", "Guide1"));
-        guideService.createOrUpdateGuide(new Guide("Guide2", "Guide2"));
-        guideService.createOrUpdateGuide(new Guide("Guide3", "Guide3"));
-        guideService.createOrUpdateGuide(new Guide("Guide4", "Guide4"));
-        guideService.createOrUpdateGuide(new Guide("Guide5", "Guide5"));
-
-        return "redirect:/tours/add";
     }
 
     private void attachDrivers(List<Long> drivers2attach, Tour tour) {
@@ -338,14 +326,5 @@ public class TourController {
                     tour.deleteGuide(guide.get());
                 }
     }
-//    // todo : better to put this logic to Tour class in setters and getters
-//    private void setTotalDays(Tour tour) {
-//        var start = tour.getStartDate();
-//        var end = tour.getEndDate();
-//
-//        if (start != null && end != null) {
-//            // todo : check, possible wrong count of days, maybe +1 shall be added
-//            tour.setDays(end.getDayOfYear() - start.getDayOfYear());
-//        }
-//    }
+
 }

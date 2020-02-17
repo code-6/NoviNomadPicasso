@@ -18,7 +18,6 @@ public class DriverConverter implements Formatter< Driver> {
     @Autowired
     DriverService service;
 
-
     @Override
     public Driver parse(String text, Locale locale) throws ParseException {
         long driverId = Long.valueOf(text);

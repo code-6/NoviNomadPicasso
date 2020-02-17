@@ -6,35 +6,38 @@
     <script type="text/javascript" th:src="@{/js/sortScript.js}"></script>
 </head>
 <body>
-<div layout:fragment="content" class="container">
+<div layout:fragment="content" >
     <h1>Tours</h1>
     <br/>
-    <table class="table table-striped" id="toursList">
+    <table class="table table-striped" id="toursList" align="left">
         <thead>
         <tr>
             <th onclick="sortTable(0,'toursList')">
                 <button type="button" class="btn btn-outline-info btn-sm">ID</button>
             </th>
             <th onclick="sortTable(1,'toursList')">
-                <button type="button" class="btn btn-outline-info btn-sm">Tittle</button>
+                <button type="button" class="btn btn-outline-info btn-sm">TITTLE</button>
             </th>
             <th onclick="sortTable(2,'toursList')">
-                <button type="button" class="btn btn-outline-info btn-sm">Start date</button>
+                <button type="button" class="btn btn-outline-info btn-sm">START DATE</button>
             </th>
             <th onclick="sortTable(3,'toursList')">
-                <button type="button" class="btn btn-outline-info btn-sm">End date</button>
+                <button type="button" class="btn btn-outline-info btn-sm">END DATE</button>
             </th>
             <th onclick="sortTable(4,'toursList')">
-                <button type="button" class="btn btn-outline-info btn-sm">Total days</button>
+                <button type="button" class="btn btn-outline-info btn-sm">TOTAL DAYS</button>
             </th>
             <th onclick="sortTable(5,'toursList')">
-                <button type="button" class="btn btn-outline-info btn-sm">Drivers</button>
+                <button type="button" class="btn btn-outline-info btn-sm">DRIVERS</button>
             </th>
             <th onclick="sortTable(6,'toursList')">
-                <button type="button" class="btn btn-outline-info btn-sm">Guides</button>
+                <button type="button" class="btn btn-outline-info btn-sm">GUIDES</button>
             </th>
             <th>
-                <button type="button" class="btn btn-outline-info btn-sm">Description</button>
+                <button type="button" class="btn btn-outline-info btn-sm">DESCRIPTION</button>
+            </th>
+            <th>
+                <button type="button" class="btn btn-outline-info btn-sm">CREATED BY</button>
             </th>
         </tr>
         </thead>
@@ -60,12 +63,16 @@
                 </span>
             </td>
             <td th:text="${tour.description}"></td>
+
+            <td th:text="${tour.createdBy}"></td>
+
             <td>
                 <a th:href="@{/tours/edit{id}(id=${tour.id})}">
                     <button type="button" class="btn btn-outline-secondary btn-sm" >edit</button>
                 </a>
 <!--                <button th:href="@{/tours/edit{id}(id=${tour.id})}" type="button" class="btn btn-outline-secondary">edit</button>-->
             </td>
+
         </tr>
         </tbody>
     </table>

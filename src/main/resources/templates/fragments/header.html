@@ -1,19 +1,27 @@
 <header th:fragment="header">
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link disabled" data-toggle="tab" href="#">Da Vinci</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="/tours/list">Tours</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " data-toggle="tab" href="/drivers/list">Drivers</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " data-toggle="tab" href="/guides/list">Guides</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " data-toggle="tab" href="/tours/init">Initialize</a>
-        </li>
-    </ul>
+	<div class="bs-component">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<!--			<a class="navbar-brand" href="#">Picasso</a>-->
+			<a class="navbar-brand" href="/getview">Picasso</a>
+			<div class="collapse navbar-collapse" id="navbarColor01">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/tours/list">Tours</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="/drivers/list">Drivers</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="/guides/list">Guides</a>
+					</li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
+					<div sec:authentication="name" class="navbar-brand"></div>
+					<a href="/logout">
+						<button class="btn btn-outline-primary" type="button" >LogOut</button>
+					</a>
+				</form>
+			</div>
+		</nav>
+	</div>
 </header>

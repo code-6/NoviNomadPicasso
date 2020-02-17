@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,9 +13,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
 @Entity(name = "drivers")
 @JsonRootName(value = "driver")
+@EntityListeners(AuditingEntityListener.class)
 public class Driver extends AbstractEntity implements Serializable {
 
     @Column
@@ -110,4 +111,5 @@ public class Driver extends AbstractEntity implements Serializable {
     public int hashCode() {
         return Objects.hash(super.hashCode(), fullName);
     }
+
 }
