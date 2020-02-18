@@ -89,7 +89,9 @@ public class TourController {
 
         try {
             mav.addObject("tourRange", new DateTimeRange(tour.getStartDate(), tour.getEndDate()).toString());
-        } catch (ValidationException e) {
+        } catch (NullPointerException e)  {
+            logger.error("Unable to add tour range for view " + e.getMessage());
+        } catch (ValidationException e){
             logger.error("Unable to add tour range for view " + e.getMessage());
         }
         mav.setViewName("addTourPage.html");
@@ -129,11 +131,13 @@ public class TourController {
                                       @RequestParam(required = false, name = "guides2attach") List<Long> guides2attach,
                                       @RequestParam(required = false, name = "guides2exclude") List<Long> guides2exclude,
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
-                                      @RequestParam(required = false, name = "adv") boolean adv) {
+                                      @RequestParam(required = false, name = "adv") boolean adv) throws Exception {
         try {
-            var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
-            tour.setStartDate(dtr.getStart());
-            tour.setEndDate(dtr.getEnd());
+            if(tourDateTimeRange != null && tourDateTimeRange != ""){
+                var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
+                tour.setStartDate(dtr.getStart());
+                tour.setEndDate(dtr.getEnd());
+            }
         } catch (ValidationException e) {
             logger.error("Unable to set tour start/end date time " + e.getMessage());
         }
@@ -149,7 +153,10 @@ public class TourController {
         tourService.createOrUpdateTour(tour);
         mav.addObject("tour", tour);
         if (adv) {
-            getAdvancedPage(tour, mav);
+            if(tour.getStartDate() != null && tour.getEndDate() != null)
+                getAdvancedPage(tour, mav);
+            else
+                throw new Exception("Advanced options can be added only if tour have some date range!");
         } else { // set to whole tour by default
             setDefaultIntervals(tour, mav);
         }
@@ -360,7 +367,7 @@ public class TourController {
             if (drivers2attach.size() > 0)
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
-                    // todo : before attach driver to the tour, check if driver already attached for this date in another tours
+                    // todo : before attach driver to the tour, check if driver already attached for this date in another tour
                     tour.addDriver(driver);
                 }
     }

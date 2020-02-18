@@ -41,12 +41,14 @@
                                 timePicker24Hour: true,
                                 timePickerIncrement: 5,
                                 autoApply: true,
-                                // startDate: moment().startOf('hour'),
-                                // endDate: moment().startOf('hour').add(32, 'hour'),
                                 locale: {
-                                    format: 'DD.MM.YYYY HH:mm'
+                                    format: 'DD.MM.YYYY HH:mm',
+                                    cancelLabel: 'Clear'
                                 }
                             });
+                            $('.datetimes').on('cancel.daterangepicker', function(ev, picker) {
+     				 			$(this).val('');
+  							});
                         });
 					</script>
 				</td>
