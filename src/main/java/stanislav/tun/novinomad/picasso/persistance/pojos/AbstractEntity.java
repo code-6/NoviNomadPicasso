@@ -38,7 +38,7 @@ public abstract class AbstractEntity {
     protected Date lasModifyDate;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     public long getId() {

@@ -10,18 +10,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
-import stanislav.tun.novinomad.picasso.util.IntervalResolver;
 
 import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.*;
 
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
@@ -192,7 +186,7 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
-            System.out.println("all days = "+allDays+" for driver "+d.getFullName());
+            System.out.println("all days = " + allDays + " for driver " + d.getFullName());
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
@@ -361,7 +355,15 @@ public class TourController {
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tours
-                    tour.addDriver(driver);
+                    try {
+                        if(checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour)){
+                            System.err.println("CONFLICT! ");
+                        }else {
+                            tour.addDriver(driver);
+                        }
+                    } catch (ValidationException e) {
+                        e.printStackTrace();
+                    }
                 }
     }
 
@@ -373,6 +375,7 @@ public class TourController {
                 for (Long id : guides2attach) {
                     var guide = guideService.getGuide(id);
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tours
+
                     tour.addGuide(guide);
                 }
     }
@@ -399,6 +402,38 @@ public class TourController {
 //                    }
                     tour.deleteGuide(guide.get());
                 }
+    }
+
+    private boolean checkAlreadyAppointedDate(AbstractEntity entity, DateTimeRange comparableRange, Tour t) {
+
+        if (entity instanceof Driver) {
+            Driver d = (Driver) entity;
+            var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
+            for (DriverTourIntervals dti : allDriverIntervals) {
+                try {
+                    if (dti.getInterval().overlaps(comparableRange)){
+                        System.err.println("CONFLICT! Can't attach driver "+d.getFullName()+" to tour "+t.getTittle()+
+                                " for datetime range "+comparableRange.toString()+" . Reason: datetime overlaps with tour "+dti.getTour().getTittle()+" "+dti.getTour().getStartDate()+" - "+dti.getTour().getEndDate());
+                        return true;
+                    }
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (entity instanceof Guide) {
+            Guide g = (Guide) entity;
+            var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
+            for (GuideTourIntervals gti : allGuideIntervals) {
+                try {
+                    if (gti.getInterval().overlaps(comparableRange))
+                        return true;
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+
     }
 
 }

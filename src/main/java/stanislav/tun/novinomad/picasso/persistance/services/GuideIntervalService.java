@@ -28,7 +28,7 @@ public class GuideIntervalService {
         return repo.findById(id);
     }
 
-    public Collection<GuideTourIntervals> getAllRelatedToDriver(Guide guide) {
+    public Collection<GuideTourIntervals> getAllRelatedToGuide(Guide guide) {
         //return Collections.sort(Arrays.asList(repo.findByDriverEquals(driverId)));
         return repo.findByGuideEquals(guide);
     }

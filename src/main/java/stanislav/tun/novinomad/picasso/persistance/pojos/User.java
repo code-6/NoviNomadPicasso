@@ -11,7 +11,7 @@ import java.util.Set;
 @JsonRootName(value = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     private String userName;
