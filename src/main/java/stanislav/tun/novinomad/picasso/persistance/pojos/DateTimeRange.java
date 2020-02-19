@@ -37,16 +37,16 @@ public class DateTimeRange {
     public DateTimeRange(@NotNull LocalDateTime start, @NotNull LocalDateTime end) throws ValidationException {
         this.start = start;
         this.end = end;
-        if(start.isAfter(end))
+        if (start.isAfter(end))
             throw new ValidationException("Wrong interval format. Start date cannot be larger than end date.");
 
-        totalDays = (end.getDayOfYear() - start.getDayOfYear())+1;
+        totalDays = (end.getDayOfYear() - start.getDayOfYear()) + 1;
     }
 
     /**
      * Single range
      * dd.mm.yyyy hh:mm - dd.mm.yyyy hh:mm
-     * */
+     */
     public static DateTimeRange parseSingle(String range) throws ValidationException {
         var days = range.split(" - ");
         return new DateTimeRange(LocalDateTime.from(f.parse(days[0])), LocalDateTime.from(f.parse(days[1])));
@@ -55,7 +55,7 @@ public class DateTimeRange {
     /**
      * Multi range
      * dd.mm.yyyy hh:mm - dd.mm.yyyy hh:mm; dd.mm.yyyy hh:mm - dd.mm.yyyy hh:mm; ... dd.mm.yyyy hh:mm - dd.mm.yyyy hh:mm;
-     * */
+     */
     public List<DateTimeRange> parseMulti(String range) throws ValidationException {
         var result = new ArrayList<DateTimeRange>();
         var ranges = range.trim().split(";");
@@ -66,20 +66,20 @@ public class DateTimeRange {
         return result;
     }
 
-    public boolean overlaps(LocalDateTime from, LocalDateTime to){
-        return ( (start.isBefore(to) || start.isEqual(to))&&(end.isAfter(from) || end.isEqual(from)) );
+    public boolean overlaps(LocalDateTime from, LocalDateTime to) {
+        return ((start.isBefore(to) || start.isEqual(to)) && (end.isAfter(from) || end.isEqual(from)));
     }
 
-    public boolean overlaps(DateTimeRange interval){
-        return ( (start.isBefore(interval.getEnd()) || start.isEqual(interval.getEnd()))&&(end.isAfter(interval.getStart()) || end.isEqual(interval.getStart())) );
+    public boolean overlaps(DateTimeRange interval) {
+        return ((start.isBefore(interval.getEnd()) || start.isEqual(interval.getEnd())) && (end.isAfter(interval.getStart()) || end.isEqual(interval.getStart())));
     }
 
     /**
      * used for front calendar display already attached specific days.
-     * */
+     */
     @Override
     public String toString() {
-        return f.format(start) + " - "+f.format(end);
+        return f.format(start) + " - " + f.format(end);
     }
 
     public LocalDateTime getStart() {
