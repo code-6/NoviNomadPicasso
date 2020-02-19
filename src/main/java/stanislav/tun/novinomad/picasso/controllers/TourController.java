@@ -368,7 +368,15 @@ public class TourController {
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tour
-                    tour.addDriver(driver);
+                    try {
+                        if(checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour)){
+                            System.err.println("CONFLICT! ");
+                        }else {
+                            tour.addDriver(driver);
+                        }
+                    } catch (ValidationException e) {
+                        e.printStackTrace();
+                    }
                 }
     }
 
@@ -406,6 +414,38 @@ public class TourController {
 //                    }
                     tour.deleteGuide(guide.get());
                 }
+    }
+
+    private boolean checkAlreadyAppointedDate(AbstractEntity entity, DateTimeRange comparableRange, Tour t) {
+
+        if (entity instanceof Driver) {
+            Driver d = (Driver) entity;
+            var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
+            for (DriverTourIntervals dti : allDriverIntervals) {
+                try {
+                    if (dti.getInterval().overlaps(comparableRange)){
+                        System.err.println("CONFLICT! Can't attach driver "+d.getFullName()+" to tour "+t.getTittle()+
+                                " for datetime range "+comparableRange.toString()+" . Reason: datetime overlaps with tour "+dti.getTour().getTittle()+" "+dti.getTour().getStartDate()+" - "+dti.getTour().getEndDate());
+                        return true;
+                    }
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (entity instanceof Guide) {
+            Guide g = (Guide) entity;
+            var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
+            for (GuideTourIntervals gti : allGuideIntervals) {
+                try {
+                    if (gti.getInterval().overlaps(comparableRange))
+                        return true;
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+
     }
 
 }
