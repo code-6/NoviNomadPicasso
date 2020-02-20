@@ -33,12 +33,14 @@ public class DriverController {
 
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId) {
-        var driver = driverService.getDriver(driverId);
-        logger.info("Start edit driver "+ JsonPrinter.getString(driver));
-        var mav = new ModelAndView();
-        mav.addObject("driver", driver);
-        mav.setViewName("addDriverPage.html");
-        return mav;
+        // test exception handler
+        throw new NullPointerException();
+//        var driver = driverService.getDriver(driverId);
+//        logger.info("Start edit driver "+ JsonPrinter.getString(driver));
+//        var mav = new ModelAndView();
+//        mav.addObject("driver", driver);
+//        mav.setViewName("addDriverPage.html");
+//        return mav;
     }
 
     // get view
