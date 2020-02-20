@@ -10,11 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class GlobalExceptionHandleController {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(NullPointerException.class)
-    public ModelAndView handleNullPointerException(){
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleException(){
         var mav = new ModelAndView("error");
-        mav.addObject("message", "oops :( something was not initialized properly");
-        mav.addObject("description", "please check for all fields are correctly filled");
+        mav.addObject("message", "");
+        mav.addObject("description", "");
         return mav;
     }
 }

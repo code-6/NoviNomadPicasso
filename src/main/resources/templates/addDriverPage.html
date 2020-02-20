@@ -3,42 +3,67 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Add/edit driver</title>
+	<meta charset="UTF-8">
+	<title>Add/edit driver</title>
 </head>
 <body>
-    <div layout:fragment="content" >
-        <h1>Add/edit driver</h1>
-        <br/>
-        <!--/*@thymesVar id="driver" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
-        <form action="#" th:action="@{/drivers/save}" th:object="${driver}" method="post">
-            <table border="0" cellpadding="10">
-                <tr>
-                    <td>First name:</td>
-                    <td><input type="text" th:field="*{firstName}"/></td>
-                </tr>
+<div layout:fragment="content">
+	<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+	<h1>Add/edit driver</h1>
+	<br/>
+	<!--/*@thymesVar id="driver" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
+	<form action="#" th:action="@{/drivers/save}" th:object="${driver}" method="post">
+		<div th:if="${error}">
+<!--			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+			<p>Yahooo</p>
+			<script th:inline="javascript">
+                $(document).ready(function () {
+                    $("#myModal").modal("show");
+                });
+			</script>
 
-                <tr>
-                    <td>Middle name:</td>
-                    <td><input type="text" th:field="*{middleName}"/></td>
-                </tr>
+			<div th:id="myModal" id="errorContent" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<h1> MODAAAAAAAAAAAAAAAAAAAAL !!!!</h1>
+<!--						<div class="alert alert-dismissible alert-danger">-->
+<!--							<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+<!--							<strong>Oh snap!</strong> <a href="#" class="alert-link">Change a few things up</a> and try-->
+<!--							submitting again.-->
+<!--						</div>-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<table border="0" cellpadding="10">
+			<tr>
+				<td>First name:</td>
+				<td><input type="text" th:field="*{firstName}"/></td>
+			</tr>
 
-                <tr>
-                    <td>Last name:</td>
-                    <td><input type="text" th:field="*{lastName}"/></td>
-                </tr>
+			<tr>
+				<td>Middle name:</td>
+				<td><input type="text" th:field="*{middleName}"/></td>
+			</tr>
 
-                <tr>
-                    <td colspan="2">
-                        <button type="submit" class="btn btn-outline-success">Confirm</button>
-                    </td>
-                </tr>
+			<tr>
+				<td>Last name:</td>
+				<td><input type="text" th:field="*{lastName}"/></td>
+			</tr>
 
-            </table>
-            <!--need for edit function, to auto populate fields with data of driver taken by given id-->
-            <input type="hidden" th:field="*{id}">
-        </form>
+			<tr>
+				<td colspan="2">
+					<button type="submit" class="btn btn-outline-success">Confirm</button>
+				</td>
+			</tr>
 
-    </div>
+		</table>
+		<!--need for edit function, to auto populate fields with data of driver taken by given id-->
+		<input type="hidden" th:field="*{id}">
+	</form>
+
+</div>
 </body>
 </html>
