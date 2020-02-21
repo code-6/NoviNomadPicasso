@@ -145,9 +145,10 @@ public class TourController {
 
         var mav = new ModelAndView();
         //setTotalDays(tour);
-        try{
+        try {
             attachDrivers(drivers2attach, tour);
-        }catch (OverlapsException e){
+        } catch (OverlapsException e) {
+            e.printStackTrace();
             mav = getAddTourView();
             mav.addObject("error", "Tours date range conflict!");
             mav.addObject("errorDesc", e.getMessage());
@@ -155,19 +156,28 @@ public class TourController {
             mav.addObject("tour", tour);
             return mav;
         }
-
         excludeDrivers(drivers2exclude, tour);
 
-        attachGuides(guides2attach, tour);
+        try {
+            attachGuides(guides2attach, tour);
+        } catch (OverlapsException e) {
+            e.printStackTrace();
+            mav = getAddTourView();
+            mav.addObject("error", "Tours date range conflict!");
+            mav.addObject("errorDesc", e.getMessage());
+            mav.addObject("exception", e);
+            mav.addObject("tour", tour);
+            return mav;
+        }
         excludeGuides(guides2exclude, tour);
 
         tourService.createOrUpdateTour(tour);
         if (adv) {
-            if(tour.getStartDate() == null && tour.getEndDate() == null){
+            if (tour.getStartDate() == null && tour.getEndDate() == null) {
                 mav = getAddTourView();
                 mav.addObject("error", "Tour date range not chosen!");
                 mav.addObject("errorDesc", "Advanced options available only for tours with date range specified.\n Tour was created you can just edit edit now.");
-            }else{
+            } else {
                 var wrapper = new MapWrapper();
                 mav.addObject("wrapper", wrapper);
                 mav.setViewName("advancedTourPage");
@@ -384,11 +394,12 @@ public class TourController {
             if (drivers2attach.size() > 0)
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
-                    try{
-                        checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour);
+                    try {
+                        checkAlreadyAppointedDate(driver.get(), tour);
                         tour.addDriver(driver);
-                    }catch (ValidationException e){
-                        logger.error(e.getLocalizedMessage());
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        // ignored
                     }
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tour
 //                    try {
@@ -402,13 +413,19 @@ public class TourController {
                 }
     }
 
-    private void attachGuides(List<Long> guides2attach, Tour tour) {
+    private void attachGuides(List<Long> guides2attach, Tour tour) throws OverlapsException {
         // for edit purposes
         tour.addGuide(tourService.getAttachedGuides(tour.getId()));
         if (guides2attach != null)
             if (guides2attach.size() > 0)
                 for (Long id : guides2attach) {
                     var guide = guideService.getGuide(id);
+                    try {
+                        checkAlreadyAppointedDate(guide.get(), tour);
+                    }catch (NullPointerException e) {
+                        e.printStackTrace();
+                        // ignored
+                    }
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tours
                     tour.addGuide(guide);
                 }
@@ -438,18 +455,15 @@ public class TourController {
                 }
     }
 
-    private void checkAlreadyAppointedDate(AbstractEntity entity, DateTimeRange comparableRange, Tour t) throws OverlapsException {
-        var exception = new OverlapsException();
+    private void checkAlreadyAppointedDate(AbstractEntity entity, Tour t) throws OverlapsException {
+
         if (entity instanceof Driver) {
             Driver d = (Driver) entity;
             var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
             for (DriverTourIntervals dti : allDriverIntervals) {
                 try {
-                    if (dti.getInterval().overlaps(comparableRange)) {
-                        exception.setEntity(d);
-                        exception.setTour(t);
-                        exception.setOverlapsTour(dti.getTour());
-                        exception.setOverlapsRange(new DateTimeRange(dti.getTour().getStartDate(), t.getEndDate()));
+                    if (dti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                        throw new OverlapsException(d, t, dti.getTour());
                     }
                 } catch (ValidationException e) {
                     e.printStackTrace();
@@ -460,19 +474,14 @@ public class TourController {
             var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
             for (GuideTourIntervals gti : allGuideIntervals) {
                 try {
-                    if (gti.getInterval().overlaps(comparableRange)){
-                        exception.setEntity(g);
-                        exception.setTour(t);
-                        exception.setOverlapsTour(gti.getTour());
-                        exception.setOverlapsRange(new DateTimeRange(gti.getTour().getStartDate(), t.getEndDate()));
+                    if (gti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                        throw new OverlapsException(g, t, gti.getTour());
                     }
-
                 } catch (ValidationException e) {
                     e.printStackTrace();
                 }
             }
         }
-        throw exception;
     }
 
 }
