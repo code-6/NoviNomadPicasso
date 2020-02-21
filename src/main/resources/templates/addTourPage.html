@@ -3,13 +3,13 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{fragments/mainLayout}">
 <head>
-	<script type="text/javascript" th:src="@{../js/jquery.min.js}"></script>
+<!--	<script type="text/javascript" th:src="@{../js/jquery.min.js}"></script>-->
 	<script type="text/javascript" th:src="@{/js/moment.min.js}" src="../static/js/moment.min.js"></script>
 	<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}" src="../static/js/daterangepicker.min.js"></script>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/daterangepicker.css}" href="../static/css/daterangepicker.css"/>
 </head>
 <body>
-<div layout:fragment="content" class="container">
+<div layout:fragment="content">
 	<h1>Add/edit tour</h1>
 	<br/>
 	<!--/*@thymesVar id="tour" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
@@ -17,6 +17,7 @@
 	<form action="#" th:action="@{/tours/save}" th:object="${tour}" method="post">
 
 		<div th:if="${error}" >
+			<h1> Error received from controller !</h1>
 			<script th:inline="javascript">
                 $(document).ready(function () {
                     $("#myModal").modal("show");
@@ -42,8 +43,7 @@
 			<tr>
 				<td>Date Time Range: </td>
 				<td>
-					<input readonly th:name="tourDateTimeRange" type="text" class="datetimes" th:style="${'width: 260px;padding-left: 5px;'}" th:value="${tourRange
-					}"/>
+					<input readonly th:name="tourDateTimeRange" type="text" class="datetimes" th:style="${'width: 260px;padding-left: 5px;'}" th:value="${tourRange}"/>
 					<script>
                         $(function() {
                             $('.datetimes').daterangepicker({
