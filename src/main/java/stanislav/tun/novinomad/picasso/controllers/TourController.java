@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import stanislav.tun.novinomad.picasso.PicassoApp;
+import stanislav.tun.novinomad.picasso.exceptions.OverlapsException;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
@@ -144,7 +145,17 @@ public class TourController {
 
         var mav = new ModelAndView();
         //setTotalDays(tour);
-        attachDrivers(drivers2attach, tour);
+        try{
+            attachDrivers(drivers2attach, tour);
+        }catch (OverlapsException e){
+            mav = getAddTourView();
+            mav.addObject("error", "Tours date range conflict!");
+            mav.addObject("errorDesc", e.getMessage());
+            mav.addObject("exception", e);
+            mav.addObject("tour", tour);
+            return mav;
+        }
+
         excludeDrivers(drivers2exclude, tour);
 
         attachGuides(guides2attach, tour);
@@ -154,8 +165,8 @@ public class TourController {
         if (adv) {
             if(tour.getStartDate() == null && tour.getEndDate() == null){
                 mav = getAddTourView();
-                mav.addObject("error", " no date range for tour attached");
-                mav.addObject("errorDesc", " chose tour date range ");
+                mav.addObject("error", "Tour date range not chosen!");
+                mav.addObject("errorDesc", "Advanced options available only for tours with date range specified.\n Tour was created you can just edit edit now.");
             }else{
                 var wrapper = new MapWrapper();
                 mav.addObject("wrapper", wrapper);
@@ -366,23 +377,28 @@ public class TourController {
 //        }
 //    }
 
-    private void attachDrivers(List<Long> drivers2attach, Tour tour) {
+    private void attachDrivers(List<Long> drivers2attach, Tour tour) throws OverlapsException {
         // for edit purposes
         tour.addDriver(tourService.getAttachedDrivers(tour.getId()));
         if (drivers2attach != null)
             if (drivers2attach.size() > 0)
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
-                    // todo : before attach driver to the tour, check if driver already attached for this date in another tour
-                    try {
-                        if (checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour)) {
-                            System.err.println("CONFLICT! ");
-                        } else {
-                            tour.addDriver(driver);
-                        }
-                    } catch (ValidationException e) {
-                        e.printStackTrace();
+                    try{
+                        checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour);
+                        tour.addDriver(driver);
+                    }catch (ValidationException e){
+                        logger.error(e.getLocalizedMessage());
                     }
+                    // todo : before attach driver to the tour, check if driver already attached for this date in another tour
+//                    try {
+//                        if (checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour)) {
+//                        } else {
+//                            tour.addDriver(driver);
+//                        }
+//                    } catch (ValidationException e) {
+//                        e.printStackTrace();
+//                    }
                 }
     }
 
@@ -422,17 +438,18 @@ public class TourController {
                 }
     }
 
-    private boolean checkAlreadyAppointedDate(AbstractEntity entity, DateTimeRange comparableRange, Tour t) {
-
+    private void checkAlreadyAppointedDate(AbstractEntity entity, DateTimeRange comparableRange, Tour t) throws OverlapsException {
+        var exception = new OverlapsException();
         if (entity instanceof Driver) {
             Driver d = (Driver) entity;
             var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
             for (DriverTourIntervals dti : allDriverIntervals) {
                 try {
                     if (dti.getInterval().overlaps(comparableRange)) {
-                        System.err.println("CONFLICT! Can't attach driver " + d.getFullName() + " to tour " + t.getTittle() +
-                                " for datetime range " + comparableRange.toString() + " . Reason: datetime overlaps with tour " + dti.getTour().getTittle() + " " + dti.getTour().getStartDate() + " - " + dti.getTour().getEndDate());
-                        return true;
+                        exception.setEntity(d);
+                        exception.setTour(t);
+                        exception.setOverlapsTour(dti.getTour());
+                        exception.setOverlapsRange(new DateTimeRange(dti.getTour().getStartDate(), t.getEndDate()));
                     }
                 } catch (ValidationException e) {
                     e.printStackTrace();
@@ -443,15 +460,19 @@ public class TourController {
             var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
             for (GuideTourIntervals gti : allGuideIntervals) {
                 try {
-                    if (gti.getInterval().overlaps(comparableRange))
-                        return true;
+                    if (gti.getInterval().overlaps(comparableRange)){
+                        exception.setEntity(g);
+                        exception.setTour(t);
+                        exception.setOverlapsTour(gti.getTour());
+                        exception.setOverlapsRange(new DateTimeRange(gti.getTour().getStartDate(), t.getEndDate()));
+                    }
+
                 } catch (ValidationException e) {
                     e.printStackTrace();
                 }
             }
         }
-        return false;
-
+        throw exception;
     }
 
 }
