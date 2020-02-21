@@ -70,6 +70,7 @@ public class DriverController {
         }catch (Exception e){
             logger.info("DRIVER WAS NOT CREATED! REASON: "+e.getMessage()+"; STACK TRACE: "+e.getStackTrace().toString());
             modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("errorDesc", e.getMessage());
         }
         return modelAndView;
     }

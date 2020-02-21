@@ -15,6 +15,17 @@
 	<!--/*@thymesVar id="tour" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
 	<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
 	<form action="#" th:action="@{/tours/save}" th:object="${tour}" method="post">
+
+		<div th:if="${error}" >
+			<script th:inline="javascript">
+                $(document).ready(function () {
+                    $("#myModal").modal("show");
+                });
+			</script>
+
+			<div th:replace="fragments/notification"></div>
+		</div>
+
 		<table cellpadding="10">
 			<tr>
 				<td>Tittle:</td>

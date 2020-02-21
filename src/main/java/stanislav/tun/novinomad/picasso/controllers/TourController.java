@@ -58,7 +58,8 @@ public class TourController {
 
         map.put("guides", guideService.getGuidesList());
         map.put("guidesExclude", tour.getGuides());
-        return new ModelAndView("addTourPage.html", map);
+
+        return new ModelAndView("addTourPage", map);
     }
 
     @RequestMapping("/list")
@@ -89,9 +90,9 @@ public class TourController {
 
         try {
             mav.addObject("tourRange", new DateTimeRange(tour.getStartDate(), tour.getEndDate()).toString());
-        } catch (NullPointerException e)  {
+        } catch (NullPointerException e) {
             logger.error("Unable to add tour range for view " + e.getMessage());
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             logger.error("Unable to add tour range for view " + e.getMessage());
         }
         mav.setViewName("addTourPage.html");
@@ -99,7 +100,7 @@ public class TourController {
         return mav;
     }
 
-    private void setDefaultIntervals(Tour tour, ModelAndView mav) {
+    private void setDefaultIntervals(Tour tour) {
         try {
             var attachedDrivers = tour.getDrivers();
             var attachedGuides = tour.getGuides();
@@ -118,7 +119,6 @@ public class TourController {
         } catch (ValidationException e) {
             e.printStackTrace();
         }
-        mav.setViewName("redirect:/tours/add");
     }
 
     //todo : add default intervals for guides
@@ -131,9 +131,9 @@ public class TourController {
                                       @RequestParam(required = false, name = "guides2attach") List<Long> guides2attach,
                                       @RequestParam(required = false, name = "guides2exclude") List<Long> guides2exclude,
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
-                                      @RequestParam(required = false, name = "adv") boolean adv) throws Exception {
+                                      @RequestParam(required = false, name = "adv") boolean adv) {
         try {
-            if(tourDateTimeRange != null && tourDateTimeRange != ""){
+            if (tourDateTimeRange != null && tourDateTimeRange != "") {
                 var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
                 tour.setStartDate(dtr.getStart());
                 tour.setEndDate(dtr.getEnd());
@@ -151,15 +151,22 @@ public class TourController {
         excludeGuides(guides2exclude, tour);
 
         tourService.createOrUpdateTour(tour);
-        mav.addObject("tour", tour);
         if (adv) {
-            if(tour.getStartDate() != null && tour.getEndDate() != null)
-                getAdvancedPage(tour, mav);
-            else
-                throw new Exception("Advanced options can be added only if tour have some date range!");
+            if(tour.getStartDate() == null && tour.getEndDate() == null){
+                mav = getAddTourView();
+                mav.addObject("error", " no date range for tour attached");
+                mav.addObject("errorDesc", " chose tour date range ");
+            }else{
+                var wrapper = new MapWrapper();
+                mav.addObject("wrapper", wrapper);
+                mav.setViewName("advancedTourPage");
+                getAdvancedPage(tour, wrapper);
+            }
         } else { // set to whole tour by default
-            setDefaultIntervals(tour, mav);
+            setDefaultIntervals(tour);
+            mav.setViewName("redirect:/tours/add");
         }
+        mav.addObject("tour", tour);
         return mav;
     }
 
@@ -169,19 +176,18 @@ public class TourController {
                 new CustomDateEditor(new SimpleDateFormat("dd.MM.yyyy"), true, 10));
     }
 
-    private void getAdvancedPage(Tour tour, ModelAndView mav) {
+    private void getAdvancedPage(Tour tour, MapWrapper wrapper) {
         // advanced view is dynamic, it contains list of attached drivers to the tour.
         // also input field opposite each driver, to input days
         var attachedDrivers = tour.getDrivers();
         var attachedGuides = tour.getGuides();
         // this is wrapper to map values entered to input fields to related drivers. Used as a model for view, but not for DB
-        var wrapper = new MapWrapper();
+
         // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
         wrapDrivers(attachedDrivers, tour, wrapper);
         wrapGuides(attachedGuides, tour, wrapper);
 
-        mav.addObject("wrapper", wrapper);
-        mav.setViewName("advancedTourPage.html");
+
     }
 
     private void wrapDrivers(Set<Driver> attachedDrivers, Tour tour, MapWrapper wrapper) {
@@ -199,7 +205,7 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
-            System.out.println("all days = "+allDays+" for driver "+d.getFullName());
+            System.out.println("all days = " + allDays + " for driver " + d.getFullName());
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
@@ -239,7 +245,7 @@ public class TourController {
 //        for (Driver d : drivers) {
 //            logger.debug("Collection is empty? "+d.getDriverTourIntervals().isEmpty());
 //        }
-        mav.setViewName("redirect:/tours/list");
+        mav.setViewName("toursListPage");
         return mav;
     }
 
@@ -369,9 +375,9 @@ public class TourController {
                     var driver = driverService.getDriver(id);
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tour
                     try {
-                        if(checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour)){
+                        if (checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour)) {
                             System.err.println("CONFLICT! ");
-                        }else {
+                        } else {
                             tour.addDriver(driver);
                         }
                     } catch (ValidationException e) {
@@ -423,9 +429,9 @@ public class TourController {
             var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
             for (DriverTourIntervals dti : allDriverIntervals) {
                 try {
-                    if (dti.getInterval().overlaps(comparableRange)){
-                        System.err.println("CONFLICT! Can't attach driver "+d.getFullName()+" to tour "+t.getTittle()+
-                                " for datetime range "+comparableRange.toString()+" . Reason: datetime overlaps with tour "+dti.getTour().getTittle()+" "+dti.getTour().getStartDate()+" - "+dti.getTour().getEndDate());
+                    if (dti.getInterval().overlaps(comparableRange)) {
+                        System.err.println("CONFLICT! Can't attach driver " + d.getFullName() + " to tour " + t.getTittle() +
+                                " for datetime range " + comparableRange.toString() + " . Reason: datetime overlaps with tour " + dti.getTour().getTittle() + " " + dti.getTour().getStartDate() + " - " + dti.getTour().getEndDate());
                         return true;
                     }
                 } catch (ValidationException e) {
