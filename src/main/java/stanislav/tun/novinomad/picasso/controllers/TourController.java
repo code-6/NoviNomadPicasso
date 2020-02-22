@@ -96,7 +96,7 @@ public class TourController {
         } catch (ValidationException e) {
             logger.error("Unable to add tour range for view " + e.getMessage());
         }
-        mav.setViewName("addTourPage.html");
+        mav.setViewName("addTourPage");
         logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
         return mav;
     }
@@ -148,12 +148,13 @@ public class TourController {
         try {
             attachDrivers(drivers2attach, tour);
         } catch (OverlapsException e) {
-            e.printStackTrace();
+
             mav = getAddTourView();
             mav.addObject("error", "Tours date range conflict!");
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
+            logger.error(e.getMessage());
             return mav;
         }
         excludeDrivers(drivers2exclude, tour);
@@ -161,12 +162,12 @@ public class TourController {
         try {
             attachGuides(guides2attach, tour);
         } catch (OverlapsException e) {
-            e.printStackTrace();
             mav = getAddTourView();
             mav.addObject("error", "Tours date range conflict!");
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
+            logger.error(e.getMessage());
             return mav;
         }
         excludeGuides(guides2exclude, tour);
@@ -390,7 +391,7 @@ public class TourController {
     private void attachDrivers(List<Long> drivers2attach, Tour tour) throws OverlapsException {
         // for edit purposes
         tour.addDriver(tourService.getAttachedDrivers(tour.getId()));
-        if (drivers2attach != null)
+        if (drivers2attach != null) {
             if (drivers2attach.size() > 0)
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
@@ -411,24 +412,35 @@ public class TourController {
 //                        e.printStackTrace();
 //                    }
                 }
+        }else{
+            // check when edit tour
+            for (Driver driver : tour.getDrivers()) {
+                checkAlreadyAppointedDate(driver, tour);
+            }
+        }
     }
 
     private void attachGuides(List<Long> guides2attach, Tour tour) throws OverlapsException {
         // for edit purposes
         tour.addGuide(tourService.getAttachedGuides(tour.getId()));
-        if (guides2attach != null)
+        if (guides2attach != null) {
             if (guides2attach.size() > 0)
                 for (Long id : guides2attach) {
                     var guide = guideService.getGuide(id);
                     try {
                         checkAlreadyAppointedDate(guide.get(), tour);
-                    }catch (NullPointerException e) {
+                    } catch (NullPointerException e) {
                         e.printStackTrace();
                         // ignored
                     }
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tours
                     tour.addGuide(guide);
                 }
+        }else{
+            for (Guide guide : tour.getGuides()) {
+                checkAlreadyAppointedDate(guide, tour);
+            }
+        }
     }
 
     private void excludeDrivers(List<Long> drivers2exclude, Tour tour) {

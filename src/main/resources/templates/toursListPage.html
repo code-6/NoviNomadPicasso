@@ -10,7 +10,8 @@
     <div>
         <h1>Tours</h1>
         <br/>
-        <table class="table table-striped" id="toursList" align="left">
+        <table class="table table-striped table-sm table-hover" id="toursList" align="left">
+            <caption>List of tours</caption>
             <thead>
             <tr>
                 <th onclick="sortTable(0,'toursList')">
@@ -34,9 +35,9 @@
                 <th onclick="sortTable(6,'toursList')">
                     <button type="button" class="btn btn-outline-info btn-sm">GUIDES</button>
                 </th>
-                <th>
-                    <button type="button" class="btn btn-outline-info btn-sm">DESCRIPTION</button>
-                </th>
+<!--                <th>-->
+<!--                    <button type="button" class="btn btn-outline-info btn-sm">DESCRIPTION</button>-->
+<!--                </th>-->
                 <th>
                     <button type="button" class="btn btn-outline-info btn-sm">CREATED BY</button>
                 </th>
@@ -47,7 +48,7 @@
             <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
             <tr th:each="tour:${toursList}">
                 <td th:text="${tour.id}"></td>
-                <td th:text="${tour.tittle}"></td>
+                <td th:text="${tour.tittle}" th:title="${tour.description}"></td>
                 <td th:text="${tour.getStartDate()}"></td>
                 <td th:text="${tour.getEndDate()}"></td>
                 <td th:text="${tour.days}"></td>
@@ -63,15 +64,14 @@
 					<br/>
                 </span>
                 </td>
-                <td th:text="${tour.description}"></td>
+<!--                <td th:text="${tour.description}"></td>-->
 
                 <td th:text="${tour.createdBy}"></td>
 
                 <td>
                     <a th:href="@{/tours/edit{id}(id=${tour.id})}">
-                        <button type="button" class="btn btn-outline-secondary btn-sm">edit</button>
+                        <button type="button" class="btn btn-outline-info btn-sm">edit</button>
                     </a>
-                    <!--                <button th:href="@{/tours/edit{id}(id=${tour.id})}" type="button" class="btn btn-outline-secondary">edit</button>-->
                 </td>
 
             </tr>
