@@ -63,15 +63,10 @@ public class DriverController {
         var modelAndView = new ModelAndView();
 //        modelAndView.setViewName("redirect:/drivers/add");
         modelAndView.setViewName("addDriverPage");
-        try {
-            throwException();
-            driverService.createOrUpdateDriver(driver);
-            logger.info("driver to be created or updated = " + JsonPrinter.getString(driver));
-        }catch (Exception e){
-            logger.info("DRIVER WAS NOT CREATED! REASON: "+e.getMessage()+"; STACK TRACE: "+e.getStackTrace().toString());
-            modelAndView.addObject("error", e.getMessage());
-            modelAndView.addObject("errorDesc", e.getMessage());
-        }
+
+        driverService.createOrUpdateDriver(driver);
+
+        logger.info("driver created "+JsonPrinter.getString(driver));
         return modelAndView;
     }
 }
