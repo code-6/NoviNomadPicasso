@@ -190,7 +190,10 @@ public class TourController {
             }
         } else { // set to whole tour by default
             setDefaultIntervals(tour);
-            mav.setViewName("redirect:/getview");
+            var m = tour.getStartDate().getMonth().getValue();
+            var y = tour.getStartDate().getYear();
+            var r = String.format("redirect:/getview?month=%d&year=%d", m, y);
+            mav.setViewName(r);
         }
         mav.addObject("tour", tour);
         return mav;

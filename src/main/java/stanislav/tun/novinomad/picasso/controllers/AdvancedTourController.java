@@ -58,6 +58,7 @@ public class AdvancedTourController {
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
+        mav.addObject("selectedMonthNum",month);
         mav.addObject("selectedYear", year);
         // add tours created for entered month
         var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
@@ -91,6 +92,7 @@ public class AdvancedTourController {
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
+        mav.addObject("selectedMonthNum",month);
         mav.addObject("selectedYear", year);
         // remember user selected driver
         mav.addObject("selectedDriver", driverService.getDriver(driverId).get());
@@ -141,6 +143,7 @@ public class AdvancedTourController {
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
+        mav.addObject("selectedMonthNum",month);
         mav.addObject("selectedYear", year);
         mav.addObject("selectedGuide", guideService.getGuide(guideId).get());
 
@@ -163,6 +166,8 @@ public class AdvancedTourController {
         mav.addObject("tours", tours);
         return mav;
     }
+
+
 
     private String num2month(int month) {
         switch (month) {

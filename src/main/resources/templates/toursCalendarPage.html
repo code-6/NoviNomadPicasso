@@ -30,6 +30,9 @@
             <input th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
                    placeholder="ENTER YEAR">
 
+            <button th:text="${'<<'}" onclick="this.form.submit()" th:value="${selectedMonthNum > 1} ? ${selectedMonthNum -1} : ${selectedMonthNum}" th:name="month"></button>
+            <button th:text="${'>>'}" onclick="this.form.submit()" th:value="${selectedMonthNum < 12} ? ${selectedMonthNum +1} : ${selectedMonthNum}" th:name="month"></button>
+
             <span th:if="${selectedDriver}" th:text="${'Driver: '+selectedDriver.getFullName()}"></span>
             <span th:if="${selectedGuide}" th:text="${'Guide: '+selectedGuide.getFullName()}"></span>
 
