@@ -32,6 +32,9 @@ public class Driver extends AbstractEntity implements Serializable {
 
     protected String fullName;
 
+    @Column
+    private String car;
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drivers")
     @JsonBackReference
     @Fetch(FetchMode.JOIN)
@@ -49,6 +52,14 @@ public class Driver extends AbstractEntity implements Serializable {
     public Driver(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getCar() {
+        return car;
+    }
+
+    public void setCar(String car) {
+        this.car = car;
     }
 
     public Set<Tour> getTours() {
