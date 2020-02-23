@@ -41,6 +41,9 @@
                 <th>
                     <button type="button" class="btn btn-outline-info btn-sm">CREATED BY</button>
                 </th>
+                <th onclick="sortTable(7,'toursList')">
+                    <button type="button" class="btn btn-outline-info btn-sm">FILE</button>
+                </th>
             </tr>
             </thead>
 
@@ -67,6 +70,7 @@
 <!--                <td th:text="${tour.description}"></td>-->
 
                 <td th:text="${tour.createdBy}"></td>
+                <td th:text="${tour.fileName}"></td>
 
                 <td>
                     <a th:href="@{/tours/edit{id}(id=${tour.id})}">

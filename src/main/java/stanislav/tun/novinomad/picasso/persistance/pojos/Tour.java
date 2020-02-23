@@ -13,8 +13,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -55,6 +53,8 @@ public class Tour extends AbstractEntity implements Serializable {
     //@Temporal(TemporalType.DATE)
     private LocalDateTime endDate;
 
+    private String fileName;
+
     @Column
     private int days;
     @Column
@@ -77,12 +77,10 @@ public class Tour extends AbstractEntity implements Serializable {
     @JoinTable(name="tours_guides", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name="guide_id"))
     private Set<Guide> guides = new HashSet<>();
 
-
     @Fetch(FetchMode.JOIN)
     @OneToMany( mappedBy = "tour", orphanRemoval = true)
     @JsonIgnore
     Set<DriverTourIntervals> driverIntervals = new HashSet<DriverTourIntervals>();
-
 
     @JsonIgnore
     @Fetch(FetchMode.JOIN)
@@ -121,6 +119,14 @@ public class Tour extends AbstractEntity implements Serializable {
     public void addGuide(Set<Guide> _guides){
         if(_guides != null)
             guides.addAll(_guides);
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public void deleteDriver(Driver driver){

@@ -1,6 +1,5 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,22 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.exceptions.OverlapsException;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
-import stanislav.tun.novinomad.picasso.util.IntervalResolver;
 import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
-import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.*;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.*;
@@ -131,12 +124,13 @@ public class TourController {
 
     // todo ; refactor to big method. change logic of tour creation
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView addTourAction(@ModelAttribute("tour") @Valid Tour tour,
+    public ModelAndView addTourAction(@ModelAttribute("tour") Tour tour,
                                       @RequestParam(required = false, name = "drivers2attach") List<Long> drivers2attach,
                                       @RequestParam(required = false, name = "drivers2exclude") List<Long> drivers2exclude,
                                       @RequestParam(required = false, name = "guides2attach") List<Long> guides2attach,
                                       @RequestParam(required = false, name = "guides2exclude") List<Long> guides2exclude,
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
+                                      @RequestParam(required = false, name = "file") MultipartFile file,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
         try {
             if (tourDateTimeRange != null && tourDateTimeRange != "") {
@@ -147,6 +141,8 @@ public class TourController {
         } catch (ValidationException e) {
             logger.error(getStackTrace(e));
         }
+
+        tour.setFileName(file.getOriginalFilename());
 
         var mav = new ModelAndView();
         // todo : refactor duplicate try-catch blocks
