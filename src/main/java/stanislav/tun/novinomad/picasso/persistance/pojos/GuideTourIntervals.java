@@ -1,7 +1,5 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
@@ -18,7 +16,7 @@ public class GuideTourIntervals extends AbstractIntervals {
     public GuideTourIntervals() {
     }
 
-    public GuideTourIntervals(Tour tour, MyInterval interval, Guide guide) {
+    public GuideTourIntervals(Tour tour, DateTimeRange interval, Guide guide) {
         super(tour, interval);
         this.guide = guide;
     }

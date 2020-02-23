@@ -1,9 +1,11 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
+import org.dom4j.rule.Mode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +33,10 @@ public class DriverController {
         return modelAndView;
     }
 
+    private void throwException() throws Exception {
+        throw new Exception("This is an exception!");
+    }
+
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId) {
         var driver = driverService.getDriver(driverId);
@@ -53,9 +59,19 @@ public class DriverController {
 
     // action todo: make single method for adding driver to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String addOrUpdateDriverAction(Driver driver) {
-        driverService.createOrUpdateDriver(driver);
-        logger.info("driver to be created or updated = " + JsonPrinter.getString(driver));
-        return "redirect:/drivers/add";
+    public ModelAndView addOrUpdateDriverAction(Driver driver) {
+        var modelAndView = new ModelAndView();
+//        modelAndView.setViewName("redirect:/drivers/add");
+        modelAndView.setViewName("addDriverPage");
+        try {
+            throwException();
+            driverService.createOrUpdateDriver(driver);
+            logger.info("driver to be created or updated = " + JsonPrinter.getString(driver));
+        }catch (Exception e){
+            logger.info("DRIVER WAS NOT CREATED! REASON: "+e.getMessage()+"; STACK TRACE: "+e.getStackTrace().toString());
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("errorDesc", e.getMessage());
+        }
+        return modelAndView;
     }
 }

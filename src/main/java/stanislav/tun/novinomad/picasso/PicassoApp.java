@@ -22,6 +22,7 @@ import stanislav.tun.novinomad.picasso.security.audit.AuditorAwareImpl;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
@@ -91,26 +92,26 @@ public class PicassoApp {
         guideService.createOrUpdateGuide(new Guide("Nikolai", "Drozdov"));
 
         var tour1 = new Tour();
-        tour1.setStartDate(LocalDate.of(2020,2,1));
-        tour1.setEndDate(LocalDate.of(2020,2,15));
+        tour1.setStartDate(LocalDateTime.of(2020,2,1, 0,0,0));
+        tour1.setEndDate(LocalDateTime.of(2020,2,15, 0,0,0));
         tour1.addDriver(java.util.Optional.of(d1));
         tour1.setTittle("first tour");
 
         var tour2 = new Tour();
-        tour2.setStartDate(LocalDate.of(2020,2,15));
-        tour2.setEndDate(LocalDate.of(2020,2,28));
+        tour2.setStartDate(LocalDateTime.of(2020,2,15, 0,0,0));
+        tour2.setEndDate(LocalDateTime.of(2020,2,28, 0,0,0));
         tour2.addDriver(java.util.Optional.of(d1));
         tour2.setTittle("second tour");
 
         var tour3 = new Tour();
-        tour3.setStartDate(LocalDate.of(2020,3,1));
-        tour3.setEndDate(LocalDate.of(2020,3,15));
+        tour3.setStartDate(LocalDateTime.of(2020,3,1, 0,0,0));
+        tour3.setEndDate(LocalDateTime.of(2020,3,15, 0,0,0));
         tour3.addDriver(java.util.Optional.of(d2));
         tour3.setTittle("third tour");
 
         var tour4 = new Tour();
-        tour4.setStartDate(LocalDate.of(2020,1,25));
-        tour4.setEndDate(LocalDate.of(2020,2,1));
+        tour4.setStartDate(LocalDateTime.of(2020,1,25, 0,0,0));
+        tour4.setEndDate(LocalDateTime.of(2020,2,1, 0,0,0));
         tour4.addDriver(java.util.Optional.of(d2));
         tour4.setTittle("fourth tour");
 

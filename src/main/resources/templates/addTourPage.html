@@ -3,25 +3,65 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{fragments/mainLayout}">
 <head>
+<!--	<script type="text/javascript" th:src="@{../js/jquery.min.js}"></script>-->
+	<script type="text/javascript" th:src="@{/js/moment.min.js}" src="../static/js/moment.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}" src="../static/js/daterangepicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/daterangepicker.css}" href="../static/css/daterangepicker.css"/>
+</head>
 <body>
-<div layout:fragment="content" class="container">
+<div layout:fragment="content">
 	<h1>Add/edit tour</h1>
 	<br/>
 	<!--/*@thymesVar id="tour" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
 	<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
 	<form action="#" th:action="@{/tours/save}" th:object="${tour}" method="post">
+
+		<div th:if="${error}">
+			<script th:inline="javascript">
+                $(document).ready(function () {
+                    $("#myModal").modal("show");
+                });
+			</script>
+
+			<div th:replace="fragments/notification"></div>
+		</div>
+
 		<table cellpadding="10">
 			<tr>
 				<td>Tittle:</td>
 				<td><input required="required" class="form-control form-control-sm" type="text" th:field="*{tittle}"/></td>
 			</tr>
+<!--			<tr>-->
+<!--				<td>Start date:</td>-->
+<!--				<td><input class="form-control form-control-sm" id="startDate" type="date" th:field="*{startDate}"/></td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td>End date:</td>-->
+<!--				<td><input class="form-control form-control-sm" id="endDate" type="date" th:field="*{endDate}"/></td>-->
+<!--			</tr>-->
 			<tr>
-				<td>Start date:</td>
-				<td><input class="form-control form-control-sm" id="startDate" type="date" th:field="*{startDate}"/></td>
-			</tr>
-			<tr>
-				<td>End date:</td>
-				<td><input class="form-control form-control-sm" id="endDate" type="date" th:field="*{endDate}"/></td>
+				<td>Date Time Range: </td>
+				<td>
+					<input readonly th:name="tourDateTimeRange" type="text" class="datetimes" th:style="${'width: 260px;padding-left: 5px;'}" th:value="${tourRange}"/>
+					<script>
+                        $(function() {
+                            $('.datetimes').daterangepicker({
+
+                                timePicker: true,
+                                timePicker24Hour: true,
+                                timePickerIncrement: 5,
+                                autoApply: true,
+                                locale: {
+                                    format: 'DD.MM.YYYY HH:mm',
+                                    cancelLabel: 'Clear'
+                                }
+                            });
+                            $('.datetimes').on('cancel.daterangepicker', function(ev, picker) {
+     				 			$(this).val('');
+  							});
+                        });
+					</script>
+				</td>
 			</tr>
 			<tr>
 				<!--<td>Attach a driver</td>-->

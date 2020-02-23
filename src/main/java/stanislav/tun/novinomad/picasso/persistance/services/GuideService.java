@@ -8,6 +8,7 @@ import stanislav.tun.novinomad.picasso.persistance.repositories.IGuideRepo;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class GuideService {
         return (List<Tour>) guide.get().getTours();
     }
 
-    public List<Tour> getToursRelatedTo(Long guideId, LocalDate from, LocalDate to){
+    public List<Tour> getToursRelatedTo(Long guideId, LocalDateTime from, LocalDateTime to){
         var guide = getGuide(guideId);
         var tours = (List<Tour>) guide.get().getTours();
         var list = new ArrayList<Tour>();
