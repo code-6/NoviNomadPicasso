@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IGuideIntervalRepo;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -21,7 +22,9 @@ public class GuideIntervalService {
 
     @Transactional
     public void createOrUpdateInterval( GuideTourIntervals interval) {
+
         repo.save(interval);
+        logger.debug("created "+ JsonPrinter.getString(interval));
     }
 
     public Optional<GuideTourIntervals> getInterval(long id) {

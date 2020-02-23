@@ -13,7 +13,7 @@ import stanislav.tun.novinomad.picasso.PicassoApp;
 public abstract class JsonPrinter {
 
     private static ObjectMapper mapper = new ObjectMapper();
-    static Logger logger = LoggerFactory.getLogger(PicassoApp.class);
+    static Logger logger = LoggerFactory.getLogger(JsonPrinter.class);
 
     static {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -30,7 +30,7 @@ public abstract class JsonPrinter {
         try {
             return mapper.writeValueAsString(o);
         } catch (JsonProcessingException e) {
-            logger.error(e.getStackTrace().toString());
+            logger.error(e.getMessage());
             return "";
         }
     }

@@ -1,11 +1,15 @@
 package stanislav.tun.novinomad.picasso.persistance.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
 import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -17,11 +21,17 @@ import java.util.Optional;
 @Service
 @Transactional
 public class  DriverService {
+    Logger logger = LoggerFactory.getLogger(DriverService.class);
     @Autowired
     IDriverRepo repo;
 
     @Transactional
     public void createOrUpdateDriver(Driver driver){
+        if(exist(driver))
+            logger.info("edited "+ JsonPrinter.getString(driver));
+        else
+            logger.info("created "+JsonPrinter.getString(driver));
+
         repo.save(driver);
     }
 
@@ -60,6 +70,10 @@ public class  DriverService {
             }
         }
         return list;
+    }
+
+    public boolean exist(Driver driver){
+        return repo.existsById(driver.getId());
     }
 
 }

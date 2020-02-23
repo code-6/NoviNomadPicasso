@@ -18,7 +18,7 @@ public abstract class IntervalResolver {
 
     private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     private static SimpleDateFormat format2 = new SimpleDateFormat("dd.MM.yyyy hh:mm");
-    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
+    Logger logger = LoggerFactory.getLogger(IntervalResolver.class);
 
     /**
      * @param dates should contain list of days in format: 01.01.2020;02.01.2020;...dd.mm.yyyy
@@ -58,12 +58,12 @@ public abstract class IntervalResolver {
         return list;
     }
 
-    private static LocalDate toLocalDate(Date dateToConvert) {
+    public static LocalDate toLocalDate(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
-    private static LocalDateTime toLocalDateTime(Date dateToConvert) {
+    public static LocalDateTime toLocalDateTime(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();

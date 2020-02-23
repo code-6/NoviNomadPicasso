@@ -51,9 +51,7 @@ public class GuideController {
     // action todo: make single method for adding guide to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addOrUpdateGuideAction(Guide guide) {
-        logger.debug("guide to be created or updated = "+ JsonPrinter.getString(guide));
         guideService.createOrUpdateGuide(guide);
-
-        return "redirect:/guides/add";
+        return "redirect:/guides/list";
     }
 }

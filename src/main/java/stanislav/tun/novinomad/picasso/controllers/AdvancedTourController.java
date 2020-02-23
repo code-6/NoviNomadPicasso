@@ -101,6 +101,7 @@ public class AdvancedTourController {
             while (di.hasNext()) {
                 var driver = di.next();
                 if (driver.getId() != driverId)
+                    // illegal state exception was thrown here!
                     ti.remove();
             }
         }

@@ -91,34 +91,34 @@ public class PicassoApp {
         guideService.createOrUpdateGuide(new Guide("Peter", "Hillary"));
         guideService.createOrUpdateGuide(new Guide("Nikolai", "Drozdov"));
 
-        var tour1 = new Tour();
-        tour1.setStartDate(LocalDateTime.of(2020,2,1, 0,0,0));
-        tour1.setEndDate(LocalDateTime.of(2020,2,15, 0,0,0));
-        tour1.addDriver(java.util.Optional.of(d1));
-        tour1.setTittle("first tour");
-
-        var tour2 = new Tour();
-        tour2.setStartDate(LocalDateTime.of(2020,2,15, 0,0,0));
-        tour2.setEndDate(LocalDateTime.of(2020,2,28, 0,0,0));
-        tour2.addDriver(java.util.Optional.of(d1));
-        tour2.setTittle("second tour");
-
-        var tour3 = new Tour();
-        tour3.setStartDate(LocalDateTime.of(2020,3,1, 0,0,0));
-        tour3.setEndDate(LocalDateTime.of(2020,3,15, 0,0,0));
-        tour3.addDriver(java.util.Optional.of(d2));
-        tour3.setTittle("third tour");
-
-        var tour4 = new Tour();
-        tour4.setStartDate(LocalDateTime.of(2020,1,25, 0,0,0));
-        tour4.setEndDate(LocalDateTime.of(2020,2,1, 0,0,0));
-        tour4.addDriver(java.util.Optional.of(d2));
-        tour4.setTittle("fourth tour");
-
-        tourService.createOrUpdateTour(tour1);
-        tourService.createOrUpdateTour(tour2);
-        tourService.createOrUpdateTour(tour3);
-        tourService.createOrUpdateTour(tour4);
+//        var tour1 = new Tour();
+//        tour1.setStartDate(LocalDateTime.of(2020,2,1, 0,0,0));
+//        tour1.setEndDate(LocalDateTime.of(2020,2,15, 0,0,0));
+//        tour1.addDriver(java.util.Optional.of(d1));
+//        tour1.setTittle("first tour");
+//
+//        var tour2 = new Tour();
+//        tour2.setStartDate(LocalDateTime.of(2020,2,15, 0,0,0));
+//        tour2.setEndDate(LocalDateTime.of(2020,2,28, 0,0,0));
+//        tour2.addDriver(java.util.Optional.of(d1));
+//        tour2.setTittle("second tour");
+//
+//        var tour3 = new Tour();
+//        tour3.setStartDate(LocalDateTime.of(2020,3,1, 0,0,0));
+//        tour3.setEndDate(LocalDateTime.of(2020,3,15, 0,0,0));
+//        tour3.addDriver(java.util.Optional.of(d2));
+//        tour3.setTittle("third tour");
+//
+//        var tour4 = new Tour();
+//        tour4.setStartDate(LocalDateTime.of(2020,1,25, 0,0,0));
+//        tour4.setEndDate(LocalDateTime.of(2020,2,1, 0,0,0));
+//        tour4.addDriver(java.util.Optional.of(d2));
+//        tour4.setTittle("fourth tour");
+//
+//        tourService.createOrUpdateTour(tour1);
+//        tourService.createOrUpdateTour(tour2);
+//        tourService.createOrUpdateTour(tour3);
+//        tourService.createOrUpdateTour(tour4);
 
         logger.debug("initialize app data finished");
     }

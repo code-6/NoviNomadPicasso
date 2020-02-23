@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.ValidationException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,10 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity(name = "tours")
@@ -36,13 +34,24 @@ public class Tour extends AbstractEntity implements Serializable {
 //    @Transient
 //    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
 
+    @JsonIgnore
+    @Transient
+    private static DateTimeFormatter f = new DateTimeFormatterBuilder()
+            .appendPattern("dd.MM.yyyy")
+            .optionalStart()
+            .appendPattern(" HH:mm")
+            .optionalEnd()
+            .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+            .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+            .toFormatter();
+
     @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     //@Temporal(TemporalType.DATE)
     private LocalDateTime startDate;
 
     @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     //@Temporal(TemporalType.DATE)
     private LocalDateTime endDate;
 
@@ -135,7 +144,16 @@ public class Tour extends AbstractEntity implements Serializable {
     }
 
     public LocalDateTime getStartDate() {
+
         return startDate;
+    }
+
+    public String getStartDateFormatted(){
+        return f.format(startDate);
+    }
+
+    public String getEndDateFormatted(){
+        return f.format(endDate);
     }
 
     @JsonIgnore
@@ -162,8 +180,22 @@ public class Tour extends AbstractEntity implements Serializable {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
-        if(startDate != null)
+        if(startDate != null){
             days = this.endDate.getDayOfYear() - startDate.getDayOfYear()+1;
+
+        }
+
+    }
+
+    public DateTimeRange getRange(){
+        if(startDate != null && endDate != null){
+            try {
+                return new DateTimeRange(startDate, endDate);
+            } catch (ValidationException e) {
+                // ignored
+            }
+        }
+        return null;
     }
 
     public void setDays(int days) {
@@ -217,4 +249,5 @@ public class Tour extends AbstractEntity implements Serializable {
     public void setGuideIntervals(Set<GuideTourIntervals> guideIntervals) {
         this.guideIntervals = guideIntervals;
     }
+
 }

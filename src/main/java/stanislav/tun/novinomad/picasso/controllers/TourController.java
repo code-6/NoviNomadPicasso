@@ -1,5 +1,6 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import stanislav.tun.novinomad.picasso.exceptions.OverlapsException;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
@@ -25,6 +27,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.*;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.*;
 import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 
 @Controller
@@ -59,7 +62,7 @@ public class TourController {
 
         map.put("guides", guideService.getGuidesList());
         map.put("guidesExclude", tour.getGuides());
-
+        logger.debug("/tours/add requested. Returned view with tour "+ JsonPrinter.getString(tour));
         return new ModelAndView("addTourPage", map);
     }
 
@@ -67,6 +70,7 @@ public class TourController {
     public ModelAndView getToursListView(Model model) {
         var mav = new ModelAndView("toursListPage.html");
         mav.addObject("toursList", tourService.getAllTours());
+        logger.debug("/tours/list requested.");
         return mav;
     }
 
@@ -92,12 +96,12 @@ public class TourController {
         try {
             mav.addObject("tourRange", new DateTimeRange(tour.getStartDate(), tour.getEndDate()).toString());
         } catch (NullPointerException e) {
-            logger.error("Unable to add tour range for view " + e.getMessage());
+            logger.error(getStackTrace(e));
         } catch (ValidationException e) {
-            logger.error("Unable to add tour range for view " + e.getMessage());
+            logger.error(getStackTrace(e));
         }
-        mav.setViewName("addTourPage.html");
-        logger.debug("getEditTourView TOUR TO EDIT " + getString(tour));
+        mav.setViewName("addTourPage");
+        logger.debug("/tours/edit requested. Returned view with tour " + getString(tour));
         return mav;
     }
 
@@ -116,9 +120,10 @@ public class TourController {
                     var gti = new GuideTourIntervals(tour, new DateTimeRange(tour.getStartDate(), tour.getEndDate()), g);
                     guideIntervalService.createOrUpdateInterval(gti);
                 }
+                logger.debug("Set default intervals for tour: "+tour.getId());
             }
         } catch (ValidationException e) {
-            e.printStackTrace();
+            logger.error(getStackTrace(e));
         }
     }
 
@@ -140,20 +145,20 @@ public class TourController {
                 tour.setEndDate(dtr.getEnd());
             }
         } catch (ValidationException e) {
-            logger.error("Unable to set tour start/end date time " + e.getMessage());
+            logger.error(getStackTrace(e));
         }
 
         var mav = new ModelAndView();
-        //setTotalDays(tour);
+        // todo : refactor duplicate try-catch blocks
         try {
             attachDrivers(drivers2attach, tour);
         } catch (OverlapsException e) {
-            e.printStackTrace();
             mav = getAddTourView();
             mav.addObject("error", "Tours date range conflict!");
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
+            logger.error(getStackTrace(e));
             return mav;
         }
         excludeDrivers(drivers2exclude, tour);
@@ -161,12 +166,12 @@ public class TourController {
         try {
             attachGuides(guides2attach, tour);
         } catch (OverlapsException e) {
-            e.printStackTrace();
             mav = getAddTourView();
             mav.addObject("error", "Tours date range conflict!");
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
+            logger.error(getStackTrace(e));
             return mav;
         }
         excludeGuides(guides2exclude, tour);
@@ -185,7 +190,7 @@ public class TourController {
             }
         } else { // set to whole tour by default
             setDefaultIntervals(tour);
-            mav.setViewName("redirect:/tours/add");
+            mav.setViewName("redirect:/getview");
         }
         mav.addObject("tour", tour);
         return mav;
@@ -262,10 +267,6 @@ public class TourController {
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
         logger.debug("Advanced save tour = " + getString(tour));
-//        var drivers = tour.getDrivers();
-//        for (Driver d : drivers) {
-//            logger.debug("Collection is empty? "+d.getDriverTourIntervals().isEmpty());
-//        }
         mav.setViewName("toursListPage");
         return mav;
     }
@@ -390,7 +391,7 @@ public class TourController {
     private void attachDrivers(List<Long> drivers2attach, Tour tour) throws OverlapsException {
         // for edit purposes
         tour.addDriver(tourService.getAttachedDrivers(tour.getId()));
-        if (drivers2attach != null)
+        if (drivers2attach != null) {
             if (drivers2attach.size() > 0)
                 for (Long id : drivers2attach) {
                     var driver = driverService.getDriver(id);
@@ -398,37 +399,37 @@ public class TourController {
                         checkAlreadyAppointedDate(driver.get(), tour);
                         tour.addDriver(driver);
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
                         // ignored
                     }
-                    // todo : before attach driver to the tour, check if driver already attached for this date in another tour
-//                    try {
-//                        if (checkAlreadyAppointedDate(driver.get(), new DateTimeRange(tour.getStartDate(), tour.getEndDate()), tour)) {
-//                        } else {
-//                            tour.addDriver(driver);
-//                        }
-//                    } catch (ValidationException e) {
-//                        e.printStackTrace();
-//                    }
                 }
+        } else {
+            // check when edit tour
+            for (Driver driver : tour.getDrivers()) {
+                checkAlreadyAppointedDate(driver, tour);
+            }
+        }
     }
 
     private void attachGuides(List<Long> guides2attach, Tour tour) throws OverlapsException {
         // for edit purposes
         tour.addGuide(tourService.getAttachedGuides(tour.getId()));
-        if (guides2attach != null)
+        if (guides2attach != null) {
             if (guides2attach.size() > 0)
                 for (Long id : guides2attach) {
                     var guide = guideService.getGuide(id);
                     try {
                         checkAlreadyAppointedDate(guide.get(), tour);
-                    }catch (NullPointerException e) {
-                        e.printStackTrace();
+                    } catch (NullPointerException e) {
                         // ignored
                     }
                     // todo : before attach driver to the tour, check if driver already attached for this date in another tours
                     tour.addGuide(guide);
                 }
+        } else {
+            for (Guide guide : tour.getGuides()) {
+                checkAlreadyAppointedDate(guide, tour);
+            }
+        }
     }
 
     private void excludeDrivers(List<Long> drivers2exclude, Tour tour) {
@@ -436,9 +437,6 @@ public class TourController {
             if (drivers2exclude.size() > 0)
                 for (Long id : drivers2exclude) {
                     var driver = driverService.getDriver(id);
-//                    if(Validator.overlaps(driver.get(), start, end)){
-//                        // todo : show error to user
-//                    }
                     tour.deleteDriver(driver.get());
                 }
     }
@@ -462,9 +460,10 @@ public class TourController {
             var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
             for (DriverTourIntervals dti : allDriverIntervals) {
                 try {
-                    if (dti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
-                        throw new OverlapsException(d, t, dti.getTour());
-                    }
+                    if (dti.getTour().getId() != t.getId())
+                        if (dti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                            throw new OverlapsException(d, t, dti.getTour());
+                        }
                 } catch (ValidationException e) {
                     e.printStackTrace();
                 }
@@ -474,14 +473,17 @@ public class TourController {
             var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
             for (GuideTourIntervals gti : allGuideIntervals) {
                 try {
-                    if (gti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
-                        throw new OverlapsException(g, t, gti.getTour());
-                    }
+                    if (gti.getTour().getId() != t.getId()) // fix bug when edit tour. Exception thrown even when no overlaps
+                        if (gti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                            throw new OverlapsException(g, t, gti.getTour());
+                        }
                 } catch (ValidationException e) {
-                    e.printStackTrace();
+                    // ignore exception
+                    logger.error(e.getMessage());
                 }
             }
         }
     }
+
 
 }

@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin().defaultSuccessUrl("/tours/list",true);
+                .formLogin().defaultSuccessUrl("/getview",true);
     }
 
     @Bean
