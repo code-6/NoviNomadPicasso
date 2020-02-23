@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
+import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -26,6 +27,9 @@ public class AdvancedTourController {
 
     @Autowired
     private DriverService driverService;
+
+    @Autowired
+    private GuideService guideService;
 
     private Logger logger = LoggerFactory.getLogger(AdvancedTourController.class);
 
@@ -88,6 +92,8 @@ public class AdvancedTourController {
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
         mav.addObject("selectedYear", year);
+        // remember user selected driver
+        mav.addObject("selectedDriver", driverService.getDriver(driverId).get());
 
         var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
         // get only where driver is specified
@@ -136,6 +142,8 @@ public class AdvancedTourController {
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
         mav.addObject("selectedYear", year);
+        mav.addObject("selectedGuide", guideService.getGuide(guideId).get());
+
         var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
         // get only where driver is specified
         var ti = tours.iterator();

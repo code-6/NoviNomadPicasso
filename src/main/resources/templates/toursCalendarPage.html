@@ -30,6 +30,10 @@
             <input th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
                    placeholder="ENTER YEAR">
 
+            <span th:if="${selectedDriver}" th:text="${'Driver: '+selectedDriver.getFullName()}"></span>
+            <span th:if="${selectedGuide}" th:text="${'Guide: '+selectedGuide.getFullName()}"></span>
+
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered table-sm">
                     <thead>
@@ -73,10 +77,12 @@
                         <td th:each="d: ${days}" th:style="${'width: 2%; text-align: center;'}">
                             <!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
                             <!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
-                            <span th:title="${t.getRange().toString()}" th:if="${d.isAfter(t.startDate.toLocalDate()) && d.isBefore(t.endDate.toLocalDate())}">---</span>
+                            <span th:title="${t.getRange().toString()}"
+                                  th:if="${d.isAfter(t.startDate.toLocalDate()) && d.isBefore(t.endDate.toLocalDate())}">---</span>
                             <!--					<span th:if="${d.isEqual(t.startDate) || d.isEqual(t.endDate)}">|</span>-->
 
-                            <span th:title="${t.getRange().toString()}" th:if="${d.isEqual(t.endDate.toLocalDate())}">-|</span>
+                            <span th:title="${t.getRange().toString()}"
+                                  th:if="${d.isEqual(t.endDate.toLocalDate())}">-|</span>
                             <span th:title="${t.getRange().toString()}" th:if="${d.isEqual(t.startDate.toLocalDate())}">|-</span>
 
                             <!--					<div class="progress" th:if="${d.isAfter(t.startDate) && d.isBefore(t.endDate)}">-->
