@@ -61,7 +61,7 @@ public class DriverController {
     public ModelAndView addOrUpdateDriverAction(Driver driver) {
         var modelAndView = new ModelAndView();
 //        modelAndView.setViewName("redirect:/drivers/add");
-        modelAndView.setViewName("driversListPage");
+        modelAndView.setViewName("redirect:/drivers/list");
 
         driverService.createOrUpdateDriver(driver);
         return modelAndView;

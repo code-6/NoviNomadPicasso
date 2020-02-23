@@ -19,6 +19,9 @@
                 <th onclick="sortTable(1,'driversList')">
                     <button type="button" class="btn btn-outline-info btn-sm">NAME</button>
                 </th>
+                <th onclick="sortTable(2,'driversList')">
+                    <button type="button" class="btn btn-outline-info btn-sm">CAR</button>
+                </th>
                 <th ></th>
             </tr>
         </thead>
@@ -28,6 +31,7 @@
             <tr th:each="driver:${drivers}">
                 <td th:text="${driver.getId()}"></td>
                 <td th:text="${driver.getFullName()}"></td>
+                <td th:text="${driver.getCar()}"></td>
                 <td>
                     <a th:href="@{/drivers/edit{id}(id=${driver.getId()})}">
                         <button type="button" class="btn btn-outline-secondary btn-sm" >edit</button>
