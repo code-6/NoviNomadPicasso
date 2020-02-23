@@ -8,6 +8,7 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.DriverTourIntervals;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverIntervalRepo;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -24,6 +25,7 @@ public class DriverIntervalService {
 
     @Transactional
     public void createOrUpdateInterval( DriverTourIntervals interval) {
+        logger.info("created "+ JsonPrinter.getString(interval));
         repo.save(interval);
     }
 

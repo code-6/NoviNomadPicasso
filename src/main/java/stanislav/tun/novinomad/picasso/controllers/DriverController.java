@@ -22,7 +22,7 @@ public class DriverController {
     @Autowired
     DriverService driverService;
 
-    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
+    Logger logger = LoggerFactory.getLogger(DriverController.class);
 
     @RequestMapping("/list")
     public ModelAndView getDriversListView() {
@@ -40,7 +40,6 @@ public class DriverController {
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId) {
         var driver = driverService.getDriver(driverId);
-        logger.info("Start edit driver "+ JsonPrinter.getString(driver));
         var mav = new ModelAndView();
         mav.addObject("driver", driver);
         mav.setViewName("addDriverPage.html");
@@ -62,11 +61,9 @@ public class DriverController {
     public ModelAndView addOrUpdateDriverAction(Driver driver) {
         var modelAndView = new ModelAndView();
 //        modelAndView.setViewName("redirect:/drivers/add");
-        modelAndView.setViewName("addDriverPage");
+        modelAndView.setViewName("driversListPage");
 
         driverService.createOrUpdateDriver(driver);
-
-        logger.info("driver created "+JsonPrinter.getString(driver));
         return modelAndView;
     }
 }

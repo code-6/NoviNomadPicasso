@@ -49,8 +49,8 @@
             <tr th:each="tour:${toursList}">
                 <td th:text="${tour.id}"></td>
                 <td th:text="${tour.tittle}" th:title="${tour.description}"></td>
-                <td th:text="${tour.getStartDate()}"></td>
-                <td th:text="${tour.getEndDate()}"></td>
+                <td th:text="${tour.getStartDateFormatted()}"></td>
+                <td th:text="${tour.getEndDateFormatted()}"></td>
                 <td th:text="${tour.days}"></td>
                 <td>
                 <span th:each="d: ${tour.drivers}">

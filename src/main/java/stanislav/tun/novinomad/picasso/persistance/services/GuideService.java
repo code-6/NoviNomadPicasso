@@ -1,10 +1,13 @@
 package stanislav.tun.novinomad.picasso.persistance.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IGuideRepo;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -16,11 +19,18 @@ import java.util.Optional;
 @Service
 @Transactional
 public class GuideService {
+    Logger logger = LoggerFactory.getLogger(DriverService.class);
+
     @Autowired
     IGuideRepo repo;
 
     @Transactional
     public void createOrUpdateGuide(Guide guide){
+        if(exist(guide))
+            logger.info("edited "+ JsonPrinter.getString(guide));
+        else
+            logger.info("created "+JsonPrinter.getString(guide));
+
         repo.save(guide);
     }
 
@@ -59,5 +69,13 @@ public class GuideService {
             }
         }
         return list;
+    }
+
+    public boolean exist(Guide guide){
+        return repo.existsById(guide.getId());
+    }
+
+    public boolean exist(Long id){
+        return repo.existsById(id);
     }
 }

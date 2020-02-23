@@ -1,11 +1,14 @@
 package stanislav.tun.novinomad.picasso.persistance.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
+import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -15,10 +18,17 @@ import java.util.Set;
 @Service
 @Transactional
 public class TourService {
+
+    Logger logger = LoggerFactory.getLogger(TourService.class);
     @Autowired
     ITourRepo repo;
 
     public void createOrUpdateTour(Tour tour) {
+        if(repo.existsById(tour.getId()))
+            logger.info("edit "+ JsonPrinter.getString(tour));
+        else
+            logger.info("create "+ JsonPrinter.getString(tour));
+
         repo.save(tour);
     }
 
