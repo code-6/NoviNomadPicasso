@@ -32,6 +32,8 @@ public class Guide extends AbstractEntity {
 
     protected String fullName;
 
+    private String language;
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "guides")
     @JsonBackReference
     @Fetch(FetchMode.JOIN)
@@ -50,6 +52,14 @@ public class Guide extends AbstractEntity {
     public Guide(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public Set<Tour> getTours() {

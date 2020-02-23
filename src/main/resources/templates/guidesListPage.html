@@ -19,6 +19,9 @@
             <th onclick="sortTable(1,'guidesList')">
                 <button type="button" class="btn btn-outline-info btn-sm">NAME</button>
             </th>
+            <th onclick="sortTable(2,'guidesList')">
+                <button type="button" class="btn btn-outline-info btn-sm">LANGUAGE</button>
+            </th>
             <th></th>
         </tr>
         </thead>
@@ -30,6 +33,8 @@
             <td>
                 <a th:href="@{/getViewRelatedToGuide{guideId}(guideId=${guide.id})}" th:text="${guide.fullName}"></a>
             </td>
+
+            <td th:text="${guide.getLanguage()}"></td>
             <td>
                 <a th:href="@{/guides/edit{id}(id=${guide.getId()})}">
                     <button type="button" class="btn btn-outline-secondary btn-sm" >edit</button>

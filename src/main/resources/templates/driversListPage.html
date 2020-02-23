@@ -30,7 +30,9 @@
         <!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
             <tr th:each="driver:${drivers}">
                 <td th:text="${driver.getId()}"></td>
-                <td th:text="${driver.getFullName()}"></td>
+                <td>
+                    <a th:href="@{/getViewRelatedToDriver{driverId}(driverId=${driver.id})}" th:text="${driver.fullName}"></a>
+                </td>
                 <td th:text="${driver.getCar()}"></td>
                 <td>
                     <a th:href="@{/drivers/edit{id}(id=${driver.getId()})}">
