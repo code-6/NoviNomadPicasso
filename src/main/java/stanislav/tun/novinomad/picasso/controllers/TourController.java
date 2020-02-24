@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import stanislav.tun.novinomad.picasso.PicassoApp;
@@ -137,6 +138,7 @@ public class TourController {
                                       @RequestParam(required = false, name = "guides2attach") List<Long> guides2attach,
                                       @RequestParam(required = false, name = "guides2exclude") List<Long> guides2exclude,
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
+                                      @RequestParam(required = false, name = "file") MultipartFile file,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
         try {
             if (tourDateTimeRange != null && tourDateTimeRange != "") {
@@ -147,7 +149,7 @@ public class TourController {
         } catch (ValidationException e) {
             logger.error(getStackTrace(e));
         }
-
+        tour.setFileName(file.getOriginalFilename());
         var mav = new ModelAndView();
         // todo : refactor duplicate try-catch blocks
         try {

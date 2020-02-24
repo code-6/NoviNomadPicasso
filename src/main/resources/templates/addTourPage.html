@@ -26,7 +26,7 @@
 	<br/>
 	<!--/*@thymesVar id="tour" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
 	<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
-	<form action="#" th:action="@{/tours/save}" th:object="${tour}" method="post">
+	<form action="#" th:action="@{/tours/save}" th:object="${tour}" method="post" enctype="multipart/form-data">
 
 		<div th:if="${error}">
 			<script th:inline="javascript">
@@ -148,7 +148,7 @@
 
 				<td>
 					<div class="form-group">
-						<input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+						<input type="file" name="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
 					</div>
 				</td>
 			</tr>
