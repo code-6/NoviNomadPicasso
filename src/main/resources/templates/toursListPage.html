@@ -27,7 +27,7 @@
                     <button type="button" class="btn btn-outline-info btn-sm">END DATE</button>
                 </th>
                 <th onclick="sortTable(4,'toursList')">
-                    <button type="button" class="btn btn-outline-info btn-sm">TOTAL DAYS</button>
+                    <button type="button" class="btn btn-outline-info btn-sm">DAYS</button>
                 </th>
                 <th onclick="sortTable(5,'toursList')">
                     <button type="button" class="btn btn-outline-info btn-sm">DRIVERS</button>
@@ -44,6 +44,10 @@
 
                 <th>
                     <button type="button" class="btn btn-outline-info btn-sm">FILE</button>
+                </th>
+
+                <th>
+                    <button type="button" class="btn btn-outline-info btn-sm">DESCRIPTION</button>
                 </th>
             </tr>
             </thead>
@@ -72,7 +76,9 @@
 
                 <td th:text="${tour.createdBy}"></td>
 
-                <td th:text="${tour.fileName}"></td>
+                <td th:text="${tour.fileName}" class="text-truncate"></td>
+
+                <td th:text="${tour.description}" class="text-truncate"></td>
 
                 <td>
                     <a th:href="@{/tours/edit{id}(id=${tour.id})}">

@@ -9,10 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
-import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
-import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
-import stanislav.tun.novinomad.picasso.persistance.pojos.User;
+import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
@@ -21,8 +18,10 @@ import stanislav.tun.novinomad.picasso.security.audit.AuditorAwareImpl;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
@@ -58,7 +57,150 @@ public class PicassoApp {
         SpringApplication.run(PicassoApp.class, args);
     }
 
-    @PostConstruct
+    private void createDriversLoop() {
+        for (int i = 0; i <= 300; i++) {
+            var d = new Driver();
+            d.setFirstName("FirstName " + i);
+            d.setMiddleName("MiddleName " + i);
+            d.setLastName("LastName " + i);
+            d.setCar(getRandomCar());
+            driverService.createOrUpdateDriver(d);
+        }
+    }
+
+    private void createGuidesLoop() {
+        for (int i = 0; i <= 300; i++) {
+            var g = new Guide();
+            g.setFirstName("FirstName " + i);
+            g.setMiddleName("MiddleName " + i);
+            g.setLastName("LastName " + i);
+            g.setLanguage(getRandomLanguage());
+            guideService.createOrUpdateGuide(g);
+        }
+    }
+
+    private void createToursLoop() {
+        var allDrivers = driverService.getDriversList();
+        var allGuides = guideService.getGuidesList();
+        for (int i = 0; i <= 3000; i++) {
+            var rnd = getRandomNumInRange(1, 3); // drivers count in tour
+            var rnd2 = getRandomNumInRange(1, 3); // guides count in tour
+            var tour1 = new Tour();
+            tour1.setTittle("Tour "+i);
+            tour1.setDescription("this is tour description "+i);
+            tour1.setFileName("SomeFile.txt");
+            var range = getRandomRange();
+            tour1.setStartDate(range.getStart());
+            tour1.setEndDate(range.getEnd());
+            // add 1,2 or 3 drivers to tour
+            switch (rnd) {
+                case 1:
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    break;
+                case 2:
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    break;
+                case 3:
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    break;
+            }
+
+            switch (rnd2) {
+                case 1:
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    break;
+                case 2:
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    break;
+                case 3:
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    break;
+            }
+
+            tour1.setCreatedBy("SYSTEM");
+            tour1.setCreationDate(new Date());
+        }
+    }
+
+    private DateTimeRange getRandomRange(){
+        var start = LocalDateTime.of(2020, getRandomNumInRange(1,12), getRandomNumInRange(1,28), getRandomNumInRange(1,24), getRandomNumInRange(1,60), 0);
+        var rnd = getRandomNumInRange(10, 15);
+        var end = start.plusDays(rnd);
+        try {
+            return new DateTimeRange(start, end);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private int getRandomNumInRange(int from, int to) {
+        int rnd = from + (int) (Math.random() * to);
+        return rnd;
+    }
+
+    private String getRandomCar() {
+        int rnd = 1 + (int) (Math.random() * 10);
+        switch (rnd) {
+            case 1:
+                return "Alfa Romeo";
+            case 2:
+                return "Mercedes Benz";
+            case 3:
+                return "BMW";
+            case 4:
+                return "Lamborghini";
+            case 5:
+                return "Porsche";
+            case 6:
+                return "Koenigsegg";
+            case 7:
+                return "VolksWagen";
+            case 8:
+                return "Audi";
+            case 9:
+                return "Nissan";
+            case 10:
+                return "Toyota";
+            default:
+                return "Mercedes Benz Sprinter";
+        }
+    }
+
+    private String getRandomLanguage() {
+        int rnd = 1 + (int) (Math.random() * 10);
+        switch (rnd) {
+            case 1:
+                return "CHINESE";
+            case 2:
+                return "SPANISH";
+            case 3:
+                return "ENGLISH";
+            case 4:
+                return "HINDI";
+            case 5:
+                return "ARABIC";
+            case 6:
+                return "PORTUGUESE";
+            case 7:
+                return "BENGALI";
+            case 8:
+                return "RUSSIAN";
+            case 9:
+                return "JAPANESE";
+            case 10:
+                return "GERMAN";
+            default:
+                return "TURKISH";
+        }
+    }
+
     private void init() {
         var user1 = new User("visitor", "$2a$10$lnyXL7Jc.PlCMdrxSXyIu.5klIHkztPUaDwQBHoRdqdc20rjOJZHC");
         user1.addAuthority("VISITOR");
@@ -121,6 +263,13 @@ public class PicassoApp {
 //        tourService.createOrUpdateTour(tour4);
 
         logger.debug("initialize app data finished");
+    }
+
+    @PostConstruct
+    private void init2(){
+        createDriversLoop();
+        createGuidesLoop();
+        createToursLoop();
     }
 
 }
