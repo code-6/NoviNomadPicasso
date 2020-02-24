@@ -51,6 +51,9 @@ public class Tour extends AbstractEntity implements Serializable {
     private LocalDateTime startDate;
 
     @Column
+    private String fileName;
+
+    @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     //@Temporal(TemporalType.DATE)
     private LocalDateTime endDate;
@@ -121,6 +124,14 @@ public class Tour extends AbstractEntity implements Serializable {
     public void addGuide(Set<Guide> _guides){
         if(_guides != null)
             guides.addAll(_guides);
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public void deleteDriver(Driver driver){
