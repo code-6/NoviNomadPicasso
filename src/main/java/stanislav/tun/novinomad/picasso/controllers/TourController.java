@@ -62,7 +62,7 @@ public class TourController {
 
         map.put("guides", guideService.getGuidesList());
         map.put("guidesExclude", tour.getGuides());
-        logger.debug("/tours/add requested. Returned view with tour "+ JsonPrinter.getString(tour));
+        logger.debug("/tours/add requested. Returned view with tour " + JsonPrinter.getString(tour));
         return new ModelAndView("addTourPage", map);
     }
 
@@ -120,7 +120,7 @@ public class TourController {
                     var gti = new GuideTourIntervals(tour, new DateTimeRange(tour.getStartDate(), tour.getEndDate()), g);
                     guideIntervalService.createOrUpdateInterval(gti);
                 }
-                logger.debug("Set default intervals for tour: "+tour.getId());
+                logger.debug("Set default intervals for tour: " + tour.getId());
             }
         } catch (ValidationException e) {
             logger.error(getStackTrace(e));
@@ -456,36 +456,39 @@ public class TourController {
                 }
     }
 
-    private void checkAlreadyAppointedDate(AbstractEntity entity, Tour t) throws OverlapsException {
+    private boolean check = false;
 
-        if (entity instanceof Driver) {
-            Driver d = (Driver) entity;
-            var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
-            for (DriverTourIntervals dti : allDriverIntervals) {
-                try {
-                    if (dti.getTour().getId() != t.getId())
-                        if (dti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
-                            throw new OverlapsException(d, t, dti.getTour());
-                        }
-                } catch (ValidationException e) {
-                    e.printStackTrace();
+    private void checkAlreadyAppointedDate(AbstractEntity entity, Tour t) throws OverlapsException {
+        // todo : flag only for test. Remove later.
+        if (check)
+            if (entity instanceof Driver) {
+                Driver d = (Driver) entity;
+                var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
+                for (DriverTourIntervals dti : allDriverIntervals) {
+                    try {
+                        if (dti.getTour().getId() != t.getId())
+                            if (dti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                                throw new OverlapsException(d, t, dti.getTour());
+                            }
+                    } catch (ValidationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (entity instanceof Guide) {
+                Guide g = (Guide) entity;
+                var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
+                for (GuideTourIntervals gti : allGuideIntervals) {
+                    try {
+                        if (gti.getTour().getId() != t.getId()) // fix bug when edit tour. Exception thrown even when no overlaps
+                            if (gti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                                throw new OverlapsException(g, t, gti.getTour());
+                            }
+                    } catch (ValidationException e) {
+                        // ignore exception
+                        logger.error(e.getMessage());
+                    }
                 }
             }
-        } else if (entity instanceof Guide) {
-            Guide g = (Guide) entity;
-            var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
-            for (GuideTourIntervals gti : allGuideIntervals) {
-                try {
-                    if (gti.getTour().getId() != t.getId()) // fix bug when edit tour. Exception thrown even when no overlaps
-                        if (gti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
-                            throw new OverlapsException(g, t, gti.getTour());
-                        }
-                } catch (ValidationException e) {
-                    // ignore exception
-                    logger.error(e.getMessage());
-                }
-            }
-        }
     }
 
 
