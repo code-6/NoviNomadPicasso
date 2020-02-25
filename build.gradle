@@ -36,11 +36,12 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.2.2.RELEASE'
     //compile group: 'joda-time', name: 'joda-time', version: '2.10.5'
     //compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: '2.10.1'
+
     // https://mvnrepository.com/artifact/org.webjars.bower/jquery
     compile group: 'org.webjars.bower', name: 'jquery', version: '3.4.1'
     // https://mvnrepository.com/artifact/org.webjars/webjars-locator
     compile group: 'org.webjars', name: 'webjars-locator', version: '0.38'
-    compile group: 'org.webjars.bower', name: 'bootstrap-table', version: '1.16.0'
+
 
     // https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
     compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
