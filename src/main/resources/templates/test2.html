@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+         table.table-fixedheader {
+    width: 100%;
+}
+
+ table.table-fixedheader, table.table-fixedheader>thead, table.table-fixedheader>tbody, table.table-fixedheader>thead>tr, table.table-fixedheader>tbody>tr, table.table-fixedheader>thead>tr>th, table.table-fixedheader>tbody>td {
+    display: block;
+}
+table.table-fixedheader>thead>tr:after, table.table-fixedheader>tbody>tr:after {
+    content:' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+ table.table-fixedheader>tbody {
+    overflow-y: scroll;
+    height: 100px;
+
+}
+
+ table.table-fixedheader>thead {
+    overflow-y: scroll;
+}
+
+ table.table-fixedheader>thead::-webkit-scrollbar {
+    background-color: inherit;
+}
+
+
+table.table-fixedheader>thead>tr>th:after, table.table-fixedheader>tbody>tr>td:after {
+    content:' ';
+    display: table-cell;
+    visibility: hidden;
+    clear: both;
+}
+
+ table.table-fixedheader>thead tr th, table.table-fixedheader>tbody tr td {
+    float: left;
+    word-wrap:break-word;
+}
+    </style>
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <table id="myTable" class="table table-hover table-fixedheader table-bordered table-striped">
+            <thead>
+            <tr>
+                <th width="15%">Column1Column1Column1Column1</th>
+                <th width="15%">Column2</th>
+                <th width="15%">Column3</th>
+                <th width="15%">Column4</th>
+                <th width="40%">Column5</th>
+            </tr>
+            </thead>
+            <tbody style="height:110px">
+            <tr>
+                <td width="15%">aaaaaaaaaaa</td>
+                <td width="15%">bbbbbbbbbbb</td>
+                <td width="15%">ccccccccccc</td>
+                <td width="15%">ddddddddddd</td>
+                <td width="40%">eeeeeeeeeee</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
