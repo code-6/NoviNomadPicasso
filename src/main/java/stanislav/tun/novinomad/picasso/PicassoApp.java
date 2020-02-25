@@ -57,37 +57,35 @@ public class PicassoApp {
         SpringApplication.run(PicassoApp.class, args);
     }
 
-    private void createDriversLoop() {
-        for (int i = 0; i <= 300; i++) {
+    private void createDriversLoop(int maxCount) {
+        for (int i = 0; i <= maxCount; i++) {
             var d = new Driver();
-            d.setFirstName("FirstName " + i);
-            d.setMiddleName("MiddleName " + i);
-            d.setLastName("LastName " + i);
+            d.setFirstName("Driver_" + i);
+            d.setLastName("Driverov_" + i);
             d.setCar(getRandomCar());
             driverService.createOrUpdateDriver(d);
         }
     }
 
-    private void createGuidesLoop() {
-        for (int i = 0; i <= 300; i++) {
+    private void createGuidesLoop(int maxCount) {
+        for (int i = 0; i <= maxCount; i++) {
             var g = new Guide();
-            g.setFirstName("FirstName " + i);
-            g.setMiddleName("MiddleName " + i);
-            g.setLastName("LastName " + i);
+            g.setFirstName("Guide_" + i);
+            g.setLastName("Guidov_" + i);
             g.setLanguage(getRandomLanguage());
             guideService.createOrUpdateGuide(g);
         }
     }
 
-    private void createToursLoop() {
+    private void createToursLoop(int toursMaxCount) {
         var allDrivers = driverService.getDriversList();
         var allGuides = guideService.getGuidesList();
-        for (int i = 0; i <= 3000; i++) {
+        for (int i = 0; i <= toursMaxCount; i++) {
             var rnd = getRandomNumInRange(1, 3); // drivers count in tour
             var rnd2 = getRandomNumInRange(1, 3); // guides count in tour
             var tour1 = new Tour();
-            tour1.setTittle("Tour "+i);
-            tour1.setDescription("this is tour description "+i);
+            tour1.setTittle("Tour_"+i);
+            tour1.setDescription("this is tour description_"+i);
             tour1.setFileName("SomeFile.txt");
             var range = getRandomRange();
             tour1.setStartDate(range.getStart());
@@ -95,36 +93,38 @@ public class PicassoApp {
             // add 1,2 or 3 drivers to tour
             switch (rnd) {
                 case 1:
-                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
                     break;
                 case 2:
-                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
-                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
                     break;
                 case 3:
-                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
-                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
-                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(1, 300))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour1.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
                     break;
             }
 
             switch (rnd2) {
                 case 1:
-                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allGuides.size()-1))));
                     break;
                 case 2:
-                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
-                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allGuides.size()-1))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allGuides.size()-1))));
                     break;
                 case 3:
-                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
-                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
-                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(1, 300))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allGuides.size()-1))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allGuides.size()-1))));
+                    tour1.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allGuides.size()-1))));
                     break;
             }
 
             tour1.setCreatedBy("SYSTEM");
             tour1.setCreationDate(new Date());
+
+            tourService.createOrUpdateTour(tour1);
         }
     }
 
@@ -201,72 +201,8 @@ public class PicassoApp {
         }
     }
 
-    private void init() {
-        var user1 = new User("visitor", "$2a$10$lnyXL7Jc.PlCMdrxSXyIu.5klIHkztPUaDwQBHoRdqdc20rjOJZHC");
-        user1.addAuthority("VISITOR");
-        user1.setEnabled(true);
-
-        var user2 = new User("user", "$2a$10$YHyM3KAswilNcNbAUmZH9O28kBDhUX6Bz5CXCTzuBVX6ARJ3EpAjW");
-        user2.addAuthority("USER");
-        user2.setEnabled(true);
-
-        var user3 = new User("testuser", "$2a$10$Z/.BLe3VelzXHnUKn9/.pOKKYnk9ctCW2WPj4wB7it/B9Q6gGbZtC");
-        user3.addAuthority("TEST_USER");
-        user3.setEnabled(true);
-
-        userService.createUser(user1);
-        userService.createUser(user2);
-        userService.createUser(user3);
-
-        var d1 = new Driver("Ryan", "Cooper");
-        var d2 = new Driver("Michael", "Schumacher");
-        driverService.createOrUpdateDriver(d1);
-        driverService.createOrUpdateDriver(new Driver("Ken", "Miles"));
-        driverService.createOrUpdateDriver(d2);
-        driverService.createOrUpdateDriver(new Driver("Ken", "Block"));
-        driverService.createOrUpdateDriver(new Driver("Carroll", "Shelby"));
-
-        guideService.createOrUpdateGuide(new Guide("Roberto", "Strippoli"));
-        guideService.createOrUpdateGuide(new Guide("Kennedy", "Omwenga"));
-        guideService.createOrUpdateGuide(new Guide("Nic", "Polenakis"));
-        guideService.createOrUpdateGuide(new Guide("Alfredo", "Meneses"));
-        guideService.createOrUpdateGuide(new Guide("Peter", "Hillary"));
-        guideService.createOrUpdateGuide(new Guide("Nikolai", "Drozdov"));
-
-//        var tour1 = new Tour();
-//        tour1.setStartDate(LocalDateTime.of(2020,2,1, 0,0,0));
-//        tour1.setEndDate(LocalDateTime.of(2020,2,15, 0,0,0));
-//        tour1.addDriver(java.util.Optional.of(d1));
-//        tour1.setTittle("first tour");
-//
-//        var tour2 = new Tour();
-//        tour2.setStartDate(LocalDateTime.of(2020,2,15, 0,0,0));
-//        tour2.setEndDate(LocalDateTime.of(2020,2,28, 0,0,0));
-//        tour2.addDriver(java.util.Optional.of(d1));
-//        tour2.setTittle("second tour");
-//
-//        var tour3 = new Tour();
-//        tour3.setStartDate(LocalDateTime.of(2020,3,1, 0,0,0));
-//        tour3.setEndDate(LocalDateTime.of(2020,3,15, 0,0,0));
-//        tour3.addDriver(java.util.Optional.of(d2));
-//        tour3.setTittle("third tour");
-//
-//        var tour4 = new Tour();
-//        tour4.setStartDate(LocalDateTime.of(2020,1,25, 0,0,0));
-//        tour4.setEndDate(LocalDateTime.of(2020,2,1, 0,0,0));
-//        tour4.addDriver(java.util.Optional.of(d2));
-//        tour4.setTittle("fourth tour");
-//
-//        tourService.createOrUpdateTour(tour1);
-//        tourService.createOrUpdateTour(tour2);
-//        tourService.createOrUpdateTour(tour3);
-//        tourService.createOrUpdateTour(tour4);
-
-        logger.debug("initialize app data finished");
-    }
-
     @PostConstruct
-    private void init2(){
+    private void init(){
         var user1 = new User("visitor", "$2a$10$lnyXL7Jc.PlCMdrxSXyIu.5klIHkztPUaDwQBHoRdqdc20rjOJZHC");
         user1.addAuthority("VISITOR");
         user1.setEnabled(true);
@@ -283,9 +219,9 @@ public class PicassoApp {
         userService.createUser(user2);
         userService.createUser(user3);
 
-        createDriversLoop();
-        createGuidesLoop();
-        createToursLoop();
+        createDriversLoop(20);
+        createGuidesLoop(20);
+        createToursLoop(40);
     }
 
 }

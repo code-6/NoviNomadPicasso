@@ -28,16 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/*/add").hasAnyAuthority("USER","TEST_USER")
+                .antMatchers("/*/add").hasAnyAuthority("USER", "TEST_USER")
                 .antMatchers("/*/edit{id}").hasAuthority("USER")
+                .antMatchers("/h2-console/**").hasAuthority("USER")
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin().defaultSuccessUrl("/getview",true);
+                .formLogin().defaultSuccessUrl("/getview", true);
+        http.csrf().ignoringAntMatchers("/h2-console/**");
+        //this will allow frames with same origin which is much more safe
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Bean
-    public PasswordEncoder getPasswordEncoder(){
+    public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
