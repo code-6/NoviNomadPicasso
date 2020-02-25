@@ -3,6 +3,7 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
@@ -32,14 +33,17 @@ public class TourService {
         repo.save(tour);
     }
 
+    @Cacheable("singleTour")
     public Optional<Tour> getTour(Long id) {
         return repo.findById(id);
     }
 
+    @Cacheable("allTours")
     public List<Tour> getAllTours() {
         return repo.findAll();
     }
 
+    @Cacheable("singleTour")
     public Tour getTour(String tittle) {
         var allTours = getAllTours();
         for (Tour t : allTours) {
@@ -49,6 +53,7 @@ public class TourService {
         return null;
     }
 
+    @Cacheable("tourDrivers")
     public Set<Driver> getAttachedDrivers(Long id){
         var tour = getTour(id);
         if(!tour.isEmpty() && tour.isPresent())
@@ -56,6 +61,7 @@ public class TourService {
         return null;
     }
 
+    @Cacheable("tourGuides")
     public Set<Guide> getAttachedGuides(long id) {
         var tour = getTour(id);
         if(!tour.isEmpty() && tour.isPresent())
