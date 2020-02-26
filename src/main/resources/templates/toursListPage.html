@@ -3,94 +3,123 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-    <link rel="stylesheet" th:src="@{/webjars/bootstrap-table/1.16.0/distr/extensions/sticky-header/bootstrap-table-sticky-header.css}">
-    <script type="text/javascript" th:src="@{webjars/bootstrap-table/1.16.0/distr/extensions/sticky-header/bootstrap-table-sticky-header.js}"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.css}">
 </head>
 <body>
-<div layout:fragment="content">
-    <div>
-        <h1>Tours</h1>
-        <br/>
-        <table class="table table-hover" id="toursList" align="left">
-            <caption>List of tours</caption>
-            <thead>
-            <tr>
-                <th>
-                    <button type="button" class="btn btn-outline-info btn-sm" >ID</button>
-                </th>
-                <th >
-                    <button type="button" class="btn btn-outline-info btn-sm">TITLE</button>
-                </th>
-                <th onclick="sortTable(2,'toursList')">
-                    <button type="button" class="btn btn-outline-info btn-sm">START DATE</button>
-                </th>
-                <th onclick="sortTable(3,'toursList')">
-                    <button type="button" class="btn btn-outline-info btn-sm">END DATE</button>
-                </th>
-                <th onclick="sortTable(4,'toursList')">
-                    <button type="button" class="btn btn-outline-info btn-sm">DAYS</button>
-                </th>
-                <th onclick="sortTable(5,'toursList')">
-                    <button type="button" class="btn btn-outline-info btn-sm">DRIVERS</button>
-                </th>
-                <th onclick="sortTable(6,'toursList')">
-                    <button type="button" class="btn btn-outline-info btn-sm">GUIDES</button>
-                </th>
-                <th>
-                    <button type="button" class="btn btn-outline-info btn-sm">CREATED BY</button>
-                </th>
+<div layout:fragment="content" class="jumbotron">
 
-                <th>
-                    <button type="button" class="btn btn-outline-info btn-sm">FILE</button>
-                </th>
+    <style>
+        .fixed-table-container{
+            top:50px;
+        }
+        .fix-sticky{
+            top:114px;
+        }
+        .fixed-table-toolbar{
+            z-index: 10000000;
+            top: 56px;
+            float: right;
+            display: block;
+            position: fixed;
+            width: 96%;
+            background-color: #e9ecef;
+        }
+        .loading-text {
+            display: none;
+        }
 
-                <th>
-                    <button type="button" class="btn btn-outline-info btn-sm">DESCRIPTION</button>
-                </th>
-            </tr>
-            </thead>
+        .text_search_title{
+            margin-top: 16px;
+        }
+    </style>
+    <table id="table" class="table table-sm table-fit" data-toggle="table"
+           data-sticky-header-offset-left="1em" data-sticky-header-offset-right="1em"
+           data-sticky-header="true"
+           data-sticky-header-offset-y="114"
+           data-sortable="true"
+           data-show-columns="true" data-search="true">
+        <caption>List of tours</caption>
+        <thead class="thead-light sticky-header">
+        <tr>
+            <th data-sortable="true" data-field="id" class="th-inner sortable both">ID</th>
+            <th data-sortable="true" data-field="title" class="th-inner sortable both">TITLE</th>
+            <th data-sortable="true" data-field="start" class="th-inner sortable both">START</th>
+            <th data-sortable="true" data-field="end" class="th-inner sortable both">END</th>
+            <th data-sortable="true" data-field="days" class="th-inner sortable both">DAYS</th>
+            <th data-sortable="true" data-field="drivers" class="th-inner sortable both">DRIVERS</th>
+            <th data-sortable="true" data-field="guides" class="th-inner sortable both">GUIDES</th>
+            <th data-sortable="true" data-field="created_by" class="th-inner sortable both">CREATED_BY</th>
+            <th data-sortable="true" data-field="file" class="th-inner sortable both">FILE</th>
+            <th data-sortable="true" data-field="description" class="th-inner sortable both">DESCRIPTION</th>
+            <th>
+                <a href="/drivers/add">
+                    <button type="button" class="btn btn-outline-success">create tour</button>
+                </a>
+            </th>
+        </tr>
+        </thead>
 
-            <tbody>
-            <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
-            <tr th:each="tour:${toursList}">
-                <td th:text="${tour.id}"></td>
-                <td th:text="${tour.tittle}" th:title="${tour.description}"></td>
-                <td th:text="${tour.getStartDateFormatted()}"></td>
-                <td th:text="${tour.getEndDateFormatted()}"></td>
-                <td th:text="${tour.days}"></td>
-                <td>
+        <tbody>
+        <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
+        <tr th:each="tour:${toursList}">
+            <td th:text="${tour.id}"></td>
+            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>
+            <td th:text="${tour.getStartDateFormatted()}"></td>
+            <td th:text="${tour.getEndDateFormatted()}"></td>
+            <td th:text="${tour.days}"></td>
+            <td>
                 <span th:each="d: ${tour.drivers}">
                     <span th:text="${d.fullName}"></span>
 					<br/>
                 </span>
-                </td>
-                <td>
+            </td>
+            <td>
                 <span th:each="g: ${tour.guides}">
                     <span th:text="${g.fullName}"></span>
 					<br/>
                 </span>
-                </td>
-<!--                <td th:text="${tour.description}"></td>-->
+            </td>
+            <!--                <td th:text="${tour.description}"></td>-->
 
-                <td th:text="${tour.createdBy}"></td>
+            <td th:text="${tour.createdBy}"></td>
 
-                <td th:text="${tour.fileName}" class="text-truncate"></td>
+            <td th:text="${tour.fileName}" class="text-truncate"></td>
 
-                <td th:text="${tour.description}" class="text-truncate"></td>
+            <td th:text="${tour.description}" class="text-truncate"></td>
 
-                <td>
-                    <a th:href="@{/tours/edit{id}(id=${tour.id})}">
-                        <button type="button" class="btn btn-outline-info btn-sm">edit</button>
-                    </a>
-                </td>
+            <td>
+                <a th:href="@{/tours/edit{id}(id=${tour.id})}">
+                    <button type="button" class="btn btn-outline-info btn-sm">edit</button>
+                </a>
+            </td>
 
-            </tr>
-            </tbody>
-        </table>
-        <a href="/tours/add">
-            <button type="button" class="btn btn-outline-success">add new tour</button>
-        </a>
-    </div>
+        </tr>
+        </tbody>
+    </table>
 </div>
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+
+    <script type="text/javascript"
+            th:src="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.js}"></script>
+
+    <script type="text/javascript"
+            th:src="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js}"></script>
+
+    <script>
+    	$( document ).ready(function() {
+        	console.log( "ready!" );
+        	$( "<h4 class=\"text_search_title\" >Tours list</h4>" ).appendTo( ".fixed-table-toolbar" );
+    	});
+	</script>
+
+</th:block>
 </body>
 </html>
