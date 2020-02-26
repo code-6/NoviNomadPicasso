@@ -31,7 +31,7 @@
         <tr th:each="guide:${guides}">
             <td th:text="${guide.getId()}"></td>
             <td>
-                <a th:href="@{/getViewRelatedToGuide{guideId}(guideId=${guide.id})}" th:text="${guide.fullName}"></a>
+                <a th:href="@{/picasso/getViewRelatedToGuide{guideId}(guideId=${guide.id})}" th:text="${guide.fullName}"></a>
             </td>
 
             <td th:text="${guide.getLanguage()}"></td>

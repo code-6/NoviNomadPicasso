@@ -194,7 +194,7 @@ public class TourController {
             setDefaultIntervals(tour);
             var m = tour.getStartDate().getMonth().getValue();
             var y = tour.getStartDate().getYear();
-            var r = String.format("redirect:/getview?month=%d&year=%d", m, y);
+            var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
             mav.setViewName(r);
         }
         mav.addObject("tour", tour);

@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/picasso")
 public class AdvancedTourController {
     private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
