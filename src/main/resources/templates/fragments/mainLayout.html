@@ -7,12 +7,10 @@
 <body>
 <div th:replace="fragments/header::header"></div>
 <div layout:fragment="content"></div>
-<!--<div th:replace="fragments/footer::footer"></div>-->
-<!--<script type="text/javascript" th:src="@{../js/jquery.min.js}"></script>-->
 <!--jquery from webjars instead of local-->
 <script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
 <!--bootstrap js from webjars instead of local-->
 <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
-
+<th:block layout:fragment="script"></th:block>
 </body>
 </html>
