@@ -27,17 +27,21 @@
         .fix-sticky{
             top:114px;
         }
-
         .fixed-table-toolbar{
-
-            z-index: 10000000000000;
+            z-index: 100;
             top: 56px;
             float: right;
             display: block;
             position: fixed;
             width: 96%;
             background-color: #e9ecef;
+        }
+        .loading-text {
+            display: none;
+        }
 
+        .text_search_title{
+            margin-top: 16px;
         }
 
     </style>
@@ -155,7 +159,7 @@
             <td>value</td>
             <td>value</td>
             <td>value</td>
-            <td>value</td>
+            <td>uahaha</td>
             <td>value</td>
             <td>value</td>
             <td>value</td>
@@ -275,6 +279,7 @@
 <!--</div>-->
 <!--data-show-columns="true" this attribute on table tag enables cell selecting-->
 
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -287,5 +292,13 @@
         type="text/javascript"></script>
 <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        $( "<h4 class=\"text_search_title\" >Test</h4>" ).appendTo( ".fixed-table-toolbar" );
+    });
+
+</script>
+
 </body>
 </html>
