@@ -11,7 +11,11 @@
     <link rel="stylesheet"
           href="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.css">
 </head>
-
+<header>
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Fixed top</a>
+    </nav>
+</header>
 <body>
 
 <main role="main" class="jumbotron">
@@ -20,11 +24,14 @@
         .custom{
             top: 100px;
         }
+        .fix-sticky{
+            top:52px;
+        }
     </style>
     <table id="table" data-toggle="table"
            data-sticky-header-offset-left="2em" data-sticky-header-offset-right="2em"
            data-sticky-header="true"
-           data-sticky-header-offset-y="120"
+           data-sticky-header-offset-y="60"
            data-sortable="true"
            data-show-columns="true" data-search="true"
            data-show-fullscreen="true"
