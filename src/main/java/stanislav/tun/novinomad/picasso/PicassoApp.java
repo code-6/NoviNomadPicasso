@@ -60,7 +60,7 @@ public class PicassoApp {
     }
 
     private void createDriversLoop(int count) {
-        for (int i = 0; i <= count; i++) {
+        for (int i = 0; i < count; i++) {
             var d = new Driver();
             d.setFirstName("Driver_" + i);
             d.setLastName("Driver_" + i);
@@ -70,7 +70,7 @@ public class PicassoApp {
     }
 
     private void createGuidesLoop(int count) {
-        for (int i = 0; i <= count; i++) {
+        for (int i = 0; i < count; i++) {
             var g = new Guide();
             g.setFirstName("Guide_" + i);
             g.setLastName("Guide_" + i);
@@ -82,7 +82,7 @@ public class PicassoApp {
     private void createToursLoop(int count) {
         var allDrivers = driverService.getDriversList();
         var allGuides = guideService.getGuidesList();
-        for (int i = 0; i <= count; i++) {
+        for (int i = 0; i < count; i++) {
             var rnd = getRandomNumInRange(1, 3); // drivers count in tour
             var rnd2 = getRandomNumInRange(1, 3); // guides count in tour
             var tour = new Tour();
@@ -221,9 +221,9 @@ public class PicassoApp {
         userService.createUser(user2);
         userService.createUser(user3);
 
-        createDriversLoop(10);
-        createGuidesLoop(10);
-        createToursLoop(1);
+        createDriversLoop(150);
+        createGuidesLoop(150);
+        createToursLoop(500);
     }
 
 }

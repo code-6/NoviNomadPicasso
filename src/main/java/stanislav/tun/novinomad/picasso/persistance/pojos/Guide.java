@@ -110,12 +110,15 @@ public class Guide extends AbstractEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Guide)) return false;
-        if (!super.equals(o)) return false;
-        Guide guide = (Guide) o;
-        return fullName.equals(guide.fullName);
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Guide guide = (Guide) obj;
+        return id == guide.id && (firstName == guide.firstName || (firstName != null && firstName.equals(guide.getFirstName()))) && (lastName == guide.lastName || (lastName != null && lastName.equals(guide.getLastName())));
     }
 
     @Override

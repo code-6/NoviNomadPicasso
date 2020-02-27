@@ -41,7 +41,7 @@ public class Driver extends AbstractEntity implements Serializable {
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected Set<Tour> tours = new HashSet<>();
 
-    @OneToMany( mappedBy = "driver", orphanRemoval = true)
+    @OneToMany(mappedBy = "driver", orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     private Set<DriverTourIntervals> driverTourIntervals = new HashSet<DriverTourIntervals>();
 
@@ -109,14 +109,27 @@ public class Driver extends AbstractEntity implements Serializable {
         this.driverTourIntervals = driverTourIntervals;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof Driver)) return false;
+//        if (!super.equals(o)) return false;
+//        Driver driver = (Driver) o;
+//        return fullName.equals(driver.fullName);
+//    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Driver)) return false;
-        if (!super.equals(o)) return false;
-        Driver driver = (Driver) o;
-        return fullName.equals(driver.fullName);
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Driver driver = (Driver) obj;
+        return id == driver.id && (firstName == driver.firstName || (firstName != null && firstName.equals(driver.getFirstName()))) && (lastName == driver.lastName || (lastName != null && lastName.equals(driver.getLastName())));
     }
+
 
     @Override
     public int hashCode() {

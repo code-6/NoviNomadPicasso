@@ -1,5 +1,6 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,14 +78,16 @@ public class TourController {
 
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
+        logger.debug("tou id = "+tourId);
         var tour = tourService.getTour(tourId).get();
-
+        logger.debug("tour = "+ JsonPrinter.getString(tour));
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
         var allGuides = guideService.getGuidesList();
         // exclude already attached drivers from view
-        allDrivers.removeAll(tour.getDrivers());
+        var drvs = tour.getDrivers();
+        allDrivers.removeAll(drvs);
         // exclude already attached drivers from view
         allGuides.removeAll(tour.getGuides());
 
@@ -102,7 +105,7 @@ public class TourController {
             logger.error(getStackTrace(e));
         }
         mav.setViewName("addTourPage");
-        logger.debug("/tours/edit requested. Returned view with tour " + getString(tour));
+        logger.info("/tours/edit requested. Returned view with tour " + getString(tour));
         return mav;
     }
 
