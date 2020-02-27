@@ -115,7 +115,7 @@ public class Driver extends AbstractEntity implements Serializable {
         if (!(o instanceof Driver)) return false;
         if (!super.equals(o)) return false;
         Driver driver = (Driver) o;
-        return fullName.equals(driver.fullName);
+        return id == driver.id;
     }
 
     @Override
