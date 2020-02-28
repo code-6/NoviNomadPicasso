@@ -7,10 +7,11 @@
 	<title>Add/edit driver</title>
 <!--	<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">-->
 </head>
-<body>
+
+<body class="jumbotron">
 <div layout:fragment="content">
 	<!--/*@thymesVar id="error" type="java.lang.String"*/-->
-	<h1>Add/edit driver</h1>
+	<h1>create / edit driver</h1>
 	<br/>
 	<!--/*@thymesVar id="driver" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
 	<form action="#" th:action="@{/drivers/save}" th:object="${driver}" method="post">
@@ -55,7 +56,6 @@
 		<!--need for edit function, to auto populate fields with data of driver taken by given id-->
 		<input type="hidden" th:field="*{id}">
 	</form>
-
 </div>
 </body>
 </html>
