@@ -6,31 +6,31 @@
     <meta charset="UTF-8">
     <title>Add/edit guide</title>
 </head>
-<body>
+<body class="jumbotron">
 <div layout:fragment="content" >
-    <h1>Add/edit guide</h1>
+    <h1>create/edit guide</h1>
     <br/>
     <!--/*@thymesVar id="guide" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
     <form action="#" th:action="@{/guides/save}" th:object="${guide}" method="post">
         <table border="0" cellpadding="10">
             <tr>
                 <td>First name:</td>
-                <td><input type="text" th:field="*{firstName}"/></td>
+                <td><input required="required" type="text" th:field="*{firstName}"/></td>
             </tr>
 
             <tr>
                 <td>Middle name:</td>
-                <td><input type="text" th:field="*{middleName}"/></td>
+                <td><input title="Optional field. Leave empty if not needed" type="text" th:field="*{middleName}"/></td>
             </tr>
 
             <tr>
                 <td>Last name:</td>
-                <td><input type="text" th:field="*{lastName}"/></td>
+                <td><input required="required" type="text" th:field="*{lastName}"/></td>
             </tr>
 
             <tr>
                 <td>Language:</td>
-                <td><input type="text" th:field="*{language}"/></td>
+                <td><input title="Optional field. Leave empty if not needed" type="text" th:field="*{language}"/></td>
             </tr>
 
             <tr>

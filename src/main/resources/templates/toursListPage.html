@@ -3,8 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-    <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.css}">
+
     <link rel="stylesheet"
           th:href="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.css}">
 </head>
@@ -35,14 +35,14 @@
             margin-top: 16px;
         }
     </style>
-    <table id="table" class="table table-sm table-fit" data-toggle="table"
+    <table id="table" class="table table-sm table-fit table-striped" data-toggle="table"
            data-sticky-header-offset-left="1em" data-sticky-header-offset-right="1em"
            data-sticky-header="true"
            data-sticky-header-offset-y="114"
            data-sortable="true"
            data-show-columns="true" data-search="true">
         <caption>List of tours</caption>
-        <thead class="thead-light sticky-header">
+        <thead class="thead-dark sticky-header">
         <tr>
             <th data-sortable="true" data-field="id" class="th-inner sortable both">ID</th>
             <th data-sortable="true" data-field="title" class="th-inner sortable both">TITLE</th>
@@ -95,15 +95,15 @@
                     <button type="button" class="btn btn-outline-info btn-sm">edit</button>
                 </a>
             </td>
-
         </tr>
         </tbody>
     </table>
 </div>
 <th:block layout:fragment="script">
-    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
 
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
 
     <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
 
@@ -111,14 +111,15 @@
             th:src="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.js}"></script>
 
     <script type="text/javascript"
-            th:src="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js}"></script>
+            th:src="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js}">
+    </script>
 
     <script>
-    	$( document ).ready(function() {
-        	console.log( "ready!" );
-        	$( "<h4 class=\"text_search_title\" >Tours list</h4>" ).appendTo( ".fixed-table-toolbar" );
-    	});
-	</script>
+        $(document).ready(function () {
+            console.log("ready!");
+            $("<h4 class=\"text_search_title\" >Tours list</h4>").appendTo(".fixed-table-toolbar");
+        });
+    </script>
 
 </th:block>
 </body>

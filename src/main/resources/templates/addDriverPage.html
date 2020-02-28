@@ -28,22 +28,22 @@
 		<table border="0" cellpadding="10">
 			<tr>
 				<td>First name:</td>
-				<td><input type="text" th:field="*{firstName}"/></td>
+				<td><input required="required" type="text" th:field="*{firstName}"/></td>
 			</tr>
 
 			<tr>
 				<td>Middle name:</td>
-				<td><input type="text" th:field="*{middleName}"/></td>
+				<td><input title="Optional field. Leave empty if not needed" type="text" th:field="*{middleName}"/></td>
 			</tr>
 
 			<tr>
 				<td>Last name:</td>
-				<td><input type="text" th:field="*{lastName}"/></td>
+				<td><input required="required" type="text" th:field="*{lastName}"/></td>
 			</tr>
 
 			<tr>
 				<td>Car:</td>
-				<td><input type="text" th:field="*{car}"/></td>
+				<td><input placeholder="e.g. Mercedes sprinter" title="Optional field. Leave empty if not needed" type="text" th:field="*{car}"/></td>
 			</tr>
 
 			<tr>
