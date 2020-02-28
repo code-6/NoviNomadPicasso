@@ -99,18 +99,6 @@
 					</select>
 				</td>
 				<td>
-					<p>Exclude driver</p>
-					<select th:name="drivers2exclude" multiple="multiple" class="form-control">
-
-						<!--/*@thymesVar id="id" type="java.lang.Long"*/-->
-						<option th:each="d : ${driversExclude}" th:value="${d.id}"
-						        th:text="${d.id+' '+d.fullName}">
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<!--<td>Attach a driver</td>-->
-				<td>
 					<!--<script th:src="@{/js/openIntervalInput.js}" type="text/javascript"></script>-->
 					<p>Attach guide</p>
 					<!--th:onselect="'addInput();'"-->
@@ -121,6 +109,19 @@
 						        th:text="${g.getId()+' '+g.fullName}">
 						</option>
 
+					</select>
+				</td>
+
+			</tr>
+			<tr>
+				<!--<td>Attach a driver</td>-->
+				<td>
+					<p>Exclude driver</p>
+					<select th:name="drivers2exclude" multiple="multiple" class="form-control">
+
+						<!--/*@thymesVar id="id" type="java.lang.Long"*/-->
+						<option th:each="d : ${driversExclude}" th:value="${d.id}"
+						        th:text="${d.id+' '+d.fullName}">
 					</select>
 				</td>
 				<td>

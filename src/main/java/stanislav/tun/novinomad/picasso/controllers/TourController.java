@@ -143,8 +143,9 @@ public class TourController {
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
                                       @RequestParam(required = false, name = "file") MultipartFile file,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
+        logger.debug("DateTime range param = "+tourDateTimeRange);
         try {
-            if (tourDateTimeRange != null && tourDateTimeRange != "") {
+            if (tourDateTimeRange != "" || tourDateTimeRange != null) {
                 var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
                 tour.setStartDate(dtr.getStart());
                 tour.setEndDate(dtr.getEnd());
