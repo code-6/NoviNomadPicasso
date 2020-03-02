@@ -78,9 +78,9 @@ public class TourController {
 
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
-        logger.debug("tou id = "+tourId);
+        logger.debug("tou id = " + tourId);
         var tour = tourService.getTour(tourId).get();
-        logger.debug("tour = "+ JsonPrinter.getString(tour));
+        logger.debug("tour = " + JsonPrinter.getString(tour));
         var mav = new ModelAndView();
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
@@ -143,7 +143,7 @@ public class TourController {
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
                                       @RequestParam(required = false, name = "file") MultipartFile file,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
-        logger.debug("DateTime range param = "+tourDateTimeRange);
+        logger.debug("DateTime range param = " + tourDateTimeRange);
         try {
             if (tourDateTimeRange != "" || tourDateTimeRange != null) {
                 var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
@@ -465,36 +465,34 @@ public class TourController {
     private boolean check = false;
 
     private void checkAlreadyAppointedDate(AbstractEntity entity, Tour t) throws OverlapsException {
-        // todo : flag only for test. Remove later.
-        if (check)
-            if (entity instanceof Driver) {
-                Driver d = (Driver) entity;
-                var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
-                for (DriverTourIntervals dti : allDriverIntervals) {
-                    try {
-                        if (dti.getTour().getId() != t.getId())
-                            if (dti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
-                                throw new OverlapsException(d, t, dti.getTour());
-                            }
-                    } catch (ValidationException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else if (entity instanceof Guide) {
-                Guide g = (Guide) entity;
-                var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
-                for (GuideTourIntervals gti : allGuideIntervals) {
-                    try {
-                        if (gti.getTour().getId() != t.getId()) // fix bug when edit tour. Exception thrown even when no overlaps
-                            if (gti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
-                                throw new OverlapsException(g, t, gti.getTour());
-                            }
-                    } catch (ValidationException e) {
-                        // ignore exception
-                        logger.error(e.getMessage());
-                    }
+        if (entity instanceof Driver) {
+            Driver d = (Driver) entity;
+            var allDriverIntervals = driverIntervalService.getAllRelatedToDriver(d);
+            for (DriverTourIntervals dti : allDriverIntervals) {
+                try {
+                    if (dti.getTour().getId() != t.getId())
+                        if (dti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                            throw new OverlapsException(d, t, dti.getTour());
+                        }
+                } catch (ValidationException e) {
+                    e.printStackTrace();
                 }
             }
+        } else if (entity instanceof Guide) {
+            Guide g = (Guide) entity;
+            var allGuideIntervals = guideIntervalService.getAllRelatedToGuide(g);
+            for (GuideTourIntervals gti : allGuideIntervals) {
+                try {
+                    if (gti.getTour().getId() != t.getId()) // fix bug when edit tour. Exception thrown even when no overlaps
+                        if (gti.getInterval().overlaps(new DateTimeRange(t.getStartDate(), t.getEndDate()))) {
+                            throw new OverlapsException(g, t, gti.getTour());
+                        }
+                } catch (ValidationException e) {
+                    // ignore exception
+                    logger.error(e.getMessage());
+                }
+            }
+        }
     }
 
 
