@@ -4,11 +4,11 @@
       layout:decorate="~{fragments/mainLayout}">
 <head>
 <!--	without this duplication select not works-->
-	<script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
+<!--	<script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>-->
 
 	<!--date-range picker-->
-	<script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}"></script>
+<!--	<script type="text/javascript" th:src="@{/js/moment.min.js}"></script>-->
+<!--	<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}"></script>-->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/daterangepicker.css}"
 	      href="../static/css/daterangepicker.css"/>
 	<!--date-range picker-->
@@ -16,8 +16,8 @@
 	<!--	for new select -->
 	<link rel="stylesheet"
 	      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.bundle.min.js}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<!--	<script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.bundle.min.js}"></script>-->
+<!--	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>-->
 	<!--	for new select -->
 
 </head>
@@ -170,8 +170,24 @@
 		<input type="hidden" th:field="*{id}">
 	</form>
 </div>
-<!--<th:block layout:fragment="script">-->
-<!--</th:block>-->
+<th:block layout:fragment="script">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+	        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+	        crossorigin="anonymous"></script>
+
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+	<!--	picker scripts-->
+	<script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}"></script>
+	<!--	picker scripts-->
+
+	<!--	new select scripts-->
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.bundle.min.js}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+	<!--	new select scripts-->
+
+</th:block>
 </body>
 <!--<script>-->
 <!--    var dialog = document.querySelector('dialog');-->
