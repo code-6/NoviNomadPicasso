@@ -69,7 +69,12 @@
         <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
         <tr th:each="tour:${toursList}">
             <td th:text="${tour.id}"></td>
-            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>
+<!--            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>-->
+            <td>
+                <a th:href="@{/tours/details{id}(id=${tour.id})}"
+                   th:text="${tour.tittle}"
+                   th:title="${tour.description}"></a>
+            </td>
             <td th:text="${tour.getStartDateFormatted()}"></td>
             <td th:text="${tour.getEndDateFormatted()}"></td>
             <td th:text="${tour.days}"></td>

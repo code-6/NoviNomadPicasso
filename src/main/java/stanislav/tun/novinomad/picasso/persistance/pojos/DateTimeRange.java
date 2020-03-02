@@ -1,11 +1,7 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -14,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DateTimeRange {
+
     private LocalDateTime start, end;
     private int totalDays;
     private static DateTimeFormatter f = new DateTimeFormatterBuilder()

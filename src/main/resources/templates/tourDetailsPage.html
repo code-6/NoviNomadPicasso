@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="jumbotron">
+<div layout:fragment="content">
+    <div th:object="${tour}">
+        <table>
+            <tr>
+                <td>Id:</td>
+                <td th:text="*{id}"></td>
+            </tr>
+
+            <tr>
+                <td>Title:</td>
+                <td th:text="*{tittle}"></td>
+            </tr>
+
+            <tr>
+                <td>Start date:</td>
+                <td th:text="${tour.getStartDateFormatted()}"></td>
+            </tr>
+
+            <tr>
+                <td>End date:</td>
+                <td th:text="${tour.getEndDateFormatted()}"></td>
+            </tr>
+
+            <tr>
+                <td>Total days:</td>
+                <td th:text="${tour.days}"></td>
+            </tr>
+
+            <tr>
+                <td>Drivers:</td>
+                <td>
+                <span th:each="d: ${tour.drivers}">
+                    <span th:text="${d.fullName}"></span>
+                    <span th:text="${tour.getIntervalOfDriver(d).toString()}"></span>
+					<br/>
+                </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Guides:</td>
+                <td>
+                <span th:each="g: ${tour.guides}">
+                    <span th:text="${g.fullName}"></span>
+                    <span th:text="${tour.getIntervalOfGuide(g).toString()}"></span>
+					<br/>
+                </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Tourist count:</td>
+                <td th:text="*{touristsCount}"></td>
+            </tr>
+            <tr>
+                <td>Program file:</td>
+                <td th:text="*{fileName}"></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td th:text="*{description}"></td>
+            </tr>
+            <tr>
+                <td>Created by:</td>
+                <td th:text="*{createdBy}"></td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

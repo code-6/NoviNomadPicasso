@@ -51,6 +51,7 @@
 			<th data-sortable="true" data-field="id" class="th-inner sortable both">ID</th>
 			<th data-sortable="true" data-field="name" class="th-inner sortable both">NAME</th>
 			<th data-sortable="true" data-field="car" class="th-inner sortable both">CAR</th>
+			<th data-sortable="true" data-field="createdBy" class="th-inner sortable both">CREATED BY</th>
 			<th>
 				<a href="/drivers/add">
 					<button type="button" class="btn btn-outline-success">create driver</button>
@@ -65,10 +66,11 @@
 		<tr th:each="driver:${drivers}">
 			<td th:text="${driver.getId()}"></td>
 			<td>
-				<a th:href="@{/getViewRelatedToDriver{driverId}(driverId=${driver.id})}"
+				<a th:href="@{/picasso/getViewRelatedToDriver{driverId}(driverId=${driver.id})}"
 				   th:text="${driver.fullName}"></a>
 			</td>
 			<td th:text="${driver.getCar()}"></td>
+			<td th:text="${driver.getCreatedBy()}"></td>
 			<td>
 				<a th:href="@{/drivers/edit{id}(id=${driver.getId()})}">
 					<button type="button" class="btn btn-outline-info btn-sm">edit</button>

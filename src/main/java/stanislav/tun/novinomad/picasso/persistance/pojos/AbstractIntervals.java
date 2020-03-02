@@ -1,5 +1,7 @@
 package stanislav.tun.novinomad.picasso.persistance.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.ValidationException;
@@ -16,16 +18,16 @@ public abstract class AbstractIntervals {
 
     @NotNull
     @ManyToOne
-    //@JsonIgnore
+    @JsonIgnore
     private Tour tour;
-    //@JsonIgnore
+
     private LocalDateTime startDate;
-    //@JsonIgnore
+
     private LocalDateTime endDate;
 
     @NotNull
     @Transient
-    // @JsonProperty
+    @JsonIgnore
     private DateTimeRange interval;
 
     public AbstractIntervals() {

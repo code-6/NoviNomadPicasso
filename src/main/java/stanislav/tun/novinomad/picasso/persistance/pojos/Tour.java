@@ -205,6 +205,32 @@ public class Tour extends AbstractEntity implements Serializable {
 
     }
 
+    public DateTimeRange getIntervalOfDriver(Driver driver){
+        for (DriverTourIntervals dti : driverIntervals) {
+            if(dti.getDriver().equals(driver)) {
+                try {
+                    return dti.getInterval();
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public DateTimeRange getIntervalOfGuide(Guide guide){
+        for (GuideTourIntervals gti : guideIntervals) {
+            if(gti.getGuide().equals(guide)) {
+                try {
+                    return gti.getInterval();
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
     public int getTouristsCount() {
         return touristsCount;
     }

@@ -77,6 +77,19 @@ public class TourController {
         return mav;
     }
 
+    @RequestMapping("/details{id}")
+    public ModelAndView getTourDetails(@PathVariable(value = "id") Long tourId){
+        var mav = new ModelAndView("tourDetailsPage");
+        var tour = tourService.getTour(tourId);
+
+        if (!tour.isEmpty() && tour.isPresent()){
+            var t = tour.get();
+            mav.addObject("tour", t);
+        }
+
+        return mav;
+    }
+
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
         logger.debug("tou id = " + tourId);
@@ -277,7 +290,7 @@ public class TourController {
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
         logger.debug("Advanced save tour = " + getString(tour));
-        mav.setViewName("toursListPage");
+        mav.setViewName("redirect:/tours/list");
         return mav;
     }
 
