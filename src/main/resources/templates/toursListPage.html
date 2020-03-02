@@ -53,12 +53,13 @@
             <th data-sortable="true" data-field="days" class="th-inner sortable both">DAYS</th>
             <th data-sortable="true" data-field="drivers" class="th-inner sortable both">DRIVERS</th>
             <th data-sortable="true" data-field="guides" class="th-inner sortable both">GUIDES</th>
+            <th data-sortable="true" data-field="tourists" class="th-inner sortable both">TOURISTS</th>
             <th data-sortable="true" data-field="created_by" class="th-inner sortable both">CREATED_BY</th>
             <th data-sortable="true" data-field="file" class="th-inner sortable both">FILE</th>
             <th data-sortable="true" data-field="description" class="th-inner sortable both">DESCRIPTION</th>
             <th>
                 <a href="/tours/add">
-                    <button type="button" class="btn btn-outline-success">create tour</button>
+                    <button type="button" class="btn btn-outline-success">add</button>
                 </a>
             </th>
         </tr>
@@ -84,6 +85,7 @@
 					<br/>
                 </span>
             </td>
+            <td th:text="${tour.touristsCount}"></td>
             <!--                <td th:text="${tour.description}"></td>-->
 
             <td th:text="${tour.createdBy}"></td>

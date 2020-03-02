@@ -60,6 +60,10 @@ public class Tour extends AbstractEntity implements Serializable {
 
     @Column
     private int days;
+
+    @Column
+    private int touristsCount;
+
     @Column
     @NotNull
     private String tittle;
@@ -196,6 +200,14 @@ public class Tour extends AbstractEntity implements Serializable {
 
         }
 
+    }
+
+    public int getTouristsCount() {
+        return touristsCount;
+    }
+
+    public void setTouristsCount(int touristsCount) {
+        this.touristsCount = touristsCount;
     }
 
     public DateTimeRange getRange(){
