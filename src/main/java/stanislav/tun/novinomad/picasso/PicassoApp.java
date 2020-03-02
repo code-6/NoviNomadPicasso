@@ -223,7 +223,7 @@ public class PicassoApp {
 
         createDriversLoop(30);
         createGuidesLoop(30);
-        createToursLoop(90);
+//        createToursLoop(90);
     }
 
 }

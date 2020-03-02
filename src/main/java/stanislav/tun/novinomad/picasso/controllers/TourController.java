@@ -69,9 +69,10 @@ public class TourController {
     }
 
     @RequestMapping("/list")
-    public ModelAndView getToursListView(Model model) {
-        var mav = new ModelAndView("toursListPage.html");
-        mav.addObject("toursList", tourService.getAllTours());
+    public ModelAndView getToursListView() {
+        var mav = new ModelAndView("toursListPage");
+        var allTours = tourService.getAllTours();
+        mav.addObject("toursList", allTours);
         logger.debug("/tours/list requested.");
         return mav;
     }

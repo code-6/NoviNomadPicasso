@@ -24,6 +24,7 @@ public class TourService {
     @Autowired
     ITourRepo repo;
 
+
     public void createOrUpdateTour(Tour tour) {
         if(repo.existsById(tour.getId()))
             logger.info("edit "+ JsonPrinter.getString(tour));
@@ -33,12 +34,10 @@ public class TourService {
         repo.save(tour);
     }
 
-    @Cacheable("singleTour")
     public Optional<Tour> getTour(Long id) {
         return repo.findById(id);
     }
 
-    @Cacheable("allTours")
     public List<Tour> getAllTours() {
         return repo.findAll();
     }
