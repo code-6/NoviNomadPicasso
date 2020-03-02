@@ -37,6 +37,8 @@ public abstract class AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     protected Date lasModifyDate;
 
+    protected boolean deleted = false;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
@@ -92,5 +94,13 @@ public abstract class AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

@@ -79,7 +79,7 @@
                 <!--                    <button th:target="@{/guides/edit{id}(id=${guide.getId()})}" type="button" class="btn btn-outline-secondary">edit-->
             </td>
             <td>
-                <a th:href="@{#}">
+                <a th:href="@{/guides/delete{id}(id=${guide.getId()})}">
                     <button onclick="deleteConfirm()" type="button" class="btn btn-outline-danger btn-sm">delete</button>
                 </a>
             </td>

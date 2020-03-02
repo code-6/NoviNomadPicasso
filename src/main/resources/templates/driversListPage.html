@@ -76,8 +76,8 @@
 				<!--                    <button th:target="@{/drivers/edit{id}(id=${driver.getId()})}" type="button" class="btn btn-outline-secondary">edit</button>-->
 			</td>
 			<td>
-				<a th:href="@{#}">
-					<button type="button" class="btn btn-outline-danger btn-sm">delete</button>
+				<a th:href="@{/drivers/delete{id}(id=${driver.getId()})}">
+					<button onclick="deleteConfirm()" type="button" class="btn btn-outline-danger btn-sm">delete</button>
 				</a>
 			</td>
 		</tr>
@@ -105,6 +105,12 @@
             $("<h4 class=\"text_search_title\" >Drivers list</h4>").appendTo(".fixed-table-toolbar");
         });
 	</script>
+
+	<script>
+        function deleteConfirm() {
+            confirm("Are you sure?");
+        }
+    </script>
 
 </th:block>
 </body>

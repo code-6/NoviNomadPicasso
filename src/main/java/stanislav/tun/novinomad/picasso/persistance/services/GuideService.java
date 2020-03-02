@@ -35,8 +35,12 @@ public class GuideService {
         repo.save(guide);
     }
 
-    public List<Guide> getGuidesList(){
+    public List<Guide> getAllGuides(){
         return (List<Guide>) repo.findAll();
+    }
+
+    public List<Guide> getGuidesList(){
+        return (List<Guide>) repo.findByDeletedFalse();
     }
 
     public Optional<Guide> getGuide(long id){

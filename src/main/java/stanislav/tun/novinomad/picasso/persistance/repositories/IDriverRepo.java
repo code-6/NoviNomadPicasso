@@ -9,5 +9,8 @@ import java.util.Collection;
 
 @Repository
 public interface IDriverRepo extends CrudRepository<Driver, Long> {
+
+    Collection<Driver> findByDeletedFalse();
+
     Driver findByFullName(String name);
 }

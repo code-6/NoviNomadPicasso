@@ -46,6 +46,18 @@ public class DriverController {
         return mav;
     }
 
+    @RequestMapping(value = "/delete{id}")
+    public String deleteDriver(@PathVariable(value = "id") Long driverId){
+        var driver = driverService.getDriver(driverId);
+
+        if(!driver.isEmpty() && driver.isPresent()){
+            var d = driver.get();
+            d.setDeleted(true);
+            driverService.createOrUpdateDriver(d);
+        }
+        return "redirect:/drivers/list";
+    }
+
     // get view
     @RequestMapping("/add")
     public ModelAndView addDriverView() {

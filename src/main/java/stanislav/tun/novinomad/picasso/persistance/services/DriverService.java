@@ -37,6 +37,10 @@ public class  DriverService {
     }
 
     public List<Driver> getDriversList(){
+        return (List<Driver>) repo.findByDeletedFalse();
+    }
+
+    public List<Driver> getAllDrivers(){
         return (List<Driver>) repo.findAll();
     }
 

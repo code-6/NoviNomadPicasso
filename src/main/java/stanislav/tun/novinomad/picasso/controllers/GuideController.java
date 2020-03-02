@@ -48,6 +48,18 @@ public class GuideController {
         return mav;
     }
 
+    @RequestMapping(value = "/delete{id}")
+    public String deleteGuide(@PathVariable(value = "id") Long guideId){
+        var guide = guideService.getGuide(guideId);
+        if(!guide.isEmpty() && guide.isPresent()){
+            var g = guide.get();
+            g.setDeleted(true);
+            guideService.createOrUpdateGuide(g);
+        }
+
+        return "redirect:/guides/list";
+    }
+
     // action todo: make single method for adding guide to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addOrUpdateGuideAction(Guide guide) {
