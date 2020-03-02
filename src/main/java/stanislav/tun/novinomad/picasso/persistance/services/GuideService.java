@@ -18,14 +18,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class GuideService {
     Logger logger = LoggerFactory.getLogger(DriverService.class);
 
     @Autowired
     IGuideRepo repo;
 
-    @Transactional
+
     public void createOrUpdateGuide(Guide guide){
         if(exist(guide))
             logger.info("edited "+ JsonPrinter.getString(guide));
@@ -35,14 +34,10 @@ public class GuideService {
         repo.save(guide);
     }
 
-    @Cacheable("allGuides")
-    @Transactional
     public List<Guide> getGuidesList(){
         return (List<Guide>) repo.findAll();
     }
 
-    @Cacheable("singleGuid")
-    @Transactional
     public Optional<Guide> getGuide(long id){
         return repo.findById(id);
     }
@@ -51,19 +46,15 @@ public class GuideService {
      * @param name: can be a first, middle, or last name of the guide
      * todo: make method more smart, find by any entered text. f+m, f+l, f+m+l etc.
      * */
-    @Cacheable("singleGuid")
-    @Transactional
     public Guide getGuide(String name){
         return repo.findByFullName(name);
     }
 
-    @Cacheable("guideTours")
     public List<Tour> getToursRelatedTo(Long guideId){
         var guide = getGuide(guideId);
         return (List<Tour>) guide.get().getTours();
     }
 
-    @Cacheable("guideTours")
     public List<Tour> getToursRelatedTo(Long guideId, LocalDateTime from, LocalDateTime to){
         var guide = getGuide(guideId);
         var tours = (List<Tour>) guide.get().getTours();
@@ -77,12 +68,10 @@ public class GuideService {
         return list;
     }
 
-    @Cacheable("exist")
     public boolean exist(Guide guide){
         return repo.existsById(guide.getId());
     }
 
-    @Cacheable("exist")
     public boolean exist(Long id){
         return repo.existsById(id);
     }

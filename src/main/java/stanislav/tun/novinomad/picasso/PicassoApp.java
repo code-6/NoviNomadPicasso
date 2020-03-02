@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
@@ -25,8 +26,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @SpringBootApplication
-@EnableCaching
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
+//@EnableTransactionManagement
 public class PicassoApp {
     @Autowired
     private DataSource dataSource;

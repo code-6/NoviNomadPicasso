@@ -13,7 +13,6 @@ import java.util.List;
 
 public interface ITourRepo extends JpaRepository<Tour, Long> {
 
-//    @Cacheable("allTours")
     @Override
     List<Tour> findAll();
 

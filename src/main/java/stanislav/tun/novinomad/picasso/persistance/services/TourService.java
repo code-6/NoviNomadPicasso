@@ -17,13 +17,11 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-@Transactional
 public class TourService {
 
     Logger logger = LoggerFactory.getLogger(TourService.class);
     @Autowired
     ITourRepo repo;
-
 
     public void createOrUpdateTour(Tour tour) {
         if(repo.existsById(tour.getId()))
@@ -42,7 +40,6 @@ public class TourService {
         return repo.findAll();
     }
 
-    @Cacheable("singleTour")
     public Tour getTour(String tittle) {
         var allTours = getAllTours();
         for (Tour t : allTours) {
@@ -52,7 +49,6 @@ public class TourService {
         return null;
     }
 
-    @Cacheable("tourDrivers")
     public Set<Driver> getAttachedDrivers(Long id){
         var tour = getTour(id);
         if(!tour.isEmpty() && tour.isPresent())
@@ -60,7 +56,6 @@ public class TourService {
         return null;
     }
 
-    @Cacheable("tourGuides")
     public Set<Guide> getAttachedGuides(long id) {
         var tour = getTour(id);
         if(!tour.isEmpty() && tour.isPresent())

@@ -21,13 +21,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class  DriverService {
     Logger logger = LoggerFactory.getLogger(DriverService.class);
     @Autowired
     IDriverRepo repo;
 
-    @Transactional
     public void createOrUpdateDriver(Driver driver){
         if(exist(driver))
             logger.info("edited "+ JsonPrinter.getString(driver));
@@ -37,14 +35,10 @@ public class  DriverService {
         repo.save(driver);
     }
 
-    @Cacheable("allDrivers")
-    @Transactional
     public List<Driver> getDriversList(){
         return (List<Driver>) repo.findAll();
     }
 
-    @Cacheable("singleDriver")
-    @Transactional
     public Optional<Driver> getDriver(long id){
         return repo.findById(id);
     }
@@ -53,19 +47,15 @@ public class  DriverService {
      * @param name: can be a first, middle, or last name of the driver
      * todo: make method more smart, find by any entered text. f+m, f+l, f+m+l etc.
      * */
-    @Cacheable("singleDriver")
-    @Transactional
     public Driver getDriver(String name){
         return repo.findByFullName(name);
     }
 
-    @Cacheable("driverTours")
     public List<Tour> getToursRelatedTo(Long driverId){
         var driver = getDriver(driverId);
         return (List<Tour>) driver.get().getTours();
     }
 
-    @Cacheable("driverTours")
     public List<Tour> getToursRelatedTo(Long driverId, LocalDateTime from, LocalDateTime to){
         var driver = getDriver(driverId);
         var tours = (List<Tour>) driver.get().getTours();
@@ -79,7 +69,6 @@ public class  DriverService {
         return list;
     }
 
-    @Cacheable("exist")
     public boolean exist(Driver driver){
         return repo.existsById(driver.getId());
     }

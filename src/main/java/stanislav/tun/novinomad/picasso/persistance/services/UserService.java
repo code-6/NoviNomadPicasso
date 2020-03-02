@@ -19,12 +19,10 @@ public class UserService {
         userRepo.save(user);
     }
 
-    @Cacheable("allUsers")
     public Optional<User> getUser(String userName) {
         return userRepo.findByUserName(userName);
     }
 
-    @Cacheable("singleUser")
     public Optional<User> getUser(Long id){
         return userRepo.findById(id);
     }
