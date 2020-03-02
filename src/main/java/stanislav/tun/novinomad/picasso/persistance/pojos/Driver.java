@@ -3,6 +3,7 @@ package stanislav.tun.novinomad.picasso.persistance.pojos;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,6 +15,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "drivers")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @JsonRootName(value = "driver")
 @EntityListeners(AuditingEntityListener.class)
 public class Driver extends AbstractEntity implements Serializable {

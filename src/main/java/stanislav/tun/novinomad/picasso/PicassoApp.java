@@ -27,7 +27,8 @@ import java.util.Date;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
-//@EnableTransactionManagement
+@EnableTransactionManagement
+@EnableCaching
 public class PicassoApp {
     @Autowired
     private DataSource dataSource;
@@ -224,7 +225,7 @@ public class PicassoApp {
 
         createDriversLoop(30);
         createGuidesLoop(30);
-//        createToursLoop(90);
+        createToursLoop(0);
     }
 
 }

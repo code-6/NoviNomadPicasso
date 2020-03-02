@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class DriverIntervalService {
 
     Logger logger = LoggerFactory.getLogger(DriverIntervalService.class);

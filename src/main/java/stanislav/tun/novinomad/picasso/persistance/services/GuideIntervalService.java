@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class GuideIntervalService {
     Logger logger = LoggerFactory.getLogger(GuideIntervalService.class);
 

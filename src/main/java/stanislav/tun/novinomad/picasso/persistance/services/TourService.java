@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class TourService {
 
     Logger logger = LoggerFactory.getLogger(TourService.class);
