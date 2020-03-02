@@ -164,7 +164,7 @@ public class TourController {
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
-            logger.error(getStackTrace(e));
+            logger.error("OVERLAPS "+getStackTrace(e));
             return mav;
         }
         excludeDrivers(drivers2exclude, tour);
@@ -177,7 +177,7 @@ public class TourController {
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
-            logger.error(getStackTrace(e));
+            logger.error("OVERLAPS "+getStackTrace(e));
             return mav;
         }
         excludeGuides(guides2exclude, tour);
@@ -461,8 +461,6 @@ public class TourController {
                     tour.deleteGuide(guide.get());
                 }
     }
-
-    private boolean check = false;
 
     private void checkAlreadyAppointedDate(AbstractEntity entity, Tour t) throws OverlapsException {
         if (entity instanceof Driver) {
