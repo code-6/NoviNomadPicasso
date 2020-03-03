@@ -3,33 +3,37 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Title</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 <!--	<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">-->
 	<style>
-		th, td {
-			padding: 0.25rem;
-		}
+		/*th, td {*/
+		/*	padding: 0.25rem;*/
+		/*}*/
 		th {
 			background: #1d9ce5;
 			position: sticky;
-			top: 56px;
+			top: 55px;
 			box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 		}
 	</style>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
 </head>
 <body>
 <nav class="navbar fixed-top navbar-dark bg-dark">
 	<a class="navbar-brand" href="#">Fixed top</a>
 </nav>
-<div class="jumbotron">
-	<table class="table-sm" data-toggle="table" data-show-columns="true" data-search="true">
+<div class="jumbotron jumbotron-fluid">
+	<table class="table table-sm" data-toggle="table" data-show-columns="true" data-search="true" >
 		<thead>
 		<tr class="red">
-			<th>Name</th>
-			<th>Age</th>
-			<th>Job</th>
-			<th>Color</th>
-			<th>URL</th>
+			<th data-sortable="true" data-field="Name" class="th-inner sortable both">Name</th>
+			<th data-sortable="true" data-field="Age" class="th-inner sortable both">Age</th>
+			<th data-sortable="true" data-field="Job" class="th-inner sortable both">Job</th>
+			<th data-sortable="true" data-field="Color" class="th-inner sortable both">Color</th>
+			<th data-sortable="true" data-field="URL" class="th-inner sortable both">URL</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -750,9 +754,5 @@
 		</tbody>
 	</table>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
 </body>
 </html>
