@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
+import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ public class AdvancedTourController {
     private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
     @Autowired
-    private ITourRepo tourRepo;
+    private TourService tourService;
 
     @Autowired
     private DriverService driverService;
@@ -58,10 +59,10 @@ public class AdvancedTourController {
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
-        mav.addObject("selectedMonthNum",month);
+        mav.addObject("selectedMonthNum", month);
         mav.addObject("selectedYear", year);
         // add tours created for entered month
-        var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
+        var tours = tourService.getToursForDate(month, Integer.valueOf(year));
         mav.addObject("tours", tours);
         return mav;
     }
@@ -92,27 +93,29 @@ public class AdvancedTourController {
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
-        mav.addObject("selectedMonthNum",month);
+        mav.addObject("selectedMonthNum", month);
         mav.addObject("selectedYear", year);
         // remember user selected driver
         mav.addObject("selectedDriver", driverService.getDriver(driverId).get());
 
-        var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
-        // get only where driver is specified
-        var ti = tours.iterator();
-        while (ti.hasNext()) {
-            var tour = ti.next();
-            var di = tour.getDrivers().iterator();
-            // if empty driver also delete tour
-            if (!di.hasNext())
-                ti.remove();
-            while (di.hasNext()) {
-                var driver = di.next();
-                if (driver.getId() != driverId)
-                    // illegal state exception was thrown here!
-                    ti.remove();
-            }
-        }
+//        var tours = tourService.getToursForDate(month, Integer.valueOf(year));
+//        // get only where driver is specified
+//        var ti = tours.iterator();
+//        while (ti.hasNext()) {
+//            var tour = ti.next();
+//            var di = tour.getDrivers().iterator();
+//            // if empty driver also delete tour
+//            if (!di.hasNext())
+//                ti.remove();
+//            while (di.hasNext()) {
+//                var driver = di.next();
+//                if (driver.getId() != driverId)
+//                    // illegal state exception was thrown here!
+//                    ti.remove();
+//            }
+//        }
+
+        var tours = tourService.getToursRelated2Driver(driverId, month, Integer.valueOf(year));
         mav.addObject("tours", tours);
         return mav;
     }
@@ -143,11 +146,11 @@ public class AdvancedTourController {
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
-        mav.addObject("selectedMonthNum",month);
+        mav.addObject("selectedMonthNum", month);
         mav.addObject("selectedYear", year);
         mav.addObject("selectedGuide", guideService.getGuide(guideId).get());
 
-        var tours = tourRepo.findToursByMonthAndYear(month, Integer.valueOf(year));
+        var tours = tourService.getToursForDate(month, Integer.valueOf(year));
         // get only where driver is specified
         var ti = tours.iterator();
         while (ti.hasNext()) {
@@ -162,11 +165,11 @@ public class AdvancedTourController {
                     ti.remove();
             }
         }
+
         logger.debug("tours size after remove " + tours.size());
         mav.addObject("tours", tours);
         return mav;
     }
-
 
 
     private String num2month(int month) {

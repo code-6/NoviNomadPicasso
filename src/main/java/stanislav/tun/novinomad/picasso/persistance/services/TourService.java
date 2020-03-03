@@ -21,16 +21,25 @@ import java.util.Set;
 public class TourService {
 
     Logger logger = LoggerFactory.getLogger(TourService.class);
+
     @Autowired
     ITourRepo repo;
 
     public void createOrUpdateTour(Tour tour) {
-        if(repo.existsById(tour.getId()))
-            logger.info("edit "+ JsonPrinter.getString(tour));
+        if (repo.existsById(tour.getId()))
+            logger.info("edit " + JsonPrinter.getString(tour));
         else
-            logger.info("create "+ JsonPrinter.getString(tour));
+            logger.info("create " + JsonPrinter.getString(tour));
 
         repo.save(tour);
+    }
+
+    public List<Tour> getToursRelated2Driver(Driver driver, int month, int year) {
+        return (List<Tour>) repo.findToursByMonthAndYearAndDriver(month, year, driver.getId());
+    }
+
+    public List<Tour> getToursRelated2Driver(Long driverId, int month, int year) {
+        return (List<Tour>) repo.findToursByMonthAndYearAndDriver(month, year, driverId);
     }
 
     public Optional<Tour> getTour(Long id) {
@@ -39,6 +48,10 @@ public class TourService {
 
     public List<Tour> getAllTours() {
         return repo.findAll();
+    }
+
+    public List<Tour> getToursForDate(int month, int year) {
+        return (List<Tour>) repo.findToursByMonthAndYear(month, year);
     }
 
     public Tour getTour(String tittle) {
@@ -50,16 +63,16 @@ public class TourService {
         return null;
     }
 
-    public Set<Driver> getAttachedDrivers(Long id){
+    public Set<Driver> getAttachedDrivers(Long id) {
         var tour = getTour(id);
-        if(!tour.isEmpty() && tour.isPresent())
+        if (!tour.isEmpty() && tour.isPresent())
             return tour.get().getDrivers();
         return null;
     }
 
     public Set<Guide> getAttachedGuides(long id) {
         var tour = getTour(id);
-        if(!tour.isEmpty() && tour.isPresent())
+        if (!tour.isEmpty() && tour.isPresent())
             return tour.get().getGuides();
         return null;
     }

@@ -225,7 +225,7 @@ public class PicassoApp {
 
         createDriversLoop(10);
         createGuidesLoop(30);
-        createToursLoop(0);
+        createToursLoop(100);
     }
 
 }
