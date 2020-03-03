@@ -3,60 +3,26 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.css}">
 
-    <link rel="stylesheet"
-          th:href="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.css}">
 </head>
 <body>
 <div layout:fragment="content" class="jumbotron">
 
-    <style>
-        .jumbotron {
-            padding: 4rem 0rem;
-        }
-        .fixed-table-container{
-            top:50px;
-        }
-        .fix-sticky{
-            top:114px;
-        }
-        .fixed-table-toolbar{
-            z-index: 10000000;
-            top: 56px;
-            float: right;
-            display: block;
-            position: fixed;
-            width: 100%;
-            background-color: #e9ecef;
-        }
-        .loading-text {
-            display: none;
-        }
-
-        .text_search_title{
-            margin-top: 16px;
-        }
-    </style>
-    <table id="table" class="table table-sm table-fit table-striped" data-toggle="table"
-           data-sticky-header="true"
-           data-sticky-header-offset-y="114"
-           data-sortable="true"
-           data-show-columns="true" data-search="true">
+    <table id="table" class="table table-sm table-striped">
         <caption>List of tours</caption>
-        <thead class="thead-dark sticky-header">
+        <thead>
         <tr>
-            <th data-sortable="true" data-field="id" class="th-inner sortable both">ID</th>
-            <th data-sortable="true" data-field="title" class="th-inner sortable both">TITLE</th>
-            <th data-sortable="true" data-field="start" class="th-inner sortable both">START</th>
-            <th data-sortable="true" data-field="end" class="th-inner sortable both">END</th>
-            <th data-sortable="true" data-field="days" class="th-inner sortable both">DAYS</th>
-            <th data-sortable="true" data-field="drivers" class="th-inner sortable both">DRIVERS</th>
-            <th data-sortable="true" data-field="guides" class="th-inner sortable both">GUIDES</th>
-            <th data-sortable="true" data-field="tourists" class="th-inner sortable both">TOURISTS</th>
-            <th data-sortable="true" data-field="created_by" class="th-inner sortable both">CREATED_BY</th>
-            <th data-sortable="true" data-field="file" class="th-inner sortable both">FILE</th>
-            <th data-sortable="true" data-field="description" class="th-inner sortable both">DESCRIPTION</th>
+            <th>ID</th>
+            <th>TITLE</th>
+            <th>START</th>
+            <th>END</th>
+            <th>DAYS</th>
+            <th>DRIVERS</th>
+            <th>GUIDES</th>
+            <th title="Tourists count">TC</th>
+            <th>CREATED_BY</th>
+            <th>FILE</th>
+            <th>DESCRIPTION</th>
             <th>
                 <a href="/tours/add">
                     <button type="button" class="btn btn-outline-success">add</button>
@@ -69,8 +35,8 @@
         <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
         <tr th:each="tour:${toursList}">
             <td th:text="${tour.id}"></td>
-<!--            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>-->
-            <td>
+            <!--            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>-->
+            <td class="text-truncate">
                 <a th:href="@{/tours/details{id}(id=${tour.id})}"
                    th:text="${tour.tittle}"
                    th:title="${tour.description}"></a>
@@ -95,9 +61,9 @@
 
             <td th:text="${tour.createdBy}"></td>
 
-            <td th:text="${tour.fileName}" class="text-truncate"></td>
+            <td class="text-truncate" th:text="${tour.fileName}"></td>
 
-            <td th:text="${tour.description}" class="text-truncate"></td>
+            <td class="text-truncate" th:text="${tour.description}"></td>
 
             <td>
                 <a th:href="@{/tours/edit{id}(id=${tour.id})}">
@@ -115,22 +81,6 @@
             crossorigin="anonymous"></script>
 
     <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
-
-    <script type="text/javascript"
-            th:src="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.js}"></script>
-
-<!--    <script type="text/javascript"-->
-<!--            th:src="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js}">-->
-<!--    </script>-->
-    <script th:src="@{/js/customStickyHeader.js}"></script>
-
-    <script>
-        $(document).ready(function () {
-            console.log("ready!");
-            $("<h4 class=\"text_search_title\" >Tours list</h4>").appendTo(".fixed-table-toolbar");
-        });
-    </script>
-
 </th:block>
 </body>
 </html>

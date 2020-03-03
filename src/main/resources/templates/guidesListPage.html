@@ -3,58 +3,24 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.css}">
-
-    <link rel="stylesheet"
-          th:href="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.css}">
 </head>
 
 <body>
 <div layout:fragment="content" class="jumbotron">
-    <style>
-        .fixed-table-container{
-            top:50px;
-        }
-        .fix-sticky{
-            top:114px;
-        }
-        .fixed-table-toolbar{
-            z-index: 10000000;
-            top: 56px;
-            float: right;
-            display: block;
-            position: fixed;
-            width: 96%;
-            background-color: #e9ecef;
-        }
-        .loading-text {
-            display: none;
-        }
-
-        .text_search_title{
-            margin-top: 16px;
-        }
-
-    </style>
-    <table id="table" class="table table-sm" data-toggle="table"
-           data-sticky-header-offset-left="2em" data-sticky-header-offset-right="2em"
-           data-sticky-header="true"
-           data-sticky-header-offset-y="114"
-           data-sortable="true"
-           data-show-columns="true" data-search="true">
+    <table id="table" class="table table-sm">
         <caption>List of guides</caption>
         <thead class="thead-dark sticky-header">
         <tr>
-            <th data-sortable="true" data-field="id" class="th-inner sortable both">
+            <th>
                 ID
             </th>
-            <th data-sortable="true" data-field="name" class="th-inner sortable both">
+            <th >
                 NAME
             </th>
-            <th data-sortable="true" data-field="language" class="th-inner sortable both">
+            <th >
                 LANGUAGE
             </th>
-            <th data-sortable="true" data-field="createdBy" class="th-inner sortable both">
+            <th >
                 CREATED BY
             </th>
             <th>
@@ -99,21 +65,6 @@
 
     <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
 
-    <script type="text/javascript"
-            th:src="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.js}"></script>
-
-<!--    <script type="text/javascript"-->
-<!--            th:src="@{/webjars/bootstrap-table/1.16.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js}">-->
-<!--    </script>-->
-
-    <script th:src="@{/js/customStickyHeader.js}"></script>
-
-    <script>
-        $(document).ready(function () {
-            console.log("ready!");
-            $("<h4 class=\"text_search_title\" >Guides list</h4>").appendTo(".fixed-table-toolbar");
-        });
-    </script>
     <script>
         function deleteConfirm() {
             confirm("Are you sure?");
