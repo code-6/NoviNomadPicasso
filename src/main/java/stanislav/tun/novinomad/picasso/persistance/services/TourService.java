@@ -34,12 +34,12 @@ public class TourService {
         repo.save(tour);
     }
 
-    public List<Tour> getToursRelated2Driver(Driver driver, int month, int year) {
-        return (List<Tour>) repo.findToursByMonthAndYearAndDriver(month, year, driver.getId());
-    }
-
     public List<Tour> getToursRelated2Driver(Long driverId, int month, int year) {
         return (List<Tour>) repo.findToursByMonthAndYearAndDriver(month, year, driverId);
+    }
+
+    public List<Tour> getToursRelated2Guide(Long guideId, int month, int year){
+        return (List<Tour>) repo.findToursByMonthAndYearAndGuide(month, year, guideId);
     }
 
     public Optional<Tour> getTour(Long id) {

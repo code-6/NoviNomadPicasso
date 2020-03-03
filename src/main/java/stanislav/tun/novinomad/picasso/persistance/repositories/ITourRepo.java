@@ -29,5 +29,12 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
             "and (extract(YEAR from t.startDate) = :year or extract(YEAR from t.endDate) = :year) order by t.startDate asc")
     Collection<Tour> findToursByMonthAndYearAndDriver(@Param("month") int month, @Param("year") int year, @Param("driverId") long driverId);
 
+    @Query("select t from tours t " +
+            "join t.guides d " +
+            "where d.id = :guideId " +
+            "and (extract(MONTH from t.startDate) = :month or extract(MONTH from t.endDate) = :month) " +
+            "and (extract(YEAR from t.startDate) = :year or extract(YEAR from t.endDate) = :year) order by t.startDate asc")
+    Collection<Tour> findToursByMonthAndYearAndGuide(@Param("month") int month, @Param("year") int year, @Param("guideId") long guideId);
+
 
 }

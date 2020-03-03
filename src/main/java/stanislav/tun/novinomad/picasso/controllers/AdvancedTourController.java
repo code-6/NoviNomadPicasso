@@ -38,7 +38,6 @@ public class AdvancedTourController {
     public ModelAndView getView(@RequestParam(required = false, name = "month") Integer month,
                                 @RequestParam(required = false, name = "year") String year) {
         // set default values for month and year. Current date by default
-        logger.debug(" call getView() INPUT DATA month = " + month + " year = " + year);
         if (month == null)
             month = LocalDate.now().getMonthValue();
 
@@ -71,7 +70,6 @@ public class AdvancedTourController {
     public ModelAndView getView(@RequestParam(required = false, name = "month") Integer month,
                                 @RequestParam(required = false, name = "year") String year,
                                 @PathVariable(value = "driverId") Long driverId) {
-        logger.debug(" call second getView() INPUT DATA month = " + month + " year = " + year + " driver id = " + driverId);
         // set default values for month and year. Current date by default
         if (month == null)
             month = LocalDate.now().getMonthValue();
