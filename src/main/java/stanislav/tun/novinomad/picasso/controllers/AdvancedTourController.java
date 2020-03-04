@@ -63,6 +63,7 @@ public class AdvancedTourController {
         // add tours created for entered month
         var tours = tourService.getToursForDate(month, Integer.valueOf(year));
         mav.addObject("tours", tours);
+        mav.addObject("activePicasso", true);
         return mav;
     }
 
@@ -113,6 +114,7 @@ public class AdvancedTourController {
 //        }
         var tours = tourService.getToursRelated2Driver(driverId, month, Integer.valueOf(year));
         mav.addObject("tours", tours);
+        mav.addObject("activePicasso", true);
         return mav;
     }
 
@@ -162,6 +164,7 @@ public class AdvancedTourController {
 //        }
         var tours = tourService.getToursRelated2Guide(guideId, month, Integer.valueOf(year));
         mav.addObject("tours", tours);
+        mav.addObject("activePicasso", true);
         return mav;
     }
 

@@ -3,6 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
+    <style>
+        th {
+			position: sticky;
+			top: 55px;
+			box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+		}
+    </style>
 </head>
 
 <body>
@@ -25,7 +32,7 @@
             </th>
             <th>
                 <a href="/guides/add">
-                    <button type="button" class="btn btn-outline-success">create guide</button>
+                    <button type="button" class="btn btn-sm btn-outline-success">create guide</button>
                 </a>
             </th>
             <th></th>
@@ -50,7 +57,7 @@
             </td>
             <td>
                 <a th:href="@{/guides/delete{id}(id=${guide.getId()})}">
-                    <button onclick="deleteConfirm()" type="button" class="btn btn-outline-danger btn-sm">delete</button>
+                    <button onclick="return confirm('Are you sure?') ? true : false;" type="button" class="btn btn-outline-danger btn-sm">delete</button>
                 </a>
             </td>
         </tr>

@@ -1,6 +1,7 @@
 package stanislav.tun.novinomad.picasso;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ import java.util.Date;
 @EnableTransactionManagement
 @EnableCaching
 public class PicassoApp {
+
+    private Faker faker = new Faker();
+
     @Autowired
     private DataSource dataSource;
 
@@ -64,8 +68,8 @@ public class PicassoApp {
     private void createDriversLoop(int count) {
         for (int i = 0; i < count; i++) {
             var d = new Driver();
-            d.setFirstName("Driver_" + i);
-            d.setLastName("Driver_" + i);
+            d.setFirstName(faker.name().firstName());
+            d.setLastName(faker.name().lastName());
             d.setCar(getRandomCar());
             driverService.createOrUpdateDriver(d);
         }
@@ -74,8 +78,8 @@ public class PicassoApp {
     private void createGuidesLoop(int count) {
         for (int i = 0; i < count; i++) {
             var g = new Guide();
-            g.setFirstName("Guide_" + i);
-            g.setLastName("Guide_" + i);
+            g.setFirstName(faker.name().firstName());
+            g.setLastName(faker.name().lastName());
             g.setLanguage(getRandomLanguage());
             guideService.createOrUpdateGuide(g);
         }
@@ -88,9 +92,9 @@ public class PicassoApp {
             var rnd = getRandomNumInRange(1, entityInTourCount); // drivers count in tour
             var rnd2 = getRandomNumInRange(1, entityInTourCount); // guides count in tour
             var tour = new Tour();
-            tour.setTittle("Tour_"+i);
-            tour.setDescription("this is tour description "+i);
-            tour.setFileName("SomeFile.txt");
+            tour.setTittle(faker.book().title());
+            tour.setDescription(faker.company().catchPhrase());
+            tour.setFileName(faker.file().fileName());
             var range = getRandomRange();
             tour.setStartDate(range.getStart());
             tour.setEndDate(range.getEnd());

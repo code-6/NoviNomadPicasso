@@ -26,6 +26,7 @@ public class GuideController {
         var modelAndView = new ModelAndView();
         modelAndView.addObject("guides", guides);
         modelAndView.setViewName("guidesListPage.html");
+        modelAndView.addObject("activeGuides", true);
         return modelAndView;
     }
 

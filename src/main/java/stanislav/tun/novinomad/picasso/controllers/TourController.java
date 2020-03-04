@@ -73,6 +73,7 @@ public class TourController {
         var mav = new ModelAndView("toursListPage");
         var allTours = tourService.getAllTours();
         mav.addObject("toursList", allTours);
+        mav.addObject("activeTours", true);
         logger.debug("/tours/list requested.");
         return mav;
     }

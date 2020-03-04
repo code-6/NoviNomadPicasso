@@ -1,27 +1,54 @@
 <header th:fragment="header">
-	<div class="bs-component">
-		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-<!--			<a class="navbar-brand" href="#">Picasso</a>-->
-			<a class="navbar-brand" href="/picasso/getview">Picasso</a>
-			<div class="collapse navbar-collapse" id="navbarColor01">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="/tours/list">Tours</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/drivers/list">Drivers</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/guides/list">Guides</a>
-					</li>
-				</ul>
-				<form class="form-inline my-2 my-lg-0">
-					<div sec:authentication="name" class="navbar-brand"></div>
-					<a href="/logout">
-						<button class="btn btn-secondary my-2 my-sm-0" type="button" >LogOut</button>
-					</a>
-				</form>
-			</div>
-		</nav>
-	</div>
+	<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="nav nav-pills">
+			<li class="nav-item">
+				<a class="nav-link" href="/picasso/getview" th:classappend="${activePicasso} ? active">PICASSO</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="/tours/list" th:classappend="${activeTours} ? active">Tours</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="/guides/list" th:classappend="${activeGuides} ? active">Guides</a>
+			</li>
+
+			<li class="nav-item" >
+				<a class="nav-link" href="/drivers/list" th:classappend="${activeDrivers} ? active">Drivers</a>
+			</li>
+			<form class="form-inline my-2 my-lg-0">
+				<div sec:authentication="name" class="navbar-brand"></div>
+				<a href="/logout">
+					<button class="btn btn-secondary my-2 my-sm-0" type="button" >LogOut</button>
+				</a>
+			</form>
+		</ul>
+		</div>
+	</nav>
+<!--	<div class="bs-component">-->
+<!--		<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">-->
+<!--&lt;!&ndash;			<a class="navbar-brand" href="#">Picasso</a>&ndash;&gt;-->
+<!--			<a class="navbar-brand" href="/picasso/getview">Picasso</a>-->
+<!--			<div class="collapse navbar-collapse" id="navbarColor01">-->
+<!--				<ul class="nav nav-pills mr-auto">-->
+<!--					<li class="nav-item" th:classappend="${activeTours} ? active">-->
+<!--						<a class="nav-link" href="/tours/list">Tours</a>-->
+<!--					</li>-->
+<!--					<li class="nav-item" th:classappend="${activeDrivers} ? active">-->
+<!--						<a class="nav-link" href="/drivers/list">Drivers</a>-->
+<!--					</li>-->
+<!--					<li class="nav-item" th:classappend="${activeGuides} ? active">-->
+<!--						<a class="nav-link" href="/guides/list">Guides</a>-->
+<!--					</li>-->
+<!--				</ul>-->
+<!--				<form class="form-inline my-2 my-lg-0">-->
+<!--					<div sec:authentication="name" class="navbar-brand"></div>-->
+<!--					<a href="/logout">-->
+<!--						<button class="btn btn-secondary my-2 my-sm-0" type="button" >LogOut</button>-->
+<!--					</a>-->
+<!--				</form>-->
+<!--			</div>-->
+<!--		</nav>-->
+<!--	</div>-->
 </header>

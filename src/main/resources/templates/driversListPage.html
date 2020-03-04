@@ -3,7 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-
+    <style>
+        th {
+			position: sticky;
+			top: 55px;
+			box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+		}
+    </style>
 </head>
 
 <body>
@@ -18,7 +24,7 @@
             <th>CREATED BY</th>
             <th>
                 <a href="/drivers/add">
-                    <button type="button" class="btn btn-outline-success">create driver</button>
+                    <button type="button" class="btn btn-sm btn-outline-success">create driver</button>
                 </a>
             </th>
             <th></th>
@@ -43,7 +49,7 @@
             </td>
             <td>
                 <a th:href="@{/drivers/delete{id}(id=${driver.getId()})}">
-                    <button onclick="deleteConfirm()" type="button" class="btn btn-outline-danger btn-sm">delete
+                    <button onclick="return confirm('Are you sure?') ? true : false;" type="button" class="btn btn-outline-danger btn-sm">delete
                     </button>
                 </a>
             </td>
@@ -61,9 +67,15 @@
 
     <script>
         function deleteConfirm() {
-            confirm("Are you sure?");
-        }
-
+               var retVal = confirm("Do you want to continue ?");
+               if( retVal == true ) {
+                  document.write ("User wants to continue!");
+                  return true;
+               } else {
+                  document.write ("User does not want to continue!");
+                  return false;
+               }
+            }
     </script>
 
 </th:block>
