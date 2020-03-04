@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin().defaultSuccessUrl("/test", true);
+                .formLogin().defaultSuccessUrl("/picasso/getview", true);
         http.csrf().ignoringAntMatchers("/h2-console/**");
         //this will allow frames with same origin which is much more safe
         http.headers().frameOptions().sameOrigin();

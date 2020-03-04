@@ -3,153 +3,152 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+	<style>
+		div.fixed {
+            position: sticky;
+            background: #e9ecef;
+			top: 50px;
+		}
+	</style>
 </head>
 <body>
 <div layout:fragment="content" class="jumbotron jumbotron-fluid">
-    <form th:object="${month}">
-        <div>
-            <select th:name="month" onchange="this.form.submit()" id="months">
-                <option th:selected="${selectedMonth}" selected disabled hidden th:text="${selectedMonth}"></option>
-                <option th:value="1">January</option>
-                <option th:value="2">February</option>
-                <option th:value="3">March</option>
-                <option th:value="4">April</option>
-                <option th:value="5">May</option>
-                <option th:value="6">June</option>
-                <option th:value="7">July</option>
-                <option th:value="8">August</option>
-                <option th:value="9">September</option>
-                <option th:value="10">October</option>
-                <option th:value="11">November</option>
-                <option th:value="12">December</option>
-            </select>
+	<form th:object="${month}">
+		<div class="fixed">
+			<div class="row">
+				<div class="col">
+					<select th:name="month" onchange="this.form.submit()" id="months">
+						<option th:selected="${selectedMonth}" selected disabled hidden
+						        th:text="${selectedMonth}"></option>
+						<option th:value="1">January</option>
+						<option th:value="2">February</option>
+						<option th:value="3">March</option>
+						<option th:value="4">April</option>
+						<option th:value="5">May</option>
+						<option th:value="6">June</option>
+						<option th:value="7">July</option>
+						<option th:value="8">August</option>
+						<option th:value="9">September</option>
+						<option th:value="10">October</option>
+						<option th:value="11">November</option>
+						<option th:value="12">December</option>
+					</select>
 
-            <input th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
-                   placeholder="ENTER YEAR">
+					<input th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
+					       placeholder="ENTER YEAR">
 
-            <button th:text="${'<<'}" onclick="this.form.submit()"
-                    th:value="${selectedMonthNum > 1} ? ${selectedMonthNum -1} : ${selectedMonthNum}"
-                    th:name="month"
-                    title="previous month"
-                    class="btn btn-primary btn-sm"></button>
 
-            <button th:text="${'>>'}" onclick="this.form.submit()"
-                    th:value="${selectedMonthNum < 12} ? ${selectedMonthNum +1} : ${selectedMonthNum}"
-                    th:name="month"
-                    title="next month"
-                    class="btn btn-primary btn-sm"></button>
+					<button th:text="${'<<'}" onclick="this.form.submit()"
+					        th:value="${selectedMonthNum > 1} ? ${selectedMonthNum -1} : ${selectedMonthNum}"
+					        th:name="month"
+					        title="previous month"
+					        class="btn btn-primary btn-sm"></button>
 
-            <span th:if="${selectedDriver}" th:text="${'Tours of driver: '+selectedDriver.getFullName()}"></span>
-            <span th:if="${selectedGuide}" th:text="${'Tours of guide: '+selectedGuide.getFullName()}"></span>
-        </div>
 
-        <style>
-            .table-sm td, .table-sm th {
-                padding: 0.1rem;
-            }
-        </style>
-        <table class="table table-sm table-striped table-bordered">
-            <thead>
-            <tr>
-                <th>TITLE</th>
+					<button th:text="${'>>'}" onclick="this.form.submit()"
+					        th:value="${selectedMonthNum < 12} ? ${selectedMonthNum +1} : ${selectedMonthNum}"
+					        th:name="month"
+					        title="next month"
+					        class="btn btn-primary btn-sm"></button>
 
-                <th>GUIDES</th>
 
-                <th>DRIVERS</th>
+					<span th:if="${selectedDriver}"
+					      th:text="${'Tours of driver: '+selectedDriver.getFullName()}"></span>
+					<span th:if="${selectedGuide}" th:text="${'Tours of guide: '+selectedGuide.getFullName()}"></span>
+				</div>
+			</div>
+		</div>
+		<!--        <div id="control_panel" style="position: fixed; z-index: 100; top: 55px;" class="fixed-table-loading table">-->
+		<!--		-->
+		<!--        </div>-->
+		<table id="table" style="position: sticky;" class="table table-sm table-striped table-bordered table-hover">
+			<thead class="thead-dark">
+			<tr>
+				<th>TITLE</th>
 
-                <th th:each="d: ${days}" th:style="${'width: 2%; text-align: center;'}"
-                    style="width: 2%; text-align: center;">
+				<th>GUIDES</th>
+
+				<th>DRIVERS</th>
+
+				<th th:each="d: ${days}" th:style="${'padding: 0.01rem; width: 2%; text-align: center;'}">
 					<span th:style="${d.getDayOfWeek().name().substring(0,2) == 'SA'|| d.getDayOfWeek().name().substring(0,2) == 'SU'} ? ${'color: red;'}"
-                          th:text="${d.getDayOfWeek().name().substring(0,2)}"></span>
-                    <br/>
-                    <span th:text="${d.getDayOfMonth() > 9} ? ${d.getDayOfMonth()} : ${'0'+d.getDayOfMonth()}"></span>
-                    <!--					<span th:text="${d.getDayOfMonth()}"></span>-->
-                </th>
+					      th:text="${d.getDayOfWeek().name().substring(0,2)}"></span>
+					<br/>
+					<span th:text="${d.getDayOfMonth() > 9} ? ${d.getDayOfMonth()} : ${'0'+d.getDayOfMonth()}"></span>
+					<!--					<span th:text="${d.getDayOfMonth()}"></span>-->
+				</th>
 
+				<th>
+					<a href="/tours/add">
+						<button type="button" class="btn btn-sm btn-outline-success">add</button>
+					</a>
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="t: ${tours}">
+				<td th:text="${t.tittle}" th:title="${t.description}" class="text-truncate"></td>
 
-                <th>
-                    <a href="/tours/add">
-                        <button type="button" class="btn btn-sm btn-outline-success">add</button>
-                    </a>
-                </th>
-            </tr>
-            </thead>
-            <tbody th:style="${'overflow-y: auto;'}">
-            <tr th:each="t: ${tours}">
-                <td th:text="${t.tittle}" th:title="${t.description}" class="text-truncate"></td>
-
-                <td>
+				<td>
                 <span th:each="g: ${t.guides}">
 <!--                    <span th:text="${g.fullName}"></span>-->
 	                <a th:href="@{/picasso/getViewRelatedToGuide{guideId}(guideId=${g.id})}"
-                       th:text="${g.fullName}"></a>
+	                   th:text="${g.fullName}"></a>
 	                <br/>
                 </span>
-                </td>
+				</td>
 
-                <td>
+				<td>
                 <span th:each="d: ${t.drivers}">
 <!--                    <span th:text="${d.fullName}"></span>-->
 	                <a th:href="@{/picasso/getViewRelatedToDriver{driverId}(driverId=${d.id})}"
-                       th:text="${d.fullName}"></a>
+	                   th:text="${d.fullName}"></a>
 	                <br/>
                 </span>
-                </td>
+				</td>
 
-                <td th:each="d: ${days}" th:style="${'width: 2%; text-align: center;'}"
-                    style="width: 2%; text-align: center;">
-                    <!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
-                    <!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
-                    <span th:title="${t.getRange().toString()}"
-                          th:if="${d.isAfter(t.startDate.toLocalDate()) && d.isBefore(t.endDate.toLocalDate())}">---</span>
-                    <!--					<span th:if="${d.isEqual(t.startDate) || d.isEqual(t.endDate)}">|</span>-->
+				<td th:each="d: ${days}">
+					<!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
+					<!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
+					<span th:title="${t.getRange().toString()}"
+					      th:if="${d.isAfter(t.startDate.toLocalDate()) && d.isBefore(t.endDate.toLocalDate())}">---</span>
+					<!--					<span th:if="${d.isEqual(t.startDate) || d.isEqual(t.endDate)}">|</span>-->
 
-                    <span th:title="${t.getRange().toString()}"
-                          th:if="${d.isEqual(t.endDate.toLocalDate())}">--|</span>
-                    <span th:title="${t.getRange().toString()}"
-                          th:if="${d.isEqual(t.startDate.toLocalDate())}">|--</span>
+					<span th:title="${t.getRange().toString()}"
+					      th:if="${d.isEqual(t.endDate.toLocalDate())}">--|</span>
+					<span th:title="${t.getRange().toString()}"
+					      th:if="${d.isEqual(t.startDate.toLocalDate())}">|--</span>
+				</td>
 
-                    <!--					<div class="progress" th:if="${d.isAfter(t.startDate) && d.isBefore(t.endDate)}">-->
-                    <!--						<div class="progress-bar progress-bar-striped" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>-->
-                    <!--					</div>-->
-
-                    <!--					<div class="progress" th:if="${d.isEqual(t.endDate)}">-->
-                    <!--						<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>-->
-                    <!--					</div>-->
-
-                    <!--					<div class="progress" th:if="${d.isEqual(t.startDate)}">-->
-                    <!--						<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>-->
-                    <!--					</div>-->
-                </td>
-
-                <td>
-                    <a th:href="@{/tours/edit{id}(id=${t.id})}">
-                        <button type="button" class="btn btn-outline-info btn-sm">edit</button>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <!--        <script>-->
-        <!--            function headerStyle(column) {-->
-        <!--                return {-->
-        <!--                    day:{-->
-        <!--                        css: {width: 2% !important}-->
-        <!--                    }-->
-        <!--                }[column.field]-->
-        <!--            }-->
-        <!--        </script>-->
-        <!--			<a href="/tours/add">-->
-        <!--				<button type="button" class="btn btn-outline-success">create tour</button>-->
-        <!--			</a>-->
-    </form>
+				<td>
+					<a th:href="@{/tours/edit{id}(id=${t.id})}">
+						<button type="button" class="btn btn-outline-info btn-sm">edit</button>
+					</a>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		<!--        <script>-->
+		<!--            function headerStyle(column) {-->
+		<!--                return {-->
+		<!--                    day:{-->
+		<!--                        css: {width: 2% !important}-->
+		<!--                    }-->
+		<!--                }[column.field]-->
+		<!--            }-->
+		<!--        </script>-->
+		<!--			<a href="/tours/add">-->
+		<!--				<button type="button" class="btn btn-outline-success">create tour</button>-->
+		<!--			</a>-->
+	</form>
 </div>
 <th:block layout:fragment="script">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+	        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+	        crossorigin="anonymous"></script>
+
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
 
 </th:block>
 </body>
