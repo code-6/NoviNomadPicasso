@@ -81,12 +81,12 @@ public class PicassoApp {
         }
     }
 
-    private void createToursLoop(int count) {
+    private void createToursLoop(int count, int entityInTourCount) {
         var allDrivers = driverService.getDriversList();
         var allGuides = guideService.getGuidesList();
         for (int i = 0; i < count; i++) {
-            var rnd = getRandomNumInRange(1, 3); // drivers count in tour
-            var rnd2 = getRandomNumInRange(1, 3); // guides count in tour
+            var rnd = getRandomNumInRange(1, entityInTourCount); // drivers count in tour
+            var rnd2 = getRandomNumInRange(1, entityInTourCount); // guides count in tour
             var tour = new Tour();
             tour.setTittle("Tour_"+i);
             tour.setDescription("this is tour description "+i);
@@ -225,7 +225,7 @@ public class PicassoApp {
 
         createDriversLoop(10);
         createGuidesLoop(30);
-        createToursLoop(100);
+        createToursLoop(100, 2);
     }
 
 }
