@@ -3,6 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/mainLayout}">
 <head>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
 <div layout:fragment="content" class="jumbotron jumbotron-fluid">
@@ -43,7 +44,12 @@
             <span th:if="${selectedGuide}" th:text="${'Tours of guide: '+selectedGuide.getFullName()}"></span>
         </div>
 
-        <table id="table" class="table table-sm table-striped table-bordered">
+        <style>
+            .table-sm td, .table-sm th {
+                padding: 0.1rem;
+            }
+        </style>
+        <table class="table table-sm table-striped table-bordered">
             <thead>
             <tr>
                 <th>TITLE</th>
@@ -52,14 +58,14 @@
 
                 <th>DRIVERS</th>
 
-
-                    <th th:each="d: ${days}">
+                <th th:each="d: ${days}" th:style="${'width: 2%; text-align: center;'}"
+                    style="width: 2%; text-align: center;">
 					<span th:style="${d.getDayOfWeek().name().substring(0,2) == 'SA'|| d.getDayOfWeek().name().substring(0,2) == 'SU'} ? ${'color: red;'}"
                           th:text="${d.getDayOfWeek().name().substring(0,2)}"></span>
-                        <br/>
-                        <span th:text="${d.getDayOfMonth() > 9} ? ${d.getDayOfMonth()} : ${'0'+d.getDayOfMonth()}"></span>
-                        <!--					<span th:text="${d.getDayOfMonth()}"></span>-->
-                    </th>
+                    <br/>
+                    <span th:text="${d.getDayOfMonth() > 9} ? ${d.getDayOfMonth()} : ${'0'+d.getDayOfMonth()}"></span>
+                    <!--					<span th:text="${d.getDayOfMonth()}"></span>-->
+                </th>
 
 
                 <th>
@@ -69,7 +75,7 @@
                 </th>
             </tr>
             </thead>
-            <tbody>
+            <tbody th:style="${'overflow-y: auto;'}">
             <tr th:each="t: ${tours}">
                 <td th:text="${t.tittle}" th:title="${t.description}" class="text-truncate"></td>
 
@@ -91,7 +97,8 @@
                 </span>
                 </td>
 
-                <td th:each="d: ${days}">
+                <td th:each="d: ${days}" th:style="${'width: 2%; text-align: center;'}"
+                    style="width: 2%; text-align: center;">
                     <!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
                     <!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
                     <span th:title="${t.getRange().toString()}"
@@ -143,8 +150,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
-
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
 
 </th:block>
 </body>
