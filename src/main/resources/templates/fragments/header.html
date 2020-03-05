@@ -17,6 +17,59 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/drivers/list" th:classappend="${activeDrivers} ? active">Drivers</a>
 				</li>
+				<div th:if="${activePicasso}">
+					<li class="nav-item">
+						<select th:name="month" onchange="this.form.submit()" id="months"
+						        class="nav-link">
+							<option th:selected="${selectedMonth}" selected disabled hidden
+							        th:text="${selectedMonth}"
+							        ></option>
+							<option th:value="1" >January</option>
+							<option th:value="2" >February</option>
+							<option th:value="3" >March</option>
+							<option th:value="4" >April</option>
+							<option th:value="5" >May</option>
+							<option th:value="6" >June</option>
+							<option th:value="7" >July</option>
+							<option th:value="8" >August</option>
+							<option th:value="9" >September</option>
+							<option th:value="10" >October</option>
+							<option th:value="11" >November</option>
+							<option th:value="12" >December</option>
+						</select>
+					</li>
+
+					<li class="nav-item">
+						<input class="nav-link" th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
+						       placeholder="ENTER YEAR">
+					</li>
+
+					<li class="nav-item">
+						<button th:text="${'<<'}" onclick="this.form.submit()"
+						        th:value="${selectedMonthNum > 1} ? ${selectedMonthNum -1} : ${selectedMonthNum}"
+						        th:name="month"
+						        title="previous month"
+						        class="btn btn-primary btn-sm nav-link"></button>
+
+
+						<button th:text="${'>>'}" onclick="this.form.submit()"
+						        th:value="${selectedMonthNum < 12} ? ${selectedMonthNum +1} : ${selectedMonthNum}"
+						        th:name="month"
+						        title="next month"
+						        class="btn btn-primary btn-sm nav-link"></button>
+					</li>
+
+					<li class="nav-item">
+						<span th:if="${selectedDriver}"
+						      th:text="${'Tours of driver: '+selectedDriver.getFullName()}"
+						      class="nav-link"></span>
+
+						<span th:if="${selectedGuide}"
+						      th:text="${'Tours of guide: '+selectedGuide.getFullName()}"
+						      class="nav-link"></span>
+					</li>
+
+				</div>
 			</ul>
 			<form class="form-inline my-2 my-lg-0">
 				<div sec:authentication="name" class="navbar-brand"></div>

@@ -69,9 +69,14 @@ public class TourController {
     }
 
     @RequestMapping("/list")
-    public ModelAndView getToursListView() {
+    public ModelAndView getToursListView(@RequestParam(required = false, name = "year") Integer year) {
         var mav = new ModelAndView("toursListPage");
-        var allTours = tourService.getAllTours();
+        List<Tour> allTours;
+        if (year == null)
+            allTours = tourService.getAllTours();
+        else
+            allTours = tourService.getToursByYear(year);
+
         mav.addObject("toursList", allTours);
         mav.addObject("activeTours", true);
         logger.debug("/tours/list requested.");
@@ -79,11 +84,11 @@ public class TourController {
     }
 
     @RequestMapping("/details{id}")
-    public ModelAndView getTourDetails(@PathVariable(value = "id") Long tourId){
+    public ModelAndView getTourDetails(@PathVariable(value = "id") Long tourId) {
         var mav = new ModelAndView("tourDetailsPage");
         var tour = tourService.getTour(tourId);
 
-        if (!tour.isEmpty() && tour.isPresent()){
+        if (!tour.isEmpty() && tour.isPresent()) {
             var t = tour.get();
             mav.addObject("tour", t);
         }
@@ -179,7 +184,7 @@ public class TourController {
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
-            logger.error("OVERLAPS "+getStackTrace(e));
+            logger.error("OVERLAPS " + getStackTrace(e));
             return mav;
         }
         excludeDrivers(drivers2exclude, tour);
@@ -192,7 +197,7 @@ public class TourController {
             mav.addObject("errorDesc", e.getMessage());
             mav.addObject("exception", e);
             mav.addObject("tour", tour);
-            logger.error("OVERLAPS "+getStackTrace(e));
+            logger.error("OVERLAPS " + getStackTrace(e));
             return mav;
         }
         excludeGuides(guides2exclude, tour);

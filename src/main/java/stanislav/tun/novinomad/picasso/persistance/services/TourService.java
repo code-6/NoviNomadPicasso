@@ -54,6 +54,10 @@ public class TourService {
         return (List<Tour>) repo.findToursByMonthAndYear(month, year);
     }
 
+    public List<Tour> getToursByYear(int year){
+        return (List<Tour>) repo.findToursByYear(year);
+    }
+
     public Tour getTour(String tittle) {
         var allTours = getAllTours();
         for (Tour t : allTours) {
