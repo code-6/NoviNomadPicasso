@@ -6,84 +6,105 @@
     <style>
         th {
 			position: sticky;
-			top: 55px;
+			top: 85px;
 			box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 		}
+		div.fixed {
+            position: sticky;
+            background: #343a40;
+			top: 55px;
+			z-index: 100;
+		}
+
     </style>
 </head>
 <body>
 <div layout:fragment="content" class="jumbotron jumbotron-fluid">
-<div class="fixed">
-    <table id="table"
-           class="table table-sm table-striped table-bordered table-hover">
-        <caption>List of tours</caption>
-        <thead class="thead-dark">
-        <tr>
-            <th data-sortable="true" data-field="id">ID</th>
-            <th data-sortable="true" data-field="title">TITLE</th>
-            <th data-sortable="true" data-field="start">START</th>
-            <th data-sortable="true" data-field="end">END</th>
-            <th data-sortable="true" data-field="days">DAYS</th>
-            <th data-sortable="true" data-field="drivers">DRIVERS</th>
-            <th data-sortable="true" data-field="guides">GUIDES</th>
-            <th data-sortable="true" data-field="tc" title="Tourists count">TC</th>
-            <th data-sortable="true" data-field="created_by">CREATED_BY</th>
-            <th data-sortable="true" data-field="file">FILE</th>
-            <th>DESCRIPTION</th>
-            <th>
-                <a href="/tours/add">
-                    <button type="button" class="btn btn-sm btn-outline-success">add</button>
-                </a>
-            </th>
-        </tr>
-        </thead>
+    <form>
+        <div class="fixed">
+            <div class="row" style="height: 31px;">
+                <div class="col">
+                    <input th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
+                           placeholder="ENTER YEAR">
+                    <button type="submit" class="btn btn-outline-info btn-sm">submit</button>
+                    <span th:if="${selectedYear}"
+                          th:text="${'Tours for: '+selectedYear+' year'}"></span>
+                </div>
+            </div>
+        </div>
+        <table id="table"
+               class="table table-sm table-striped table-bordered table-hover results">
+            <caption>List of tours</caption>
+            <thead class="thead-dark">
+            <tr>
+                <th data-sortable="true" data-field="id">
+                    <button type="button" class="btn btn-outline-info btn-sm">ID</button>
+                </th>
+                <th data-sortable="true" data-field="title">TITLE</th>
+                <th data-sortable="true" data-field="start">START</th>
+                <th data-sortable="true" data-field="end">END</th>
+                <th data-sortable="true" data-field="days">DAYS</th>
+                <th data-sortable="true" data-field="drivers">DRIVERS</th>
+                <th data-sortable="true" data-field="guides">GUIDES</th>
+                <th data-sortable="true" data-field="tc" title="Tourists count">TC</th>
+                <th data-sortable="true" data-field="created_by">CREATED_BY</th>
+                <th data-sortable="true" data-field="file">FILE</th>
+                <th>DESCRIPTION</th>
+                <th>
+                    <a href="/tours/add">
+                        <button type="button" class="btn btn-sm btn-outline-success">add</button>
+                    </a>
+                </th>
+            </tr>
+            </thead>
 
-        <tbody>
-        <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
-        <tr th:each="tour:${toursList}">
-            <td th:text="${tour.id}"></td>
-            <!--            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>-->
-            <td style="max-width: 130px;" class="text-truncate">
-                <a th:href="@{/tours/details{id}(id=${tour.id})}"
-                   th:text="${tour.tittle}"
-                   th:title="${tour.description}"
-                   class="text-truncate"
-                   style="max-width: 130px;"></a>
-            </td>
-            <td th:text="${tour.getStartDateFormatted()}"></td>
-            <td th:text="${tour.getEndDateFormatted()}"></td>
-            <td th:text="${tour.days}"></td>
-            <td>
+            <tbody>
+            <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
+            <tr th:each="tour:${toursList}">
+                <td th:text="${tour.id}"></td>
+                <!--            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>-->
+                <td style="max-width: 130px;" class="text-truncate">
+                    <a th:href="@{/tours/details{id}(id=${tour.id})}"
+                       th:text="${tour.tittle}"
+                       th:title="${tour.description}"
+                       class="text-truncate"
+                       style="max-width: 130px;"></a>
+                </td>
+                <td th:text="${tour.getStartDateFormatted()}"></td>
+                <td th:text="${tour.getEndDateFormatted()}"></td>
+                <td th:text="${tour.days}"></td>
+                <td>
                 <span th:each="d: ${tour.drivers}">
                     <span th:text="${d.fullName}"></span>
 					<br/>
                 </span>
-            </td>
-            <td>
+                </td>
+                <td>
                 <span th:each="g: ${tour.guides}">
                     <span th:text="${g.fullName}"></span>
 					<br/>
                 </span>
-            </td>
-            <td th:text="${tour.touristsCount}"></td>
-            <!--                <td th:text="${tour.description}"></td>-->
+                </td>
+                <td th:text="${tour.touristsCount}"></td>
+                <!--                <td th:text="${tour.description}"></td>-->
 
-            <td th:text="${tour.createdBy}"></td>
+                <td th:text="${tour.createdBy}"></td>
 
-            <td th:text="${tour.fileName}" style="max-width: 130px;" class="text-truncate"></td>
+                <td th:text="${tour.fileName}" style="max-width: 130px;" class="text-truncate"></td>
 
-            <td th:text="${tour.description}" style="max-width: 130px;" class="text-truncate"></td>
+                <td th:text="${tour.description}" style="max-width: 130px;" class="text-truncate"></td>
 
-            <td>
-                <a th:href="@{/tours/edit{id}(id=${tour.id})}">
-                    <button type="button" class="btn btn-outline-info btn-sm">edit</button>
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                <td>
+                    <a th:href="@{/tours/edit{id}(id=${tour.id})}">
+                        <button type="button" class="btn btn-outline-info btn-sm">edit</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+</form>
 </div>
-</div>
+
 <th:block layout:fragment="script">
     <script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -91,10 +112,13 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/tableSearch.js}"></script>
     <script>
         $(document).ready(function() {
     $('#table').DataTable({searching: false, paging: false, info: false});
 } );
+
+
     </script>
 </th:block>
 </body>

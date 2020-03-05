@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
@@ -35,7 +36,6 @@ import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
 @Controller
 @RequestMapping("/tours")
 public class TourController {
-
     @Autowired
     TourService tourService;
 
@@ -70,13 +70,18 @@ public class TourController {
 
     @RequestMapping("/list")
     public ModelAndView getToursListView(@RequestParam(required = false, name = "year") Integer year) {
+        logger.debug("year value = " + year);
         var mav = new ModelAndView("toursListPage");
         List<Tour> allTours;
-        if (year == null)
+        if (year == null) {
             allTours = tourService.getAllTours();
-        else
+            year = LocalDate.now().getYear();
+        } else {
             allTours = tourService.getToursByYear(year);
+            YearHolder.yearHolder = year;
+        }
 
+        mav.addObject("selectedYear", year);
         mav.addObject("toursList", allTours);
         mav.addObject("activeTours", true);
         logger.debug("/tours/list requested.");

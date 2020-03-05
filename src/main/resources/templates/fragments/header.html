@@ -1,107 +1,87 @@
 <header th:fragment="header">
-	<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="nav nav-pills mr-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="/picasso/getview" th:classappend="${activePicasso} ? active">PICASSO</a>
-				</li>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav nav-pills mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/picasso/getview" th:classappend="${activePicasso} ? active">PICASSO</a>
+                </li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="/tours/list" th:classappend="${activeTours} ? active">Tours</a>
-				</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/tours/list" th:classappend="${activeTours} ? active">Tours</a>
+                </li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="/guides/list" th:classappend="${activeGuides} ? active">Guides</a>
-				</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/guides/list" th:classappend="${activeGuides} ? active">Guides</a>
+                </li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="/drivers/list" th:classappend="${activeDrivers} ? active">Drivers</a>
-				</li>
-				<div th:if="${activePicasso}">
-					<li class="nav-item">
-						<select th:name="month" onchange="this.form.submit()" id="months"
-						        class="nav-link">
-							<option th:selected="${selectedMonth}" selected disabled hidden
-							        th:text="${selectedMonth}"
-							        ></option>
-							<option th:value="1" >January</option>
-							<option th:value="2" >February</option>
-							<option th:value="3" >March</option>
-							<option th:value="4" >April</option>
-							<option th:value="5" >May</option>
-							<option th:value="6" >June</option>
-							<option th:value="7" >July</option>
-							<option th:value="8" >August</option>
-							<option th:value="9" >September</option>
-							<option th:value="10" >October</option>
-							<option th:value="11" >November</option>
-							<option th:value="12" >December</option>
-						</select>
-					</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/drivers/list" th:classappend="${activeDrivers} ? active">Drivers</a>
+                </li>
+<!--                <div th:if="${activePicasso}" th:object=${month} class="nav mr-auto">-->
+<!--                    <li class="nav-item">-->
+<!--                        <select th:name="month" onchange="document.getElementById('picassoForm').submit()" id="months"-->
+<!--                                class="nav-link">-->
+<!--                            <option th:selected="${selectedMonth}" selected disabled hidden-->
+<!--                                    th:text="${selectedMonth}"></option>-->
+<!--                            <option th:value="1">January</option>-->
+<!--                            <option th:value="2">February</option>-->
+<!--                            <option th:value="3">March</option>-->
+<!--                            <option th:value="4">April</option>-->
+<!--                            <option th:value="5">May</option>-->
+<!--                            <option th:value="6">June</option>-->
+<!--                            <option th:value="7">July</option>-->
+<!--                            <option th:value="8">August</option>-->
+<!--                            <option th:value="9">September</option>-->
+<!--                            <option th:value="10">October</option>-->
+<!--                            <option th:value="11">November</option>-->
+<!--                            <option th:value="12">December</option>-->
+<!--                        </select>-->
+<!--                    </li>-->
 
-					<li class="nav-item">
-						<input class="nav-link" th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
-						       placeholder="ENTER YEAR">
-					</li>
+<!--                    <li class="nav-item">-->
+<!--                        <input class="nav-link form-control mr-sm-2" th:name="year" type="number" min="2020" max="2099"-->
+<!--                               th:value="${selectedYear}"-->
+<!--                               placeholder="ENTER YEAR">-->
+<!--                    </li>-->
 
-					<li class="nav-item">
-						<button th:text="${'<<'}" onclick="this.form.submit()"
-						        th:value="${selectedMonthNum > 1} ? ${selectedMonthNum -1} : ${selectedMonthNum}"
-						        th:name="month"
-						        title="previous month"
-						        class="btn btn-primary btn-sm nav-link"></button>
+<!--                    <li class="nav-item">-->
+<!--                        <button th:text="${'<<'}" onclick="this.form.submit()"-->
+<!--                                th:value="${selectedMonthNum > 1} ? ${selectedMonthNum -1} : ${selectedMonthNum}"-->
+<!--                                th:name="month"-->
+<!--                                title="previous month"-->
+<!--                                class="btn btn-primary btn-sm nav-link"></button>-->
+<!--                    </li>-->
 
+<!--                    <li class="nav-item">-->
+<!--                        <button th:text="${'>>'}" onclick="this.form.submit()"-->
+<!--                                th:value="${selectedMonthNum < 12} ? ${selectedMonthNum +1} : ${selectedMonthNum}"-->
+<!--                                th:name="month"-->
+<!--                                title="next month"-->
+<!--                                class="btn btn-primary btn-sm nav-link"></button>-->
+<!--                    </li>-->
 
-						<button th:text="${'>>'}" onclick="this.form.submit()"
-						        th:value="${selectedMonthNum < 12} ? ${selectedMonthNum +1} : ${selectedMonthNum}"
-						        th:name="month"
-						        title="next month"
-						        class="btn btn-primary btn-sm nav-link"></button>
-					</li>
+<!--                    <li class="nav-item">-->
+<!--						<span th:if="${selectedDriver}"-->
+<!--                              th:text="${'Tours of driver: '+selectedDriver.getFullName()}"-->
+<!--                              class="nav-link"></span>-->
+<!--                    </li>-->
 
-					<li class="nav-item">
-						<span th:if="${selectedDriver}"
-						      th:text="${'Tours of driver: '+selectedDriver.getFullName()}"
-						      class="nav-link"></span>
+<!--                    <li class="nav-item">-->
+<!--						<span th:if="${selectedGuide}"-->
+<!--                              th:text="${'Tours of guide: '+selectedGuide.getFullName()}"-->
+<!--                              class="nav-link"></span>-->
+<!--                    </li>-->
 
-						<span th:if="${selectedGuide}"
-						      th:text="${'Tours of guide: '+selectedGuide.getFullName()}"
-						      class="nav-link"></span>
-					</li>
+<!--                </div>-->
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+				<th:block layout:fragment="search"></th:block>
 
-				</div>
-			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<div sec:authentication="name" class="navbar-brand"></div>
-				<a href="/logout">
-					<button class="btn btn-outline-secondary my-sm-0" type="button">LogOut</button>
-				</a>
-			</form>
-		</div>
-	</nav>
-	<!--	<div class="bs-component">-->
-	<!--		<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">-->
-	<!--&lt;!&ndash;			<a class="navbar-brand" href="#">Picasso</a>&ndash;&gt;-->
-	<!--			<a class="navbar-brand" href="/picasso/getview">Picasso</a>-->
-	<!--			<div class="collapse navbar-collapse" id="navbarColor01">-->
-	<!--				<ul class="nav nav-pills mr-auto">-->
-	<!--					<li class="nav-item" th:classappend="${activeTours} ? active">-->
-	<!--						<a class="nav-link" href="/tours/list">Tours</a>-->
-	<!--					</li>-->
-	<!--					<li class="nav-item" th:classappend="${activeDrivers} ? active">-->
-	<!--						<a class="nav-link" href="/drivers/list">Drivers</a>-->
-	<!--					</li>-->
-	<!--					<li class="nav-item" th:classappend="${activeGuides} ? active">-->
-	<!--						<a class="nav-link" href="/guides/list">Guides</a>-->
-	<!--					</li>-->
-	<!--				</ul>-->
-	<!--				<form class="form-inline my-2 my-lg-0">-->
-	<!--					<div sec:authentication="name" class="navbar-brand"></div>-->
-	<!--					<a href="/logout">-->
-	<!--						<button class="btn btn-secondary my-2 my-sm-0" type="button" >LogOut</button>-->
-	<!--					</a>-->
-	<!--				</form>-->
-	<!--			</div>-->
-	<!--		</nav>-->
-	<!--	</div>-->
+                <div sec:authentication="name" class="navbar-brand"></div>
+                <a href="/logout">
+                    <button class="btn btn-outline-secondary my-sm-0" type="button">LogOut</button>
+                </a>
+            </form>
+        </div>
+    </nav>
 </header>
