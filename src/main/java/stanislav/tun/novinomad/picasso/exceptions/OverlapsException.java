@@ -3,6 +3,7 @@ package stanislav.tun.novinomad.picasso.exceptions;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 
 import javax.xml.bind.ValidationException;
+import java.time.LocalDateTime;
 
 public class OverlapsException extends Exception {
     private AbstractEntity entity;
@@ -15,7 +16,29 @@ public class OverlapsException extends Exception {
         this.tour = tour;
         this.overlapsTour = overlapsTour;
         try {
-            overlapsRange = new DateTimeRange(tour.getStartDate(), overlapsTour.getEndDate());
+            LocalDateTime overlapsStart = null, overlapsEnd = null;
+            // dS - E
+            if (tour.getStartDate().isBefore(overlapsTour.getStartDate())) {
+                overlapsStart = overlapsTour.getStartDate();
+            } else if (tour.getStartDate().isAfter(overlapsTour.getStartDate())) {
+                overlapsStart = tour.getStartDate();
+            } else if (tour.getStartDate().isEqual(overlapsTour.getStartDate())) {
+                overlapsStart = tour.getStartDate();
+            }
+
+            if(tour.getEndDate().isBefore(overlapsTour.getEndDate())){
+                overlapsEnd = tour.getEndDate();
+            }else if(tour.getEndDate().isAfter(overlapsTour.getEndDate())){
+                overlapsEnd = overlapsTour.getEndDate();
+            }else if (tour.getEndDate().isEqual(overlapsTour.getEndDate())){
+                overlapsEnd = tour.getEndDate();
+            }
+
+            overlapsRange = new DateTimeRange(overlapsStart, overlapsEnd);
+            // S - dE
+            // dS - dE
+            // S - E
+            // (dS = S) - e
         } catch (ValidationException e) {
             e.printStackTrace();
         }
