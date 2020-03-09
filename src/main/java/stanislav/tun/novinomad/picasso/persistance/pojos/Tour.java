@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -199,7 +200,7 @@ public class Tour extends AbstractEntity implements Serializable {
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
         if(startDate != null){
-            days = this.endDate.getDayOfYear() - startDate.getDayOfYear()+1;
+            days = (int) ChronoUnit.DAYS.between(startDate, endDate);
 
         }
 

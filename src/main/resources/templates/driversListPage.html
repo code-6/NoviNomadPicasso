@@ -18,10 +18,18 @@
         <!--			<caption>List of drivers</caption>-->
         <thead class="thead-dark">
         <tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th>CAR</th>
-            <th>CREATED BY</th>
+            <th data-sortable="true" data-field="id">
+                <button type="button" class="btn btn-outline-info btn-sm">ID</button>
+            </th>
+            <th data-sortable="true" data-field="name">
+                <button type="button" class="btn btn-outline-info btn-sm">NAME</button>
+            </th>
+            <th data-sortable="true" data-field="car">
+                <button type="button" class="btn btn-outline-info btn-sm">CAR</button>
+            </th>
+            <th data-sortable="true" data-field="created_by">
+                <button type="button" class="btn btn-outline-info btn-sm">CREATED_BY</button>
+            </th>
             <th>
                 <a href="/drivers/add">
                     <button type="button" class="btn btn-sm btn-outline-success">create driver</button>
@@ -76,6 +84,13 @@
                   return false;
                }
             }
+    </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/tableSearch.js}"></script>
+    <script>
+        $(document).ready(function() {
+    $('#table').DataTable({searching: false, paging: false, info: false});
+} );
     </script>
 
 </th:block>

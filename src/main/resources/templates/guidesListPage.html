@@ -18,17 +18,17 @@
         <caption>List of guides</caption>
         <thead class="thead-dark">
         <tr>
-            <th>
-                ID
+            <th data-sortable="true" data-field="id">
+                <button type="button" class="btn btn-outline-info btn-sm">ID</button>
             </th>
-            <th >
-                NAME
+            <th data-sortable="true" data-field="name">
+                <button type="button" class="btn btn-outline-info btn-sm">NAME</button>
             </th>
-            <th >
-                LANGUAGE
+            <th data-sortable="true" data-field="language">
+                <button type="button" class="btn btn-outline-info btn-sm">LANGUAGE</button>
             </th>
-            <th >
-                CREATED BY
+            <th data-sortable="true" data-field="created_by">
+                <button type="button" class="btn btn-outline-info btn-sm">CREATED_BY</button>
             </th>
             <th>
                 <a href="/guides/add">
@@ -77,6 +77,13 @@
         function deleteConfirm() {
             confirm("Are you sure?");
         }
+    </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/tableSearch.js}"></script>
+    <script>
+        $(document).ready(function() {
+    $('#table').DataTable({searching: false, paging: false, info: false});
+} );
     </script>
 
 </th:block>

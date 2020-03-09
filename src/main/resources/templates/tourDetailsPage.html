@@ -72,6 +72,11 @@
                 <td>Created by:</td>
                 <td th:text="*{createdBy}"></td>
             </tr>
+            <tr>
+                <a th:href="@{/tours/edit{id}(id=${tour.id})}">
+                    <button type="button" class="btn btn-outline-info btn-sm">edit</button>
+                </a>
+            </tr>
 
         </table>
     </div>

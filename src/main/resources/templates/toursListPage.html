@@ -28,7 +28,8 @@
                            placeholder="ENTER YEAR">
                     <button type="submit" class="btn btn-outline-info btn-sm">submit</button>
                     <span th:if="${selectedYear}"
-                          th:text="${'Tours for: '+selectedYear+' year'}"></span>
+                          th:text="${'Tours for: '+selectedYear+' year'}"
+                          style="color: white"></span>
                 </div>
             </div>
         </div>
@@ -40,16 +41,36 @@
                 <th data-sortable="true" data-field="id">
                     <button type="button" class="btn btn-outline-info btn-sm">ID</button>
                 </th>
-                <th data-sortable="true" data-field="title">TITLE</th>
-                <th data-sortable="true" data-field="start">START</th>
-                <th data-sortable="true" data-field="end">END</th>
-                <th data-sortable="true" data-field="days">DAYS</th>
-                <th data-sortable="true" data-field="drivers">DRIVERS</th>
-                <th data-sortable="true" data-field="guides">GUIDES</th>
-                <th data-sortable="true" data-field="tc" title="Tourists count">TC</th>
-                <th data-sortable="true" data-field="created_by">CREATED_BY</th>
-                <th data-sortable="true" data-field="file">FILE</th>
-                <th>DESCRIPTION</th>
+                <th data-sortable="true" data-field="title">
+                    <button type="button" class="btn btn-outline-info btn-sm">TITLE</button>
+                </th>
+                <th data-sortable="true" data-field="start">
+                    <button type="button" class="btn btn-outline-info btn-sm">START</button>
+                </th>
+                <th data-sortable="true" data-field="end">
+                    <button type="button" class="btn btn-outline-info btn-sm">END</button>
+                </th>
+                <th data-sortable="true" data-field="days">
+                    <button type="button" class="btn btn-outline-info btn-sm">DAYS</button>
+                </th>
+                <th data-sortable="true" data-field="drivers">
+                    <button type="button" class="btn btn-outline-info btn-sm">DRIVERS</button>
+                </th>
+                <th data-sortable="true" data-field="guides">
+                    <button type="button" class="btn btn-outline-info btn-sm">GUIDES</button>
+                </th>
+                <th data-sortable="true" data-field="tc" title="Tourists count">
+                    <button type="button" class="btn btn-outline-info btn-sm">TC</button>
+                </th>
+                <th data-sortable="true" data-field="created_by">
+                    <button type="button" class="btn btn-outline-info btn-sm">CREATED_BY</button>
+                </th>
+                <th data-sortable="true" data-field="file">
+                    <button type="button" class="btn btn-outline-info btn-sm">FILE</button>
+                </th>
+                <th>
+                    <button type="button" class="btn btn-outline-info btn-sm">DESCRIPTION</button>
+                </th>
                 <th>
                     <a href="/tours/add">
                         <button type="button" class="btn btn-sm btn-outline-success">add</button>
@@ -117,8 +138,6 @@
         $(document).ready(function() {
     $('#table').DataTable({searching: false, paging: false, info: false});
 } );
-
-
     </script>
 </th:block>
 </body>

@@ -220,7 +220,7 @@ public class PicassoApp {
         user2.setEnabled(true);
 
         var user3 = new User("testuser", "$2a$10$Z/.BLe3VelzXHnUKn9/.pOKKYnk9ctCW2WPj4wB7it/B9Q6gGbZtC");
-        user3.addAuthority("TEST_USER");
+        user3.addAuthority("USER");
         user3.setEnabled(true);
 
         userService.createUser(user1);

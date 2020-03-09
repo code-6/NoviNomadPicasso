@@ -99,13 +99,15 @@
                class="table table-sm table-striped table-bordered table-hover results">
             <thead class="thead-dark">
             <tr>
-                <th>TITLE</th>
+                <th data-sortable="true" data-field="title">TITLE</th>
 
-                <th>GUIDES</th>
+                <th data-sortable="true" data-field="guides">GUIDES</th>
 
-                <th>DRIVERS</th>
+                <th data-sortable="true" data-field="drivers">DRIVERS</th>
 
-                <th th:style="${'padding: 0.01rem; width: 2%; text-align: center;'}" title="tourists count">TC</th>
+                <th th:style="${'padding: 0.01rem; width: 2%; text-align: center;'}"
+                    title="tourists count"
+                    data-sortable="true" data-field="tc">TC</th>
 
                 <th th:each="d: ${days}" th:style="${'padding: 0.01rem; width: 2%; text-align: center;'}">
 					<span th:style="${d.getDayOfWeek().name().substring(0,2) == 'SA'|| d.getDayOfWeek().name().substring(0,2) == 'SU'} ? ${'color: red;'}"
@@ -124,8 +126,12 @@
             </thead>
             <tbody>
             <tr th:each="t: ${tours}">
-                <td th:text="${t.tittle}" th:title="${t.description}" class="text-truncate"
-                    style="max-width: 130px;"></td>
+                <td class="text-truncate"
+                    style="max-width: 130px;">
+                    <a th:href="@{/tours/details{id}(id=${t.id})}"
+                       th:text="${t.tittle}"
+                       th:title="${t.description}"></a>
+                </td>
 
                 <td>
                 <span th:each="g: ${t.guides}">
@@ -187,7 +193,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
-
     <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
 
     <script type="text/javascript" th:src="@{/js/tableSearch.js}"></script>
