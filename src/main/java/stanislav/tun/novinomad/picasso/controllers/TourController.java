@@ -78,7 +78,6 @@ public class TourController {
             year = LocalDate.now().getYear();
         } else {
             allTours = tourService.getToursByYear(year);
-            YearHolder.yearHolder = year;
         }
 
         mav.addObject("selectedYear", year);
@@ -301,7 +300,10 @@ public class TourController {
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
         logger.debug("Advanced save tour = " + getString(tour));
-        mav.setViewName("redirect:/tours/list");
+        var m = tour.getStartDate().getMonth().getValue();
+        var y = tour.getStartDate().getYear();
+        var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
+        mav.setViewName(r);
         return mav;
     }
 

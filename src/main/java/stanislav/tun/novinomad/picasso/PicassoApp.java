@@ -209,7 +209,7 @@ public class PicassoApp {
         }
     }
 
-    @PostConstruct
+//    @PostConstruct
     private void init(){
         var user1 = new User("visitor", "$2a$10$lnyXL7Jc.PlCMdrxSXyIu.5klIHkztPUaDwQBHoRdqdc20rjOJZHC");
         user1.addAuthority("VISITOR");
@@ -227,9 +227,9 @@ public class PicassoApp {
         userService.createUser(user2);
         userService.createUser(user3);
 
-        createDriversLoop(30);
-        createGuidesLoop(30);
-        createToursLoop(500, 2);
+//        createDriversLoop(30);
+//        createGuidesLoop(30);
+//        createToursLoop(500, 2);
     }
 
 }

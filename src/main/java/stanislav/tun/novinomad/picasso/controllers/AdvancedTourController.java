@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import stanislav.tun.novinomad.picasso.persistance.pojos.YearHolder;
-import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
@@ -45,27 +43,24 @@ public class AdvancedTourController {
         if (year == null)
             year = String.valueOf(LocalDate.now().getYear());
 
-        if(YearHolder.yearHolder == 0)
-            YearHolder.yearHolder = Integer.valueOf(year);
-
         var mav = new ModelAndView();
         mav.setViewName("toursCalendarPage");
 
-        var ym = YearMonth.of(Integer.valueOf(YearHolder.yearHolder), month);
+        var ym = YearMonth.of(Integer.parseInt(year), month);
         var totalDays = ym.lengthOfMonth();
         var days = new LocalDate[totalDays];
         // fill dates
         for (int i = 0; i < totalDays; i++) {
-            days[i] = LocalDate.of(YearHolder.yearHolder, month, i + 1);
+            days[i] = LocalDate.of(Integer.parseInt(year), month, i + 1);
         }
         // put days of month with days of week
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
         mav.addObject("selectedMonth", num2month(month));
         mav.addObject("selectedMonthNum", month);
-        mav.addObject("selectedYear", YearHolder.yearHolder);
+        mav.addObject("selectedYear", year);
         // add tours created for entered month
-        var tours = tourService.getToursForDate(month, YearHolder.yearHolder);
+        var tours = tourService.getToursForDate(month, Integer.parseInt(year));
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
         return mav;
