@@ -1,4 +1,4 @@
-package stanislav.tun.novinomad.picasso.security.services;
+package stanislav.tun.novinomad.picasso.persistance.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
