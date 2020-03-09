@@ -17,7 +17,7 @@ public class OverlapsException extends Exception {
         this.overlapsTour = overlapsTour;
         try {
             LocalDateTime overlapsStart = null, overlapsEnd = null;
-            // dS - E
+
             if (tour.getStartDate().isBefore(overlapsTour.getStartDate())) {
                 overlapsStart = overlapsTour.getStartDate();
             } else if (tour.getStartDate().isAfter(overlapsTour.getStartDate())) {
@@ -26,19 +26,15 @@ public class OverlapsException extends Exception {
                 overlapsStart = tour.getStartDate();
             }
 
-            if(tour.getEndDate().isBefore(overlapsTour.getEndDate())){
+            if (tour.getEndDate().isBefore(overlapsTour.getEndDate())) {
                 overlapsEnd = tour.getEndDate();
-            }else if(tour.getEndDate().isAfter(overlapsTour.getEndDate())){
+            } else if (tour.getEndDate().isAfter(overlapsTour.getEndDate())) {
                 overlapsEnd = overlapsTour.getEndDate();
-            }else if (tour.getEndDate().isEqual(overlapsTour.getEndDate())){
+            } else if (tour.getEndDate().isEqual(overlapsTour.getEndDate())) {
                 overlapsEnd = tour.getEndDate();
             }
 
             overlapsRange = new DateTimeRange(overlapsStart, overlapsEnd);
-            // S - dE
-            // dS - dE
-            // S - E
-            // (dS = S) - e
         } catch (ValidationException e) {
             e.printStackTrace();
         }
@@ -54,12 +50,16 @@ public class OverlapsException extends Exception {
         if (entity instanceof Driver) {
             Driver d = (Driver) entity;
 
-            result = String.format("Can't add participant %s to \ntour %s \nfor date %s \ncause overlaps with \ntour %s. \nOverlaps range %s",
-                    d.getFullName(),
-                    tour.getTittle(),
-                    tour.getStartDate() + " - " + tour.getEndDate(),
-                    overlapsTour.getTittle() + " " + overlapsTour.getStartDate() + " - " + overlapsTour.getEndDate(),
-                    overlapsRange.toString());
+            try {
+                result = String.format("Can't add participant %s to \ntour %s \nfor date %s \ncause overlaps with \ntour %s. \nOverlaps range %s",
+                        d.getFullName(),
+                        tour.getTittle(),
+                        new DateTimeRange(tour.getStartDate(),tour.getEndDate()).toString(),
+                        overlapsTour.getTittle() + " " + new DateTimeRange(overlapsTour.getStartDate(), overlapsTour.getEndDate()).toString(),
+                        overlapsRange.toString());
+            } catch (ValidationException e) {
+                // ignored
+            }
 
         } else if (entity instanceof Guide) {
             Guide d = (Guide) entity;
@@ -67,9 +67,9 @@ public class OverlapsException extends Exception {
                 result = String.format("Can't add participant %s to tour %s for date %s cause overlaps with tour %s. Overlaps range %s",
                         d.getFullName(),
                         tour.getTittle(),
-                        tour.getStartDate() + " - " + tour.getEndDate(),
-                        overlapsTour.getTittle() + " " + tour.getStartDate() + " - " + tour.getEndDate(),
-                        new DateTimeRange(overlapsTour.getStartDate(), tour.getEndDate()).toString());
+                        new DateTimeRange(tour.getStartDate(),tour.getEndDate()).toString(),
+                        overlapsTour.getTittle() + " " + new DateTimeRange(overlapsTour.getStartDate(), overlapsTour.getEndDate()).toString(),
+                        overlapsRange.toString());
             } catch (ValidationException e) {
                 // ignored
             }
