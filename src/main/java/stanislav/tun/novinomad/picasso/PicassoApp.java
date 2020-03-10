@@ -19,11 +19,10 @@ import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 import stanislav.tun.novinomad.picasso.security.audit.AuditorAwareImpl;
+import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import javax.xml.bind.ValidationException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
