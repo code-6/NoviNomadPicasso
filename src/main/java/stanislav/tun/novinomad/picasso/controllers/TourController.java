@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -17,6 +18,7 @@ import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.exceptions.OverlapsException;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
+import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
 import stanislav.tun.novinomad.picasso.util.IntervalResolver;
 import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
@@ -46,6 +48,15 @@ public class TourController {
     DriverService driverService;
 
     @Autowired
+    ConcurrentHolder holder;
+
+    @Autowired
+    AuditorAware auditor;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
     DriverIntervalService driverIntervalService;
 
     @Autowired
@@ -71,6 +82,8 @@ public class TourController {
     @RequestMapping("/list")
     public ModelAndView getToursListView(@RequestParam(required = false, name = "year") Integer year) {
         logger.debug("year value = " + year);
+        User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
+        holder.release(user);
         var mav = new ModelAndView("toursListPage");
         List<Tour> allTours;
         if (year == null) {

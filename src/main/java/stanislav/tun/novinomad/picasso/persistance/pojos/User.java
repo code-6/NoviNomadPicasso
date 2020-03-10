@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "users")
@@ -81,5 +82,22 @@ public class User {
 
     public void setAuthorities(Set<SimpleGrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                enabled == user.enabled &&
+                userName.equals(user.userName) &&
+                password.equals(user.password) &&
+                authorities.equals(user.authorities);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName, password, enabled, authorities);
     }
 }

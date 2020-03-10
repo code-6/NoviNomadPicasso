@@ -3,15 +3,19 @@ package stanislav.tun.novinomad.picasso.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import stanislav.tun.novinomad.picasso.persistance.pojos.User;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.TourService;
+import stanislav.tun.novinomad.picasso.persistance.services.UserService;
+import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -31,11 +35,23 @@ public class AdvancedTourController {
     @Autowired
     private GuideService guideService;
 
+    @Autowired
+    ConcurrentHolder holder;
+
+    @Autowired
+    AuditorAware auditor;
+
+    @Autowired
+    UserService userService;
+
+
     private Logger logger = LoggerFactory.getLogger(AdvancedTourController.class);
 
     @GetMapping("/getview")
     public ModelAndView getView(@RequestParam(required = false, name = "month") Integer month,
                                 @RequestParam(required = false, name = "year") String year) {
+        User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
+        holder.release(user);
         // set default values for month and year. Current date by default
         if (month == null)
             month = LocalDate.now().getMonthValue();

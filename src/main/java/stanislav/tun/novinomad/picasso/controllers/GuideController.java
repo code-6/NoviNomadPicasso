@@ -3,13 +3,17 @@ package stanislav.tun.novinomad.picasso.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
+import stanislav.tun.novinomad.picasso.persistance.pojos.User;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
+import stanislav.tun.novinomad.picasso.persistance.services.UserService;
+import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
 import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 @Controller
@@ -18,10 +22,22 @@ public class GuideController {
     @Autowired
     GuideService guideService;
 
+    @Autowired
+    ConcurrentHolder holder;
+
+    @Autowired
+    AuditorAware auditor;
+
+    @Autowired
+    UserService userService;
+
+
     Logger logger = LoggerFactory.getLogger(GuideController.class);
 
     @RequestMapping("/list")
     public ModelAndView getGuidesListView() {
+        User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
+        holder.release(user);
         var guides = guideService.getGuidesList();
         var modelAndView = new ModelAndView();
         modelAndView.addObject("guides", guides);

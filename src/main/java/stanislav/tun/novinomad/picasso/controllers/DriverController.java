@@ -35,6 +35,8 @@ public class DriverController {
 
     @RequestMapping("/list")
     public ModelAndView getDriversListView() {
+        User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
+        holder.release(user);
         var drivers = driverService.getDriversList();
         var modelAndView = new ModelAndView();
         modelAndView.addObject("drivers", drivers);
