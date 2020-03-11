@@ -7,11 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
@@ -21,6 +23,7 @@ import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 import stanislav.tun.novinomad.picasso.security.audit.AuditorAwareImpl;
 import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
@@ -65,6 +68,11 @@ public class PicassoApp {
     @Scope("singleton")
     public ConcurrentHolder concurrentHolderSingleton(){
         return new ConcurrentHolder();
+    }
+
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
     }
 
     public static void main(String[] args) {
@@ -215,7 +223,7 @@ public class PicassoApp {
         }
     }
 
-//    @PostConstruct
+    @PostConstruct
     private void init(){
         var user1 = new User("visitor", "$2a$10$lnyXL7Jc.PlCMdrxSXyIu.5klIHkztPUaDwQBHoRdqdc20rjOJZHC");
         user1.addAuthority("VISITOR");
@@ -233,8 +241,8 @@ public class PicassoApp {
         userService.createUser(user2);
         userService.createUser(user3);
 
-//        createDriversLoop(30);
-//        createGuidesLoop(30);
+        createDriversLoop(10);
+        createGuidesLoop(10);
 //        createToursLoop(500, 2);
     }
 

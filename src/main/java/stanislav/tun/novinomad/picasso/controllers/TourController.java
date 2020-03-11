@@ -277,7 +277,7 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
-            System.out.println("all days = " + allDays + " for driver " + d.getFullName());
+            logger.debug("Fill picker advanced. All days = " + allDays + " for driver " + d.getFullName());
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
@@ -312,6 +312,13 @@ public class TourController {
 
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
+
+        var minDriver = tour.getMinDriverStart();
+        var maxDriver = tour.getMaxDriverEnd();
+
+        var minGuide = tour.getMinGuideStart();
+        var maxGuide = tour.getMaxGuideEnd();
+
         logger.debug("Advanced save tour = " + getString(tour));
         var m = tour.getStartDate().getMonth().getValue();
         var y = tour.getStartDate().getYear();
@@ -338,6 +345,7 @@ public class TourController {
                 var dateTimeRange = DateTimeRange.parseSingle(dates);
                 var dti = new DriverTourIntervals(tour, dateTimeRange, d);
                 d.getDriverTourIntervals().add(dti);
+                tour.getDriverIntervals().add(dti);
                 // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
                 driverIntervalService.createOrUpdateInterval(dti);
 
@@ -365,6 +373,7 @@ public class TourController {
                 var dateTimeRange = DateTimeRange.parseSingle(dates);
                 var gti = new GuideTourIntervals(tour, dateTimeRange, guide);
                 guide.getGuideTourIntervals().add(gti);
+                tour.getGuideIntervals().add(gti);
                 // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
                 guideIntervalService.createOrUpdateInterval(gti);
 
@@ -531,6 +540,11 @@ public class TourController {
                 }
             }
         }
+    }
+
+    public boolean hasEmptyDays(Tour tour){
+
+        return false;
     }
 
 
