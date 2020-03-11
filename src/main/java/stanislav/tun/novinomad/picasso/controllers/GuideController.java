@@ -31,7 +31,6 @@ public class GuideController {
     @Autowired
     UserService userService;
 
-
     Logger logger = LoggerFactory.getLogger(GuideController.class);
 
     @RequestMapping("/list")
@@ -41,7 +40,7 @@ public class GuideController {
         var guides = guideService.getGuidesList();
         var modelAndView = new ModelAndView();
         modelAndView.addObject("guides", guides);
-        modelAndView.setViewName("guidesListPage.html");
+        modelAndView.setViewName("guidesListPage");
         modelAndView.addObject("activeGuides", true);
         return modelAndView;
     }
@@ -52,7 +51,7 @@ public class GuideController {
         var guide = new Guide();
         var modelAndView = new ModelAndView();
         modelAndView.addObject("guide", guide);
-        modelAndView.setViewName("addGuidePage.html");
+        modelAndView.setViewName("addGuidePage");
         return modelAndView;
     }
 
@@ -61,25 +60,47 @@ public class GuideController {
         var guide = guideService.getGuide(guideId);
         var mav = new ModelAndView();
         mav.addObject("guide", guide);
-        mav.setViewName("addGuidePage.html");
+        mav.setViewName("addGuidePage");
+        User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
+        if (holder.isHold(guide.get())) {
+            mav.addObject("error", "Edit is not available!");
+            var desc = "This entity currently edited by user: " + holder.getHolderOf(guide.get()).getUserName()
+                    + ". Try again later or request  to release this entity";
+            mav.addObject("errorDesc", desc);
+        } else {
+            holder.hold(guide.get(), user);
+        }
         return mav;
     }
 
     @RequestMapping(value = "/delete{id}")
-    public String deleteGuide(@PathVariable(value = "id") Long guideId){
+    public ModelAndView deleteGuide(@PathVariable(value = "id") Long guideId){
+        var mav = new ModelAndView();
         var guide = guideService.getGuide(guideId);
         if(!guide.isEmpty() && guide.isPresent()){
             var g = guide.get();
-            g.setDeleted(true);
-            guideService.createOrUpdateGuide(g);
+            if (holder.isHold(g)) {
+                mav.addObject("error", "Delete is not available!");
+                var desc = "This entity currently edited by user: " + holder.getHolderOf(g).getUserName();
+                mav.addObject("errorDesc", desc);
+            } else {
+                g.setDeleted(true);
+                guideService.createOrUpdateGuide(g);
+            }
         }
-
-        return "redirect:/guides/list";
+        mav.addObject("guides", guideService.getGuidesList());
+        mav.addObject("activeGuides", true);
+        mav.setViewName("guidesListPage");
+        return mav;
     }
 
     // action todo: make single method for adding guide to db
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addOrUpdateGuideAction(Guide guide) {
+        // if exist => edit => hold
+        if(guideService.exist(guide))
+            holder.release(guide);
+        
         guideService.createOrUpdateGuide(guide);
         return "redirect:/guides/list";
     }

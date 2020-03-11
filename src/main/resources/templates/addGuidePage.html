@@ -12,6 +12,19 @@
     <br/>
     <!--/*@thymesVar id="guide" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
     <form action="#" th:action="@{/guides/save}" th:object="${guide}" method="post">
+
+        <div th:if="${error}" >
+            <h1 th:text="${error}"></h1>
+            <h2 th:text="${errorDesc}"></h2>
+            <script th:inline="javascript">
+                $(document).ready(function () {
+                    $("#myModal").modal("show");
+                });
+            </script>
+
+            <div th:replace="fragments/notification"></div>
+        </div>
+
         <table border="0" cellpadding="10">
             <tr>
                 <td>First name:</td>
@@ -35,7 +48,12 @@
 
             <tr>
                 <td colspan="2">
-                    <button type="submit" class="btn btn-outline-success">Confirm</button>
+                    <div th:if="${error}">
+                        <button type="submit" class="btn btn-outline-success" disabled>Confirm</button>
+                    </div>
+                    <div th:unless="${error}">
+                        <button type="submit" class="btn btn-outline-success">Confirm</button>
+                    </div>
                 </td>
             </tr>
 

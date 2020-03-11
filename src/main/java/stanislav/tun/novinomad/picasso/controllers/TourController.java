@@ -232,6 +232,7 @@ public class TourController {
                 getAdvancedPage(tour, wrapper);
             }
         } else { // set to whole tour by default
+            // todo: release tour only if advanced no pressed, otherwise release only after advanced confirm
             setDefaultIntervals(tour);
             var m = tour.getStartDate().getMonth().getValue();
             var y = tour.getStartDate().getYear();

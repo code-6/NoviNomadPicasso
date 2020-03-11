@@ -59,8 +59,7 @@ public class DriverController {
         if (holder.isHold(driver.get())) {
             mav.addObject("error", "Edit is not available!");
             var desc = "This entity currently edited by user: " + holder.getHolderOf(driver.get()).getUserName()
-                    + ". Try again later or request"
-                    + " to release this entity";
+                    + ". Try again later or request to release this entity";
             mav.addObject("errorDesc", desc);
         } else {
             holder.hold(driver.get(), user);
@@ -97,7 +96,7 @@ public class DriverController {
         var driver = new Driver();
         var modelAndView = new ModelAndView();
         modelAndView.addObject("driver", driver);
-        modelAndView.setViewName("addDriverPage.html");
+        modelAndView.setViewName("addDriverPage");
         return modelAndView;
     }
 
