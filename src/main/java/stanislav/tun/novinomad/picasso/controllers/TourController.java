@@ -75,6 +75,7 @@ public class TourController {
 
         map.put("guides", guideService.getGuidesList());
         map.put("guidesExclude", tour.getGuides());
+
         logger.debug("/tours/add requested. Returned view with tour " + JsonPrinter.getString(tour));
         return new ModelAndView("addTourPage", map);
     }
@@ -83,6 +84,7 @@ public class TourController {
     public ModelAndView getToursListView(@RequestParam(required = false, name = "year") Integer year) {
         logger.debug("year value = " + year);
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
+        // release all for current user
         holder.release(user);
         var mav = new ModelAndView("toursListPage");
         List<Tour> allTours;
@@ -119,6 +121,18 @@ public class TourController {
         var tour = tourService.getTour(tourId).get();
         logger.debug("tour = " + JsonPrinter.getString(tour));
         var mav = new ModelAndView();
+        User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
+        // show error if tour is hold
+        if(holder.isHold(tour)){
+            mav.addObject("error", "Edit is not available!");
+            var desc = "This entity currently edited by user: " + holder.getHolderOf(tour).getUserName()
+                    + ". Try again later or request  to release this entity";
+            mav.addObject("errorDesc", desc);
+            mav.addObject("disableButtons", true);
+        }else {
+            // unless => hold tour
+            holder.hold(tour, user);
+        }
         mav.addObject("tour", tour);
         var allDrivers = driverService.getDriversList();
         var allGuides = guideService.getGuidesList();
@@ -195,18 +209,6 @@ public class TourController {
         // todo : refactor duplicate try-catch blocks
         try {
             attachDrivers(drivers2attach, tour);
-        } catch (OverlapsException e) {
-            mav = getAddTourView();
-            mav.addObject("error", "Tours date range conflict!");
-            mav.addObject("errorDesc", e.getMessage());
-            mav.addObject("exception", e);
-            mav.addObject("tour", tour);
-            logger.error("OVERLAPS " + e.getMessage());
-            return mav;
-        }
-        excludeDrivers(drivers2exclude, tour);
-
-        try {
             attachGuides(guides2attach, tour);
         } catch (OverlapsException e) {
             mav = getAddTourView();
@@ -217,8 +219,19 @@ public class TourController {
             logger.error("OVERLAPS " + e.getMessage());
             return mav;
         }
+        excludeDrivers(drivers2exclude, tour);
         excludeGuides(guides2exclude, tour);
-
+//        try {
+//
+//        } catch (OverlapsException e) {
+//            mav = getAddTourView();
+//            mav.addObject("error", "Tours date range conflict!");
+//            mav.addObject("errorDesc", e.getMessage());
+//            mav.addObject("exception", e);
+//            mav.addObject("tour", tour);
+//            logger.error("OVERLAPS " + e.getMessage());
+//            return mav;
+//        }
         tourService.createOrUpdateTour(tour);
         if (adv) {
             if (tour.getStartDate() == null && tour.getEndDate() == null) {
@@ -233,6 +246,7 @@ public class TourController {
             }
         } else { // set to whole tour by default
             // todo: release tour only if advanced no pressed, otherwise release only after advanced confirm
+            holder.release(tour);
             setDefaultIntervals(tour);
             var m = tour.getStartDate().getMonth().getValue();
             var y = tour.getStartDate().getYear();
@@ -259,8 +273,6 @@ public class TourController {
         // this view is also used for edit attached days, and we shall auto fill input fields, if driver was attached for a spec days
         wrapDrivers(attachedDrivers, tour, wrapper);
         wrapGuides(attachedGuides, tour, wrapper);
-
-
     }
 
     private void wrapDrivers(Set<Driver> attachedDrivers, Tour tour, MapWrapper wrapper) {
@@ -310,15 +322,15 @@ public class TourController {
         var mav = new ModelAndView();
         mav.addObject("wrapper", wrapper);
         var tour = tourService.getTour(tourId).get();
-
+        holder.release(tour);
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
 
-        var minDriver = tour.getMinDriverStart();
-        var maxDriver = tour.getMaxDriverEnd();
-
-        var minGuide = tour.getMinGuideStart();
-        var maxGuide = tour.getMaxGuideEnd();
+//        var minDriver = tour.getMinDriverStart();
+//        var maxDriver = tour.getMaxDriverEnd();
+//
+//        var minGuide = tour.getMinGuideStart();
+//        var maxGuide = tour.getMaxGuideEnd();
 
         logger.debug("Advanced save tour = " + getString(tour));
         var m = tour.getStartDate().getMonth().getValue();

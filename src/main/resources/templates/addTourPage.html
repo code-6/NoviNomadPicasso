@@ -170,11 +170,23 @@
 
 			<tr>
 				<td colspan="2">
+					<div th:if="${disableButtons}">
+						<button type="submit" th:name="adv" th:value="true"
+						        class="btn btn-outline-warning" disabled>advanced options</button>
+
+						<button type="submit" class="btn btn-outline-success" disabled>Confirm</button>
+					</div>
+					<div th:unless="${disableButtons}">
+						<button type="submit" th:name="adv" th:value="true"
+						        class="btn btn-outline-warning">advanced options</button>
+
+						<button type="submit" class="btn btn-outline-success">Confirm</button>
+					</div>
 					<!--					<script th:src="@{/js/openIntervalInput.js}" type="text/javascript"></script>-->
-					<button id="advancedButton" type="submit" th:name="adv" th:value="true"
-					        class="btn btn-outline-warning">advanced options
-					</button>
-					<button type="submit" class="btn btn-outline-success">Confirm</button>
+<!--					<button id="advancedButton" type="submit" th:name="adv" th:value="true"-->
+<!--					        class="btn btn-outline-warning">advanced options</button>-->
+<!--					-->
+<!--					<button type="submit" class="btn btn-outline-success">Confirm</button>-->
 				</td>
 			</tr>
 		</table>
