@@ -57,10 +57,12 @@ public class DriverController {
         mav.setViewName("addDriverPage");
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         if (holder.isHold(driver.get())) {
+            mav = getDriversListView();
             mav.addObject("error", "Edit is not available!");
             var desc = "This entity currently edited by user: " + holder.getHolderOf(driver.get()).getUserName()
                     + ". Try again later or request to release this entity";
             mav.addObject("errorDesc", desc);
+            return mav;
         } else {
             holder.hold(driver.get(), user);
         }
@@ -75,10 +77,11 @@ public class DriverController {
         if (!driver.isEmpty() && driver.isPresent()) {
             var d = driver.get();
             if (holder.isHold(d)) {
-                mav.addObject("error", "Delete is not available!");
+                mav = getDriversListView();
+                mav.addObject("error", "Delete rejected!");
                 var desc = "This entity currently edited by user: " + holder.getHolderOf(d).getUserName();
                 mav.addObject("errorDesc", desc);
-//                return mav;
+                return mav;
             } else {
                 d.setDeleted(true);
                 driverService.createOrUpdateDriver(d);
@@ -107,7 +110,7 @@ public class DriverController {
 //        modelAndView.setViewName("redirect:/drivers/add");
         modelAndView.setViewName("redirect:/drivers/list");
         // if exist => edit => hold
-        if(driverService.exist(driver))
+        if (driverService.exist(driver))
             holder.release(driver);
 
         driverService.createOrUpdateDriver(driver);

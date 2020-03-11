@@ -10,10 +10,21 @@
 			box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 		}
     </style>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
 </head>
 
 <body>
 <div layout:fragment="content" class="jumbotron">
+    <div th:if="${error}" >
+        <script th:inline="javascript">
+                $(document).ready(function () {
+                    $("#myModal").modal("show");
+                });
+            </script>
+
+        <div th:replace="fragments/notification"></div>
+    </div>
     <table id="table" class="table table-sm">
         <caption>List of guides</caption>
         <thead class="thead-dark">
@@ -65,19 +76,11 @@
     </table>
 </div>
 <th:block layout:fragment="script">
-    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
+
 <!--    todo: replace to include from webjars-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
-
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
-
-    <script>
-        function deleteConfirm() {
-            confirm("Are you sure?");
-        }
-    </script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" th:src="@{/js/tableSearch.js}"></script>
     <script>

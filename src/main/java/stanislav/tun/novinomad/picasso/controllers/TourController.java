@@ -124,11 +124,12 @@ public class TourController {
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         // show error if tour is hold
         if(holder.isHold(tour)){
+            mav = getToursListView(LocalDate.now().getYear());
             mav.addObject("error", "Edit is not available!");
             var desc = "This entity currently edited by user: " + holder.getHolderOf(tour).getUserName()
                     + ". Try again later or request  to release this entity";
             mav.addObject("errorDesc", desc);
-            mav.addObject("disableButtons", true);
+            return mav;
         }else {
             // unless => hold tour
             holder.hold(tour, user);

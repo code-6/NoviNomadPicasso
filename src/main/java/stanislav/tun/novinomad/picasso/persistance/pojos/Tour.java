@@ -180,10 +180,6 @@ public class Tour extends AbstractEntity implements Serializable {
 
     @JsonIgnore
     @Transient
-    private DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-
-    @JsonIgnore
-    @Transient
     public LocalDateTime getMinDriverStart() {
         // first create a copy of set
         LocalDateTime min = null;
@@ -205,7 +201,7 @@ public class Tour extends AbstractEntity implements Serializable {
             e.printStackTrace();
         }
 
-        logger.debug("Minimal start date of driver = " + formatter.format(min));
+        logger.debug("Minimal start date of driver = " + f.format(min));
         return min;
     }
 
@@ -231,7 +227,7 @@ public class Tour extends AbstractEntity implements Serializable {
         } catch (ValidationException | NullPointerException e) {
             e.printStackTrace();
         }
-        logger.debug("Maximal end date of driver = " + max);
+        logger.debug("Maximal end date of driver = " + f.format(max));
         return max;
     }
 
@@ -258,7 +254,7 @@ public class Tour extends AbstractEntity implements Serializable {
         } catch (ValidationException | NullPointerException e) {
             e.printStackTrace();
         }
-        logger.debug("Minimal start date of guide = " + formatter.format(min));
+        logger.debug("Minimal start date of guide = " + f.format(min));
         return min;
     }
 
@@ -284,7 +280,7 @@ public class Tour extends AbstractEntity implements Serializable {
         } catch (ValidationException | NullPointerException e) {
             e.printStackTrace();
         }
-        logger.debug("Maximal end date of guide = " + formatter.format(max));
+        logger.debug("Maximal end date of guide = " + f.format(max));
         return max;
     }
 

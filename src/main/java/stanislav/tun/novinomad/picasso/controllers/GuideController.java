@@ -60,16 +60,19 @@ public class GuideController {
         var guide = guideService.getGuide(guideId);
         var mav = new ModelAndView();
         mav.addObject("guide", guide);
-        mav.setViewName("addGuidePage");
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         if (holder.isHold(guide.get())) {
+            mav = getGuidesListView();
             mav.addObject("error", "Edit is not available!");
             var desc = "This entity currently edited by user: " + holder.getHolderOf(guide.get()).getUserName()
                     + ". Try again later or request  to release this entity";
             mav.addObject("errorDesc", desc);
+
+            return mav;
         } else {
             holder.hold(guide.get(), user);
         }
+        mav.setViewName("addGuidePage");
         return mav;
     }
 
@@ -80,9 +83,13 @@ public class GuideController {
         if(!guide.isEmpty() && guide.isPresent()){
             var g = guide.get();
             if (holder.isHold(g)) {
-                mav.addObject("error", "Delete is not available!");
-                var desc = "This entity currently edited by user: " + holder.getHolderOf(g).getUserName();
+                mav = getGuidesListView();
+                mav.addObject("error", "Delete rejected!");
+                var desc = "This entity currently edited by user: " + holder.getHolderOf(guide.get()).getUserName()
+                        + ". Try again later or request  to release this entity";
                 mav.addObject("errorDesc", desc);
+
+                return mav;
             } else {
                 g.setDeleted(true);
                 guideService.createOrUpdateGuide(g);

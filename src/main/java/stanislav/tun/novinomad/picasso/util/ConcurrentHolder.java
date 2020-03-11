@@ -16,6 +16,7 @@ public class ConcurrentHolder {
     private Map<Driver, User> driversHolder = new HashMap<>();
     private Map<Guide, User> guidesHolder = new HashMap<>();
     private Map<Tour, User> toursHolder = new HashMap<>();
+    private Map<Integer, User> yearHolder = new HashMap<>();
 
     @Autowired
     private DriverService driverService;
@@ -38,6 +39,10 @@ public class ConcurrentHolder {
             toursHolder.put((Tour) entity, user);
             logger.debug("Hold tour: " + ((Tour) entity).getTittle() + " by user: " + user.getUserName());
         }
+    }
+
+    public void hold(Integer year, User user){
+        yearHolder.put(year, user);
     }
 
     /**
