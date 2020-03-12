@@ -181,24 +181,18 @@ public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
     public LocalDateTime getMinDriverStart() {
-        // first create a copy of set
+        
         LocalDateTime min = null;
-        try {
-            DriverTourIntervals[] origin = driverIntervals.stream().toArray(n -> new DriverTourIntervals[n]);
 
-            // sort elements by start date
-            // get first element as initial point of sort
-            min = origin[0].getInterval().getStart();
-            // iterate over other elements
-            for (int i = 1; i < origin.length; i++) {
-                // if next element grater than max
-                if (origin[1].getInterval().getStart().isBefore(min)) {
-                    // max = grater element
-                    min = origin[1].getInterval().getStart();
-                }
+        var i = driverIntervals.iterator();
+        if(i.hasNext()){
+            min = i.next().getStartDate();
+        }
+        while (i.hasNext()){
+            var next = i.next();
+            if(next.getStartDate().isBefore(min)){
+                min = next.getStartDate();
             }
-        } catch (ValidationException | NullPointerException e) {
-            e.printStackTrace();
         }
 
         logger.debug("Minimal start date of driver = " + f.format(min));
@@ -208,24 +202,17 @@ public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
     public LocalDateTime getMaxDriverEnd() {
-        // first create a copy of set
+        
         LocalDateTime max = null;
-        try {
-            DriverTourIntervals[] origin = driverIntervals.stream().toArray(n -> new DriverTourIntervals[n]);
-            // sort elements by start date
-
-            // get first element as initial point of sort
-            max = origin[0].getInterval().getEnd();
-            // iterate over other elements
-            for (int i = 1; i < origin.length; i++) {
-                // if next element grater than max
-                if (origin[1].getInterval().getEnd().isAfter(max)) {
-                    // max = grater element
-                    max = origin[1].getInterval().getEnd();
-                }
+        var i = driverIntervals.iterator();
+        if(i.hasNext()){
+            max = i.next().getStartDate();
+        }
+        while (i.hasNext()){
+            var next = i.next();
+            if(next.getStartDate().isAfter(max)){
+                max = next.getStartDate();
             }
-        } catch (ValidationException | NullPointerException e) {
-            e.printStackTrace();
         }
         logger.debug("Maximal end date of driver = " + f.format(max));
         return max;
@@ -234,25 +221,17 @@ public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
     public LocalDateTime getMinGuideStart() {
-        // first create a copy of set
+        
         LocalDateTime min = null;
-        try {
-            GuideTourIntervals[] origin = guideIntervals.stream().toArray(n -> new GuideTourIntervals[n]);
-
-            // sort elements by start date
-
-            // get first element as initial point of sort
-            min = origin[0].getInterval().getStart();
-            // iterate over other elements
-            for (int i = 1; i < origin.length; i++) {
-                // if next element grater than max
-                if (origin[1].getInterval().getStart().isBefore(min)) {
-                    // max = grater element
-                    min = origin[1].getInterval().getStart();
-                }
+        var i = guideIntervals.iterator();
+        if(i.hasNext()){
+            min = i.next().getStartDate();
+        }
+        while (i.hasNext()){
+            var next = i.next();
+            if(next.getStartDate().isBefore(min)){
+                min = next.getStartDate();
             }
-        } catch (ValidationException | NullPointerException e) {
-            e.printStackTrace();
         }
         logger.debug("Minimal start date of guide = " + f.format(min));
         return min;
@@ -261,24 +240,17 @@ public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
     public LocalDateTime getMaxGuideEnd() {
-        // first create a copy of set
+        
         LocalDateTime max = null;
-        try {
-            GuideTourIntervals[] origin = guideIntervals.stream().toArray(n -> new GuideTourIntervals[n]);
-            // sort elements by start date
-
-            // get first element as initial point of sort
-            max = origin[0].getInterval().getEnd();
-            // iterate over other elements
-            for (int i = 1; i < origin.length; i++) {
-                // if next element grater than max
-                if (origin[1].getInterval().getEnd().isAfter(max)) {
-                    // max = grater element
-                    max = origin[1].getInterval().getEnd();
-                }
+        var i = guideIntervals.iterator();
+        if(i.hasNext()){
+            max = i.next().getStartDate();
+        }
+        while (i.hasNext()){
+            var next = i.next();
+            if(next.getStartDate().isAfter(max)){
+                max = next.getStartDate();
             }
-        } catch (ValidationException | NullPointerException e) {
-            e.printStackTrace();
         }
         logger.debug("Maximal end date of guide = " + f.format(max));
         return max;

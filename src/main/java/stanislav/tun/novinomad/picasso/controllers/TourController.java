@@ -112,6 +112,12 @@ public class TourController {
             mav.addObject("tour", t);
         }
 
+        var minDriver = tour.get().getMinDriverStart();
+        var maxDriver = tour.get().getMaxDriverEnd();
+
+        var minGuide = tour.get().getMinGuideStart();
+        var maxGuide = tour.get().getMaxGuideEnd();
+
         return mav;
     }
 
@@ -169,11 +175,13 @@ public class TourController {
                 for (Driver d : attachedDrivers) {
                     var dti = new DriverTourIntervals(tour, new DateTimeRange(tour.getStartDate(), tour.getEndDate()), d);
                     //todo: why it not updates already existing rows in DB?
+                    tour.getDriverIntervals().add(dti);
                     driverIntervalService.createOrUpdateInterval(dti);
                 }
 
                 for (Guide g : attachedGuides) {
                     var gti = new GuideTourIntervals(tour, new DateTimeRange(tour.getStartDate(), tour.getEndDate()), g);
+                    tour.getGuideIntervals().add(gti);
                     guideIntervalService.createOrUpdateInterval(gti);
                 }
                 logger.debug("Set default intervals for tour: " + tour.getId());
@@ -326,12 +334,6 @@ public class TourController {
         holder.release(tour);
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
-
-//        var minDriver = tour.getMinDriverStart();
-//        var maxDriver = tour.getMaxDriverEnd();
-//
-//        var minGuide = tour.getMinGuideStart();
-//        var maxGuide = tour.getMaxGuideEnd();
 
         logger.debug("Advanced save tour = " + getString(tour));
         var m = tour.getStartDate().getMonth().getValue();
