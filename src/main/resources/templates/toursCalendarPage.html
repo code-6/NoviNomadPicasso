@@ -41,7 +41,7 @@
 <div layout:fragment="content" class="jumbotron jumbotron-fluid">
     <form th:object="${month}" th:id="picassoForm">
         <div class="fixed">
-            <div class="row" style="height: 31px;">
+            <div class="row m-0" style="height: 31px;">
 <!--                <div class="col-2">-->
 <!--                    <div class="form-group pull-right">-->
 <!--                        <input type="text" class="search" placeholder="What you looking for?">-->
@@ -92,7 +92,7 @@
 				</div>
                 <div class="col">
                     <div style="color: #ffffff; z-index: 100;">
-                        <span th:text="${'Tours count: '+toursCount}"
+                        <span th:text="${'Tours count in '+selectedMonth+ ' = ' +toursCount}"
                               style="color: white"></span>
                     </div>
                 </div>
