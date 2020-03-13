@@ -22,11 +22,11 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
                     "or (extract(month from t.endDate) = :month and extract(YEAR from t.endDate) = :year) order by t.startDate asc")
     Collection<Tour> findToursByMonthAndYear(@Param("month") int month, @Param("year") int year);
 
-//    @Query("select t from tours as t " +
-//            "join t.drivers as d " +
-//            "where d.id = :driverId " +
-//            "and ( extract(MONTH FROM t.startDate) = :month and extract(YEAR from t.startDate) = :year )" +
-//            "or (extract(month from t.endDate) = :month and extract(YEAR from t.endDate) = :year) order by t.startDate asc")
+    @Query("select t from tours as t " +
+            "join t.drivers as d " +
+            "where d.id = :driverId " +
+            "and ( extract(MONTH FROM t.startDate) = :month and extract(YEAR from t.startDate) = :year )" +
+            "or (extract(month from t.endDate) = :month and extract(YEAR from t.endDate) = :year) order by t.startDate asc")
     Collection<Tour> findToursByMonthAndYearAndDriver(@Param("month") int month, @Param("year") int year, @Param("driverId") long driverId);
 
 //    @Query("select distinct t from tours as t " +
@@ -34,7 +34,7 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
 //            "where d.id = :guideId " +
 //            "and ( extract(MONTH FROM t.startDate) = :month and extract(YEAR from t.startDate) = :year)" +
 //            "or (extract(month from t.endDate) = :month and extract(YEAR from t.endDate) = :year) order by t.startDate asc")
-@Query(value = "select t.* from tours as t join tours_guides as tg on tg.tour_id = t.id and tg.guide_id = ?3 and (extract(MONTH from t.start_date) = ?1 and extract(YEAR from t.start_date) = ?2) and (extract(MONTH from t.end_date) = ?1 and extract(YEAR from t.end_date) = ?2) order by t.start_date asc",
+@Query(value = "select t.* from tours as t join tours_guides as tg on tg.tour_id = t.id and tg.guide_id = :guideId where (extract(MONTH from t.start_date) = :month and extract(YEAR from t.start_date) = :year) or (extract(MONTH from t.end_date) = :month and extract(YEAR from t.end_date) = :year) order by t.start_date asc",
         nativeQuery = true)
     Collection<Tour> findToursByMonthAndYearAndGuide(@Param("month") int month, @Param("year") int year, @Param("guideId") long guideId);
 

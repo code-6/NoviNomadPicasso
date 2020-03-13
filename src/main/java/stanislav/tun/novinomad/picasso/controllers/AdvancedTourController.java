@@ -178,6 +178,7 @@ public class AdvancedTourController {
 //            }
 //        }
         var tours = tourService.getToursRelated2Guide(guideId, month, Integer.valueOf(year));
+        logger.debug("Count of tours to return = "+tours.size());
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
         return mav;
