@@ -79,6 +79,7 @@ public class AdvancedTourController {
         var tours = tourService.getToursForDate(month, Integer.parseInt(year));
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
+        mav.addObject("toursCount", tours.size());
         return mav;
     }
 
@@ -130,6 +131,7 @@ public class AdvancedTourController {
         var tours = tourService.getToursRelated2Driver(driverId, month, Integer.valueOf(year));
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
+        mav.addObject("toursCount", tours.size());
         return mav;
     }
 
@@ -181,9 +183,9 @@ public class AdvancedTourController {
         logger.debug("Count of tours to return = "+tours.size());
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
+        mav.addObject("toursCount", tours.size());
         return mav;
     }
-
 
     private String num2month(int month) {
         switch (month) {

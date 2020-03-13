@@ -98,6 +98,7 @@ public class TourController {
         mav.addObject("selectedYear", year);
         mav.addObject("toursList", allTours);
         mav.addObject("activeTours", true);
+        mav.addObject("toursCount", allTours.size());
         logger.debug("/tours/list requested.");
         return mav;
     }
@@ -111,12 +112,6 @@ public class TourController {
             var t = tour.get();
             mav.addObject("tour", t);
         }
-
-        var minDriver = tour.get().getMinDriverStart();
-        var maxDriver = tour.get().getMaxDriverEnd();
-
-        var minGuide = tour.get().getMinGuideStart();
-        var maxGuide = tour.get().getMaxGuideEnd();
 
         return mav;
     }
