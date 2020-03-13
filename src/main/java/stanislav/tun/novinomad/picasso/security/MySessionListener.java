@@ -22,7 +22,12 @@ public class MySessionListener implements ApplicationListener<HttpSessionDestroy
 
     @Override
     public void onApplicationEvent(HttpSessionDestroyedEvent event) {
-        User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
-        holder.release(user);
+        var currentAuditor = auditor.getCurrentAuditor();
+        if(!currentAuditor.isEmpty() && currentAuditor.isPresent()){
+            var user = userService.getUser(currentAuditor.get().toString());
+            if(!user.isEmpty() && user.isPresent()){
+                holder.release(user.get());
+            }
+        }
     }
 }
