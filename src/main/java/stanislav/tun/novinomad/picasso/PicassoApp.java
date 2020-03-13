@@ -241,9 +241,9 @@ public class PicassoApp {
         userService.createUser(user2);
         userService.createUser(user3);
 
-        createDriversLoop(10);
-        createGuidesLoop(10);
-        createToursLoop(10, 2);
+        createDriversLoop(50);
+        createGuidesLoop(50);
+        createToursLoop(500, 2);
     }
 
 }
