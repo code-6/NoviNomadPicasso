@@ -98,7 +98,7 @@
                 <td style="max-width: 130px;" class="text-truncate">
                     <a th:href="@{/tours/details{id}(id=${tour.id})}"
                        th:text="${tour.tittle}"
-                       th:title="${tour.description}"
+                       th:title="${tour.tittle}"
                        class="text-truncate"
                        style="max-width: 130px;"></a>
                 </td>
@@ -124,7 +124,9 @@
 
                 <td th:text="${tour.fileName}" style="max-width: 130px;" class="text-truncate"></td>
 
-                <td th:text="${tour.description}" style="max-width: 130px;" class="text-truncate"></td>
+                <td th:text="${tour.description}"
+                    th:title="${tour.description}"
+                    style="max-width: 130px;" class="text-truncate"></td>
 
                 <td>
                     <a th:href="@{/tours/edit{id}(id=${tour.id})}">

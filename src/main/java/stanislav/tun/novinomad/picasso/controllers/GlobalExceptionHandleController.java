@@ -13,11 +13,13 @@ import stanislav.tun.novinomad.picasso.exceptions.PageNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
+// for internal controllers exceptions
 @ControllerAdvice
 public class GlobalExceptionHandleController {
 
     Logger logger = LoggerFactory.getLogger(GlobalExceptionHandleController.class);
 
+    // handle all unexpected exceptions
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(HttpServletRequest req, final Throwable e) {
@@ -28,24 +30,24 @@ public class GlobalExceptionHandleController {
         logger.error("Unknown error! " + "Requested url: " + req.getRequestURI() + " " + ExceptionUtils.getStackTrace(e));
         return mav;
     }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(AccessDeniedException.class)
-    public ModelAndView handle403Exception() {
-        var mav = new ModelAndView("errorPage");
-        mav.addObject("message", "Access denied!");
-        mav.addObject("description", "You shall not pass!");
-        mav.addObject("errorCode", 403);
-        return mav;
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(PageNotFoundException.class)
-    public ModelAndView handle404Exception(HttpServletRequest req) {
-        var mav = new ModelAndView("errorPage");
-        mav.addObject("message", "Page not found!");
-        mav.addObject("description", "There is no view for path: "+req.getRequestURI());
-        mav.addObject("errorCode", 404);
-        return mav;
-    }
+// this not works for http errors
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ModelAndView handle403Exception() {
+//        var mav = new ModelAndView("errorPage");
+//        mav.addObject("message", "Access denied!");
+//        mav.addObject("description", "You shall not pass!");
+//        mav.addObject("errorCode", 403);
+//        return mav;
+//    }
+//
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(PageNotFoundException.class)
+//    public ModelAndView handle404Exception(HttpServletRequest req) {
+//        var mav = new ModelAndView("errorPage");
+//        mav.addObject("message", "Page not found!");
+//        mav.addObject("description", "There is no view for path: "+req.getRequestURI());
+//        mav.addObject("errorCode", 404);
+//        return mav;
+//    }
 }
