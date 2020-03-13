@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mainLayout}">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+
+<body class="container">
+<div layout:fragment="content">
+<div id="main">
+    <div class="fof">
+        <h1 th:text="${message}"></h1>
+        <h2 th:text="${errorCode}"></h2>
+        <h3 th:text="${description}"></h3>
+        <a href="mailto:wong.stanislav@gmail.com?subject=Picasso unknown error">
+            <button type="button" class="btn btn-outline-secondary">Inform Developers</button>
+        </a>
+    </div>
+</div>
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.min.js}"></script>
+<!--    <script type="text/javascript" th:src="@{/js/error.js}"></script>-->
+</th:block>
+</body>
+</html>

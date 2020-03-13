@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/test")
 public class TestController {
     @GetMapping
-    public String getTestView(){
-        return "testFragment";
+    public String getTestView() throws Exception {
+        throw new Exception("This is error");
     }
 }
