@@ -18,20 +18,20 @@ import java.util.Set;
 @Entity(name = "drivers")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-@JsonRootName(value = "driver")
+//@JsonRootName(value = "driver")
 @EntityListeners(AuditingEntityListener.class)
 public class Driver extends AbstractEntity implements Serializable {
 
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     protected String lastName;
 
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     protected String firstName;
 
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     protected String middleName;
 
     protected String fullName;
@@ -40,7 +40,7 @@ public class Driver extends AbstractEntity implements Serializable {
     private String car;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drivers")
-    @JsonBackReference
+    //@JsonBackReference
     @Fetch(FetchMode.JOIN)
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected Set<Tour> tours = new HashSet<>();

@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "users")
-@JsonRootName(value = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

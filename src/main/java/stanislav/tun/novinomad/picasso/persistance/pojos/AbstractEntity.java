@@ -16,9 +16,9 @@ import java.util.Objects;
 
 @Indexed
 @MappedSuperclass
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity {
     @CreatedBy

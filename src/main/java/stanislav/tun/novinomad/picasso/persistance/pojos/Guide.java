@@ -18,19 +18,19 @@ import java.util.Set;
 @Entity(name = "guides")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-@JsonRootName(value = "guide")
+//@JsonRootName(value = "guide")
 @EntityListeners(AuditingEntityListener.class)
 public class Guide extends AbstractEntity {
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     protected String lastName;
 
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     protected String firstName;
 
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     protected String middleName;
 
     protected String fullName;
@@ -38,7 +38,7 @@ public class Guide extends AbstractEntity {
     private String language;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "guides")
-    @JsonBackReference
+    //@JsonBackReference
     @Fetch(FetchMode.JOIN)
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected Set<Tour> tours = new HashSet<>();

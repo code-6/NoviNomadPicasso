@@ -30,22 +30,22 @@ import java.util.*;
 @Entity(name = "tours")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-@JsonRootName(value = "tour")
+//@JsonRootName(value = "tour")
 @EntityListeners(AuditingEntityListener.class)
 public class Tour extends AbstractEntity implements Serializable {
-//    @JsonIgnore
+//    //@JsonIgnore
 //    @Transient
 //    private static final String datePattern = "dd-mm-yyyy";
 //
-//    @JsonIgnore
+//    //@JsonIgnore
 //    @Transient
 //    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
 
-    @JsonIgnore
+    ////@JsonIgnore
     @Transient
     Logger logger = LoggerFactory.getLogger(Tour.class);
 
-    @JsonIgnore
+    ////@JsonIgnore
     @Transient
     private static DateTimeFormatter f = new DateTimeFormatterBuilder()
             .appendPattern("dd.MM.yyyy")
@@ -79,31 +79,31 @@ public class Tour extends AbstractEntity implements Serializable {
     @NotNull
     private String tittle;
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     private String description;
 
     //@Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JsonManagedReference
+    //@JsonManagedReference
     @Fetch(FetchMode.JOIN)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tours_drivers", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name = "driver_id"))
     private Set<Driver> drivers = new HashSet<>();
 
-    @JsonManagedReference
+    //@JsonManagedReference
     @Fetch(FetchMode.JOIN)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tours_guides", joinColumns = @JoinColumn(name = "tour_id"), inverseJoinColumns = @JoinColumn(name = "guide_id"))
     private Set<Guide> guides = new HashSet<>();
 
 
-    @JsonManagedReference
+    //@JsonManagedReference
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "tour", orphanRemoval = true)
-    @JsonIgnore
+    //@JsonIgnore
     Set<DriverTourIntervals> driverIntervals = new HashSet<DriverTourIntervals>();
 
-    @JsonIgnore
-    @JsonManagedReference
+    ////@JsonIgnore
+    //@JsonManagedReference
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "tour", orphanRemoval = true)
     Set<GuideTourIntervals> guideIntervals = new HashSet<>();
@@ -180,7 +180,7 @@ public class Tour extends AbstractEntity implements Serializable {
         return false;
     }
 
-    @JsonIgnore
+    ////@JsonIgnore
     @Transient
     public LocalDateTime getMinDriverStart() {
 
@@ -201,7 +201,7 @@ public class Tour extends AbstractEntity implements Serializable {
         return min;
     }
 
-    @JsonIgnore
+    ////@JsonIgnore
     @Transient
     public LocalDateTime getMaxDriverEnd() {
 
@@ -220,7 +220,7 @@ public class Tour extends AbstractEntity implements Serializable {
         return max;
     }
 
-    @JsonIgnore
+    ////@JsonIgnore
     @Transient
     public LocalDateTime getMinGuideStart() {
 
@@ -239,7 +239,7 @@ public class Tour extends AbstractEntity implements Serializable {
         return min;
     }
 
-    @JsonIgnore
+    ////@JsonIgnore
     @Transient
     public LocalDateTime getMaxGuideEnd() {
 
@@ -266,13 +266,13 @@ public class Tour extends AbstractEntity implements Serializable {
         return f.format(endDate);
     }
 
-    @JsonIgnore
+    //@JsonIgnore
     @Transient
     public String getStartDateForPicker() {
         return "\"" + startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\"";
     }
 
-    @JsonIgnore
+    //@JsonIgnore
     @Transient
     public String getEndDateForPicker() {
         return "\"" + endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\"";
