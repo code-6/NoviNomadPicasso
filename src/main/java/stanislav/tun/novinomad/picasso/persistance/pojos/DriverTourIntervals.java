@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.ValidationException;
 
 @Entity
 @Cacheable
@@ -33,4 +34,5 @@ public class DriverTourIntervals extends AbstractIntervals {
     public void setDriver(Driver driver) {
         this.driver = driver;
     }
+
 }

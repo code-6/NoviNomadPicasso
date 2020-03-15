@@ -139,7 +139,6 @@ public class AdvancedTourController {
     public ModelAndView getView2(@RequestParam(required = false, name = "month") Integer month,
                                  @RequestParam(required = false, name = "year") String year,
                                  @PathVariable(value = "guideId") Long guideId) {
-        logger.debug(" call third getView2() INPUT DATA month = " + month + " year = " + year + " guide id = " + guideId);
         // set default values for month and year. Current date by default
         if (month == null)
             month = LocalDate.now().getMonthValue();
@@ -180,7 +179,6 @@ public class AdvancedTourController {
 //            }
 //        }
         var tours = tourService.getToursRelated2Guide(guideId, month, Integer.valueOf(year));
-        logger.debug("Count of tours to return = "+tours.size());
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
         mav.addObject("toursCount", tours.size());

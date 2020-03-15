@@ -7,6 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.ValidationException;
 
 @Entity
 @Cacheable
@@ -33,4 +34,6 @@ public class GuideTourIntervals extends AbstractIntervals {
     public void setGuide(Guide guide) {
         this.guide = guide;
     }
+
+
 }

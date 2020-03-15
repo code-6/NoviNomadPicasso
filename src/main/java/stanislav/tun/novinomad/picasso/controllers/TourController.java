@@ -76,13 +76,11 @@ public class TourController {
         map.put("guides", guideService.getGuidesList());
         map.put("guidesExclude", tour.getGuides());
 
-        logger.debug("/tours/add requested. Returned view with tour " + JsonPrinter.getString(tour));
         return new ModelAndView("addTourPage", map);
     }
 
     @RequestMapping("/list")
     public ModelAndView getToursListView(@RequestParam(required = false, name = "year") Integer year) {
-        logger.debug("year value = " + year);
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         // release all for current user
         holder.release(user);
@@ -99,7 +97,6 @@ public class TourController {
         mav.addObject("toursList", allTours);
         mav.addObject("activeTours", true);
         mav.addObject("toursCount", allTours.size());
-        logger.debug("/tours/list requested.");
         return mav;
     }
 
@@ -118,9 +115,7 @@ public class TourController {
 
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
-        logger.debug("tou id = " + tourId);
         var tour = tourService.getTour(tourId).get();
-        logger.debug("tour = " + JsonPrinter.getString(tour));
         var mav = new ModelAndView();
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         // show error if tour is hold
@@ -158,7 +153,6 @@ public class TourController {
             logger.error(getStackTrace(e));
         }
         mav.setViewName("addTourPage");
-        logger.info("/tours/edit requested. Returned view with tour " + getString(tour));
         return mav;
     }
 
@@ -179,7 +173,6 @@ public class TourController {
                     tour.getGuideIntervals().add(gti);
                     guideIntervalService.createOrUpdateInterval(gti);
                 }
-                logger.debug("Set default intervals for tour: " + tour.getId());
             }
         } catch (ValidationException e) {
             logger.error(getStackTrace(e));
@@ -198,7 +191,7 @@ public class TourController {
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
                                       @RequestParam(required = false, name = "file") MultipartFile file,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
-        logger.debug("DateTime range param = " + tourDateTimeRange);
+
         try {
             if (tourDateTimeRange != "" || tourDateTimeRange != null) {
                 var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
@@ -225,23 +218,13 @@ public class TourController {
         }
         excludeDrivers(drivers2exclude, tour);
         excludeGuides(guides2exclude, tour);
-//        try {
-//
-//        } catch (OverlapsException e) {
-//            mav = getAddTourView();
-//            mav.addObject("error", "Tours date range conflict!");
-//            mav.addObject("errorDesc", e.getMessage());
-//            mav.addObject("exception", e);
-//            mav.addObject("tour", tour);
-//            logger.error("OVERLAPS " + e.getMessage());
-//            return mav;
-//        }
+
         tourService.createOrUpdateTour(tour);
         if (adv) {
             if (tour.getStartDate() == null && tour.getEndDate() == null) {
                 mav = getAddTourView();
                 mav.addObject("error", "Tour date range not chosen!");
-                mav.addObject("errorDesc", "Advanced options available only for tours with date range specified.\n Tour was created you can just edit edit now.");
+                mav.addObject("errorDesc", "Advanced options available only for tours with date range specified.\n Tour created you can just edit now.");
             } else {
                 var wrapper = new MapWrapper();
                 mav.addObject("wrapper", wrapper);
@@ -294,7 +277,6 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
-            logger.debug("Fill picker advanced. All days = " + allDays + " for driver " + d.getFullName());
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
@@ -330,11 +312,12 @@ public class TourController {
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
 
-        logger.debug("Advanced save tour = " + getString(tour));
+
         var m = tour.getStartDate().getMonth().getValue();
         var y = tour.getStartDate().getYear();
         var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
         mav.setViewName(r);
+
         return mav;
     }
 
@@ -342,7 +325,6 @@ public class TourController {
         var driversMap = wrapper.getDriverMap();
         for (Driver d : driversMap.keySet()) {
             var dates = driversMap.get(d);
-            logger.debug("dates + time from view " + dates);
             // todo : fix this hodgie code (updating set didn't helps)
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setDti = d.getDriverTourIntervals();
@@ -350,6 +332,7 @@ public class TourController {
                 for (DriverTourIntervals dti : setDti) {
                     driverIntervalService.delete(dti);
                     tour.getDriverIntervals().clear();
+                    d.getDriverTourIntervals().clear();
                 }
             }
             try {
@@ -385,6 +368,7 @@ public class TourController {
                 var gti = new GuideTourIntervals(tour, dateTimeRange, guide);
                 guide.getGuideTourIntervals().add(gti);
                 tour.getGuideIntervals().add(gti);
+                guide.getGuideTourIntervals().add(gti);
                 // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
                 guideIntervalService.createOrUpdateInterval(gti);
 

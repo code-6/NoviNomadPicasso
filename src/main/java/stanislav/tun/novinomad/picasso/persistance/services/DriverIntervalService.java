@@ -25,7 +25,7 @@ public class DriverIntervalService {
     IDriverIntervalRepo repo;
 
     public void createOrUpdateInterval(DriverTourIntervals interval) {
-        logger.info("created " + JsonPrinter.getString(interval));
+        //logger.info("created " + JsonPrinter.getString(interval));
         repo.save(interval);
     }
 

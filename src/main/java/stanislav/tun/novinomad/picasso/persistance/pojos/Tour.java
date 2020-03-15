@@ -96,12 +96,14 @@ public class Tour extends AbstractEntity implements Serializable {
     private Set<Guide> guides = new HashSet<>();
 
 
+    @JsonManagedReference
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "tour", orphanRemoval = true)
     @JsonIgnore
     Set<DriverTourIntervals> driverIntervals = new HashSet<DriverTourIntervals>();
 
     @JsonIgnore
+    @JsonManagedReference
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "tour", orphanRemoval = true)
     Set<GuideTourIntervals> guideIntervals = new HashSet<>();
@@ -181,55 +183,55 @@ public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
     public LocalDateTime getMinDriverStart() {
-        
+
         LocalDateTime min = null;
 
         var i = driverIntervals.iterator();
-        if(i.hasNext()){
+        if (i.hasNext()) {
             min = i.next().getStartDate();
         }
-        while (i.hasNext()){
+        while (i.hasNext()) {
             var next = i.next();
-            if(next.getStartDate().isBefore(min)){
+            if (next.getStartDate().isBefore(min)) {
                 min = next.getStartDate();
             }
         }
 
-        logger.debug("Minimal start date of driver = " + f.format(min));
+
         return min;
     }
 
     @JsonIgnore
     @Transient
     public LocalDateTime getMaxDriverEnd() {
-        
+
         LocalDateTime max = null;
         var i = driverIntervals.iterator();
-        if(i.hasNext()){
+        if (i.hasNext()) {
             max = i.next().getStartDate();
         }
-        while (i.hasNext()){
+        while (i.hasNext()) {
             var next = i.next();
-            if(next.getStartDate().isAfter(max)){
+            if (next.getStartDate().isAfter(max)) {
                 max = next.getStartDate();
             }
         }
-        logger.debug("Maximal end date of driver = " + f.format(max));
+
         return max;
     }
 
     @JsonIgnore
     @Transient
     public LocalDateTime getMinGuideStart() {
-        
+
         LocalDateTime min = null;
         var i = guideIntervals.iterator();
-        if(i.hasNext()){
+        if (i.hasNext()) {
             min = i.next().getStartDate();
         }
-        while (i.hasNext()){
+        while (i.hasNext()) {
             var next = i.next();
-            if(next.getStartDate().isBefore(min)){
+            if (next.getStartDate().isBefore(min)) {
                 min = next.getStartDate();
             }
         }
@@ -240,15 +242,15 @@ public class Tour extends AbstractEntity implements Serializable {
     @JsonIgnore
     @Transient
     public LocalDateTime getMaxGuideEnd() {
-        
+
         LocalDateTime max = null;
         var i = guideIntervals.iterator();
-        if(i.hasNext()){
+        if (i.hasNext()) {
             max = i.next().getStartDate();
         }
-        while (i.hasNext()){
+        while (i.hasNext()) {
             var next = i.next();
-            if(next.getStartDate().isAfter(max)){
+            if (next.getStartDate().isAfter(max)) {
                 max = next.getStartDate();
             }
         }

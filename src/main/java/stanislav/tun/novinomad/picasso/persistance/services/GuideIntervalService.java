@@ -24,7 +24,7 @@ public class GuideIntervalService {
     public void createOrUpdateInterval( GuideTourIntervals interval) {
 
         repo.save(interval);
-        logger.debug("created "+ JsonPrinter.getString(interval));
+        //logger.debug("created "+ JsonPrinter.getString(interval));
     }
 
 
