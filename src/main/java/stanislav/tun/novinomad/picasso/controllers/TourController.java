@@ -362,13 +362,13 @@ public class TourController {
                     guideIntervalService.delete(gti);
                 }
                 guide.getGuideTourIntervals().clear();
+                guide.getGuideTourIntervals().clear();
             }
             try {
                 var dateTimeRange = DateTimeRange.parseSingle(dates);
                 var gti = new GuideTourIntervals(tour, dateTimeRange, guide);
                 guide.getGuideTourIntervals().add(gti);
                 tour.getGuideIntervals().add(gti);
-                guide.getGuideTourIntervals().add(gti);
                 // todo : why not updated already exist intervals? cause above always created new interval. Can be used for create new row, but not for update
                 guideIntervalService.createOrUpdateInterval(gti);
 
