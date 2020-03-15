@@ -147,11 +147,20 @@ public class Driver extends AbstractEntity implements Serializable {
 
     public String toString(DateTimeRange i) {
 
-        return "Driver{" +
-                "\nid=" + id +
-                ",\nfullName='" + getFullName() + '\'' +
-                ",\ncar='" + car + '\'' +
-                ",\ninterval=" + i.toString() +
-                '}';
+        try{
+            return "Driver{" +
+                    "\nid=" + id +
+                    ",\nfullName='" + getFullName() + '\'' +
+                    ",\ncar='" + car + '\'' +
+                    ",\ninterval=" + i.toString() +
+                    '}';
+        }catch (NullPointerException e){
+            return "Driver{" +
+                    "\nid=" + id +
+                    ",\nfullName='" + getFullName() + '\'' +
+                    ",\ncar='" + car + '\'' +
+                    '}';
+        }
+
     }
 }

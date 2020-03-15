@@ -129,5 +129,36 @@ public class Guide extends AbstractEntity {
         return Objects.hash(super.hashCode(), fullName);
     }
 
+    @Override
+    public String toString() {
+        return "Guide{" +
+                "\nid=" + id +
+                ",\nfullName='" + getFullName() + '\'' +
+                ",\nlanguage='" + language + '\'' +
+                ",\ncreatedBy='" + createdBy + '\'' +
+                ",\ncreationDate=" + creationDate +
+                ",\nlastModifiedBy='" + lastModifiedBy + '\'' +
+                ",\nlasModifyDate=" + lasModifyDate +
+                ",\ndeleted=" + deleted +
+                '}';
+    }
 
+    public String toString(DateTimeRange i) {
+
+        try{
+            return "Guide{" +
+                    "\nid=" + id +
+                    ",\nfullName='" + getFullName() + '\'' +
+                    ",\nlanguage='" + language + '\'' +
+                    ",\ninterval=" + i.toString() +
+                    '}';
+        }catch (NullPointerException e){
+            return "Guide{" +
+                    "\nid=" + id +
+                    ",\nfullName='" + getFullName() + '\'' +
+                    ",\nlanguage='" + language + '\'' +
+                    '}';
+        }
+
+    }
 }

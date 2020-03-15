@@ -1,39 +1,27 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.exceptions.OverlapsException;
 import stanislav.tun.novinomad.picasso.persistance.pojos.*;
 import stanislav.tun.novinomad.picasso.persistance.services.*;
 import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
-import stanislav.tun.novinomad.picasso.util.IntervalResolver;
-import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.*;
 
-import static org.apache.commons.lang3.exception.ExceptionUtils.*;
-import static stanislav.tun.novinomad.picasso.util.JsonPrinter.getString;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 
 @Controller
 @RequestMapping("/tours")
@@ -119,14 +107,14 @@ public class TourController {
         var mav = new ModelAndView();
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         // show error if tour is hold
-        if(holder.isHold(tour)){
+        if (holder.isHold(tour)) {
             mav = getToursListView(LocalDate.now().getYear());
             mav.addObject("error", "Edit is not available!");
             var desc = "This entity currently edited by user: " + holder.getHolderOf(tour).getUserName()
                     + ". Try again later or request  to release this entity";
             mav.addObject("errorDesc", desc);
             return mav;
-        }else {
+        } else {
             // unless => hold tour
             holder.hold(tour, user);
         }
@@ -218,8 +206,9 @@ public class TourController {
         }
         excludeDrivers(drivers2exclude, tour);
         excludeGuides(guides2exclude, tour);
+        var exist = tourService.exist(tour.getTittle());
 
-        tourService.createOrUpdateTour(tour);
+        var logtour = tourService.createOrUpdateTour(tour);
         if (adv) {
             if (tour.getStartDate() == null && tour.getEndDate() == null) {
                 mav = getAddTourView();
@@ -239,8 +228,14 @@ public class TourController {
             var y = tour.getStartDate().getYear();
             var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
             mav.setViewName(r);
+
+            if(!exist)
+                logger.info("create " + logtour.toString());
+            else
+                logger.info("edit " + logtour.toString());
         }
         mav.addObject("tour", tour);
+
         return mav;
     }
 
@@ -277,7 +272,7 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
-            logger.debug("All days = "+allDays);
+            logger.debug("All days = " + allDays);
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
@@ -310,6 +305,7 @@ public class TourController {
         mav.addObject("wrapper", wrapper);
         var tour = tourService.getTour(tourId).get();
         holder.release(tour);
+
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
 
@@ -318,8 +314,10 @@ public class TourController {
         var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
         mav.setViewName(r);
 
-        System.out.println("TEST\n"+tour.toString());
-
+        if (tourService.exist(tourId))
+            logger.info("Advanced edit " + tour.toString());
+        else
+            logger.info("Advanced create " + tour.toString());
         return mav;
     }
 
@@ -539,12 +537,10 @@ public class TourController {
         }
     }
 
-    public boolean hasEmptyDays(Tour tour){
+    public boolean hasEmptyDays(Tour tour) {
 
         return false;
     }
-
-
 
 
 }

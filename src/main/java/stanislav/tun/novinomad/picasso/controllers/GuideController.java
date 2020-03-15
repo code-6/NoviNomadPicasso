@@ -14,7 +14,7 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.User;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
-import stanislav.tun.novinomad.picasso.util.JsonPrinter;
+
 
 @Controller
 @RequestMapping("/guides")

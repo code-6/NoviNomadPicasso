@@ -3,19 +3,17 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IGuideRepo;
-import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -27,12 +25,14 @@ public class GuideService {
 
 
     public void createOrUpdateGuide(Guide guide){
+        var u = UUID.randomUUID().toString();
         if(exist(guide))
-            logger.info("edited "+ JsonPrinter.getString(guide));
+            logger.info(u+" edit "+ guide.toString());
         else
-            logger.info("created "+JsonPrinter.getString(guide));
+            logger.info(u+" create "+guide.toString());
 
         repo.save(guide);
+        logger.info(u+" success");
     }
 
     public List<Guide> getAllGuides(){

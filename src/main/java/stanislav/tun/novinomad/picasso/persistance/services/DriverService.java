@@ -1,24 +1,19 @@
 package stanislav.tun.novinomad.picasso.persistance.services;
 
-import groovy.transform.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import stanislav.tun.novinomad.picasso.PicassoApp;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
-import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
-import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -28,12 +23,15 @@ public class  DriverService {
     IDriverRepo repo;
 
     public void createOrUpdateDriver(Driver driver){
+        var u = UUID.randomUUID().toString();
         if(exist(driver))
-            logger.info("edited "+ JsonPrinter.getString(driver));
+            logger.info(u+" edit "+ driver.toString());
         else
-            logger.info("created "+JsonPrinter.getString(driver));
+            logger.info(u+" create "+driver.toString());
 
         repo.save(driver);
+
+        logger.info(u+" success");
     }
 
     public List<Driver> getDriversList(){

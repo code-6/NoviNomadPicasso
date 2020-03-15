@@ -38,5 +38,5 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
     @Query("select t from tours as t where extract(YEAR from t.startDate) = :year or extract(YEAR from t.endDate) = :year order by t.startDate asc")
     Collection<Tour> findToursByYear(@Param("year") int year);
 
-
+    boolean existsByTittle(String title);
 }

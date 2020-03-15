@@ -400,10 +400,12 @@ public class Tour extends AbstractEntity implements Serializable {
                 "\nid=" + id +
                 ",\ntittle='" + tittle + '\'' +
                 ",\ndate=" + getRange().toString() +
-                ",\ndrivers="+getDriversAsString()+
                 ",\nfileName='" + fileName + '\'' +
                 ",\ndays=" + days +
                 ",\ntouristsCount=" + touristsCount +
+                ",\ndesc="+description+
+                ",\ndrivers="+getDriversAsString()+
+                ",\nguides="+getGuidesAsString() +
                 ",\ncreatedBy='" + createdBy + '\'' +
                 ",\ncreationDate=" + creationDate +
                 ",\nlastModifiedBy='" + lastModifiedBy + '\'' +
@@ -415,6 +417,16 @@ public class Tour extends AbstractEntity implements Serializable {
         var res = "[";
         for (Driver d : drivers) {
             var i = getIntervalOfDriver(d);
+            res += d.toString(i) + "\n";
+        }
+        res += "]";
+        return res;
+    }
+
+    private String getGuidesAsString() {
+        var res = "[";
+        for (Guide d : guides) {
+            var i = getIntervalOfGuide(d);
             res += d.toString(i) + "\n";
         }
         res += "]";

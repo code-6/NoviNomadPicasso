@@ -3,18 +3,17 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
-import stanislav.tun.novinomad.picasso.util.JsonPrinter;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -25,13 +24,28 @@ public class TourService {
     @Autowired
     ITourRepo repo;
 
-    public void createOrUpdateTour(Tour tour) {
+    public Tour createOrUpdateTour(Tour tour) {
+        var u = UUID.randomUUID().toString();
         if (repo.existsById(tour.getId()))
-            logger.info("edit " + JsonPrinter.getString(tour));
+            logger.info(u+" edit tour " + tour.getId());
         else
-            logger.info("create " + JsonPrinter.getString(tour));
+            logger.info(u+" create tour " + tour.getId());
 
-        repo.save(tour);
+        Tour t = repo.save(tour);
+        logger.info(u+" success");
+        return t;
+    }
+
+    public boolean exist(Tour t){
+        return repo.existsById(t.getId());
+    }
+
+    public boolean exist(long id){
+        return repo.existsById(id);
+    }
+
+    public boolean exist(String title){
+        return repo.existsByTittle(title);
     }
 
     public List<Tour> getToursRelated2Driver(Long driverId, int month, int year) {
