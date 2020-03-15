@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stanislav.tun.novinomad.picasso.PicassoApp;
@@ -23,14 +24,14 @@ public abstract class JsonPrinter {
         mapper.configure(
                 com.fasterxml.jackson.databind.SerializationFeature.
                         WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     public static String getString(Object o) {
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
             return mapper.writeValueAsString(o);
         } catch (JsonProcessingException e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.getStackTrace(e));
             return "";
         }
     }

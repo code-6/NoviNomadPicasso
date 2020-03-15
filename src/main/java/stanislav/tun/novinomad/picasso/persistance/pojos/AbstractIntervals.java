@@ -19,7 +19,7 @@ public abstract class AbstractIntervals {
     @NotNull
     @ManyToOne
     @JsonIgnore
-    private Tour tour;
+    protected Tour tour;
 
     private LocalDateTime startDate;
 
@@ -28,7 +28,7 @@ public abstract class AbstractIntervals {
     @NotNull
     @Transient
     @JsonIgnore
-    private DateTimeRange interval;
+    protected DateTimeRange interval;
 
     public AbstractIntervals() {
     }

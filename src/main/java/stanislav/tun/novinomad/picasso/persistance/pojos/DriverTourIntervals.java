@@ -35,4 +35,13 @@ public class DriverTourIntervals extends AbstractIntervals {
         this.driver = driver;
     }
 
+    @Override
+    public String toString() {
+        return "DriverInterval{" +
+                "\nid=" + id +
+                ",\ndriver=" + driver.getFullName() +
+                ",\ntour=" + tour.getTittle() +
+                ",\ndate=" + interval.toString()+
+                '}';
+    }
 }

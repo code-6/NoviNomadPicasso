@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -112,15 +113,6 @@ public class Driver extends AbstractEntity implements Serializable {
         this.driverTourIntervals = driverTourIntervals;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Driver)) return false;
-//        if (!super.equals(o)) return false;
-//        Driver driver = (Driver) o;
-//        return fullName.equals(driver.fullName);
-//    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -139,4 +131,27 @@ public class Driver extends AbstractEntity implements Serializable {
         return Objects.hash(super.hashCode(), fullName);
     }
 
+    @Override
+    public String toString() {
+        return "Driver{" +
+                "\nid=" + id +
+                ",\nfullName='" + getFullName() + '\'' +
+                ",\ncar='" + car + '\'' +
+                ",\ncreatedBy='" + createdBy + '\'' +
+                ",\ncreationDate=" + creationDate +
+                ",\nlastModifiedBy='" + lastModifiedBy + '\'' +
+                ",\nlasModifyDate=" + lasModifyDate +
+                ",\ndeleted=" + deleted +
+                '}';
+    }
+
+    public String toString(DateTimeRange i) {
+
+        return "Driver{" +
+                "\nid=" + id +
+                ",\nfullName='" + getFullName() + '\'' +
+                ",\ncar='" + car + '\'' +
+                ",\ninterval=" + i.toString() +
+                '}';
+    }
 }

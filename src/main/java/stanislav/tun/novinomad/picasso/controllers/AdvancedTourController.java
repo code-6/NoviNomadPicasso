@@ -112,22 +112,6 @@ public class AdvancedTourController {
         mav.addObject("selectedYear", year);
         // remember user selected driver
         mav.addObject("selectedDriver", driverService.getDriver(driverId).get());
-//        var tours = tourService.getToursForDate(month, Integer.valueOf(year));
-//        // get only where driver is specified
-//        var ti = tours.iterator();
-//        while (ti.hasNext()) {
-//            var tour = ti.next();
-//            var di = tour.getDrivers().iterator();
-//            // if empty driver also delete tour
-//            if (!di.hasNext())
-//                ti.remove();
-//            while (di.hasNext()) {
-//                var driver = di.next();
-//                if (driver.getId() != driverId)
-//                    // illegal state exception was thrown here!
-//                    ti.remove();
-//            }
-//        }
         var tours = tourService.getToursRelated2Driver(driverId, month, Integer.valueOf(year));
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
@@ -163,21 +147,6 @@ public class AdvancedTourController {
         mav.addObject("selectedMonthNum", month);
         mav.addObject("selectedYear", year);
         mav.addObject("selectedGuide", guideService.getGuide(guideId).get());
-//        var tours = tourService.getToursForDate(month, Integer.valueOf(year));
-//        // get only where driver is specified
-//        var ti = tours.iterator();
-//        while (ti.hasNext()) {
-//            var tour = ti.next();
-//            var gi = tour.getGuides().iterator();
-//            if (!gi.hasNext())
-//                ti.remove();
-//            while (gi.hasNext()) {
-//                var guide = gi.next();
-//                long id = guide.getId();
-//                if (id != guideId)
-//                    ti.remove();
-//            }
-//        }
         var tours = tourService.getToursRelated2Guide(guideId, month, Integer.valueOf(year));
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);

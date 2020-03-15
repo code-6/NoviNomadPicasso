@@ -394,4 +394,30 @@ public class Tour extends AbstractEntity implements Serializable {
         this.guideIntervals = guideIntervals;
     }
 
+    @Override
+    public String toString() {
+        return "Tour{" +
+                "\nid=" + id +
+                ",\ntittle='" + tittle + '\'' +
+                ",\ndate=" + getRange().toString() +
+                ",\ndrivers="+getDriversAsString()+
+                ",\nfileName='" + fileName + '\'' +
+                ",\ndays=" + days +
+                ",\ntouristsCount=" + touristsCount +
+                ",\ncreatedBy='" + createdBy + '\'' +
+                ",\ncreationDate=" + creationDate +
+                ",\nlastModifiedBy='" + lastModifiedBy + '\'' +
+                ",\nlasModifyDate=" + lasModifyDate +
+                '}';
+    }
+
+    private String getDriversAsString() {
+        var res = "[";
+        for (Driver d : drivers) {
+            var i = getIntervalOfDriver(d);
+            res += d.toString(i) + "\n";
+        }
+        res += "]";
+        return res;
+    }
 }

@@ -45,10 +45,6 @@ public class DriverController {
         return modelAndView;
     }
 
-    private void throwException() throws Exception {
-        throw new Exception("This is an exception!");
-    }
-
     @RequestMapping(value = "/edit{id}")
     public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId) {
         var driver = driverService.getDriver(driverId);

@@ -277,6 +277,7 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
+            logger.debug("All days = "+allDays);
             // in case of new intervals, value will be empty string
             wrapper.getDriverMap().put(d, allDays);
         }
@@ -312,11 +313,12 @@ public class TourController {
         saveAdvancedDrivers(wrapper, tour);
         saveAdvancedGuides(wrapper, tour);
 
-
         var m = tour.getStartDate().getMonth().getValue();
         var y = tour.getStartDate().getYear();
         var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
         mav.setViewName(r);
+
+        System.out.println("TEST\n"+tour.toString());
 
         return mav;
     }
@@ -541,6 +543,8 @@ public class TourController {
 
         return false;
     }
+
+
 
 
 }
