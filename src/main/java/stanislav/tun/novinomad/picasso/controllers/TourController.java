@@ -75,13 +75,15 @@ public class TourController {
         var mav = new ModelAndView("toursListPage");
         List<Tour> allTours;
         if (year == null) {
-            allTours = tourService.getAllTours();
-            year = LocalDate.now().getYear();
+            if(holder.getYearByUser(user) == -1)
+                holder.hold(LocalDate.now().getYear(), user);
+            allTours = tourService.getToursByYear(holder.getYearByUser(user));
         } else {
+            holder.hold(year, user);
             allTours = tourService.getToursByYear(year);
         }
 
-        mav.addObject("selectedYear", year);
+        mav.addObject("selectedYear", holder.getYearByUser(user));
         mav.addObject("toursList", allTours);
         mav.addObject("activeTours", true);
         mav.addObject("toursCount", allTours.size());

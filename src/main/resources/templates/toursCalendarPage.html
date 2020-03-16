@@ -70,6 +70,7 @@
                     <input th:name="year" type="number" min="2020" max="2099" th:value="${selectedYear}"
                            placeholder="ENTER YEAR">
 
+                    <button type="submit" class="btn btn-outline-info btn-sm">submit</button>
 
                     <button th:text="${'<<'}" onclick="this.form.submit()"
                             th:value="${selectedMonthNum > 1} ? ${selectedMonthNum -1} : ${selectedMonthNum}"

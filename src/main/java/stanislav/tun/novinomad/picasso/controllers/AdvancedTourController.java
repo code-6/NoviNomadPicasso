@@ -53,30 +53,39 @@ public class AdvancedTourController {
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         holder.release(user);
         // set default values for month and year. Current date by default
-        if (month == null)
-            month = LocalDate.now().getMonthValue();
+        if (month == null) {
+            if (holder.getMonthByUser(user) == -1)
+                month = LocalDate.now().getMonthValue();
+            else
+                month = holder.getMonthByUser(user);
+        }
 
         if (year == null)
-            year = String.valueOf(LocalDate.now().getYear());
+            if (holder.getYearByUser(user) == -1)
+                year = String.valueOf(LocalDate.now().getYear());
+            else
+                year = String.valueOf(holder.getYearByUser(user));
+
+        holder.hold(Integer.valueOf(month), Integer.valueOf(year), user);
 
         var mav = new ModelAndView();
         mav.setViewName("toursCalendarPage");
 
-        var ym = YearMonth.of(Integer.parseInt(year), month);
+        var ym = YearMonth.of(holder.getYearByUser(user), holder.getMonthByUser(user));
         var totalDays = ym.lengthOfMonth();
         var days = new LocalDate[totalDays];
         // fill dates
         for (int i = 0; i < totalDays; i++) {
-            days[i] = LocalDate.of(Integer.parseInt(year), month, i + 1);
+            days[i] = LocalDate.of(holder.getYearByUser(user), holder.getMonthByUser(user), i + 1);
         }
         // put days of month with days of week
         mav.addObject("days", days);
         // remember user selected month and year to display after refresh page
-        mav.addObject("selectedMonth", num2month(month));
-        mav.addObject("selectedMonthNum", month);
-        mav.addObject("selectedYear", year);
+        mav.addObject("selectedMonth", num2month(holder.getMonthByUser(user)));
+        mav.addObject("selectedMonthNum", holder.getMonthByUser(user));
+        mav.addObject("selectedYear", holder.getYearByUser(user));
         // add tours created for entered month
-        var tours = tourService.getToursForDate(month, Integer.parseInt(year));
+        var tours = tourService.getToursForDate(holder.getMonthByUser(user), holder.getYearByUser(user));
         mav.addObject("tours", tours);
         mav.addObject("activePicasso", true);
         mav.addObject("toursCount", tours.size());
@@ -175,9 +184,9 @@ public class AdvancedTourController {
             case 9:
                 return "September";
             case 10:
-                return "November";
-            case 11:
                 return "October";
+            case 11:
+                return "November";
             case 12:
                 return "December";
         }

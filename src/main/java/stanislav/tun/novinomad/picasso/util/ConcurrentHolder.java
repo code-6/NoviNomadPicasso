@@ -16,7 +16,8 @@ public class ConcurrentHolder {
     private Map<Driver, User> driversHolder = new HashMap<>();
     private Map<Guide, User> guidesHolder = new HashMap<>();
     private Map<Tour, User> toursHolder = new HashMap<>();
-    private Map<Integer, User> yearHolder = new HashMap<>();
+    private Map<User, Integer> yearHolder = new HashMap<>();
+    private Map<User, Integer> monthHolder = new HashMap<>();
 
     @Autowired
     private DriverService driverService;
@@ -41,8 +42,33 @@ public class ConcurrentHolder {
         }
     }
 
-    public void hold(Integer year, User user){
-        yearHolder.put(year, user);
+    public int getYearByUser(User user) {
+        int result = -1;
+        if (yearHolder.containsKey(user))
+            result = yearHolder.get(user);
+        return result;
+    }
+
+    public int getMonthByUser(User user) {
+        int res = -1;
+        if (monthHolder.containsKey(user))
+            res = monthHolder.get(user);
+
+        return res;
+    }
+
+    public void hold(Integer year, User user) {
+        yearHolder.put(user, year);
+        logger.debug("Hold year: " + year + " user: " + user.getUserName());
+    }
+
+    public void hold(Integer month, Integer year, User user) {
+        if (month != null)
+            yearHolder.put(user, year);
+        if (year != null)
+            monthHolder.put(user, month);
+
+        logger.debug("Hold year: " + year + " month: " + month + " user: " + user.getUserName());
     }
 
     /**
