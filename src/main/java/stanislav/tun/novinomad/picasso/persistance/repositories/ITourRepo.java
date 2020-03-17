@@ -38,5 +38,13 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
     @Query("select t from tours as t where extract(YEAR from t.startDate) = :year or extract(YEAR from t.endDate) = :year order by t.startDate asc")
     Collection<Tour> findToursByYear(@Param("year") int year);
 
+    @Query(value = "select t.* from tours as t " +
+            "join tours_drivers as td on t.id = td.tour_id " +
+            "where td.driver_id = :driverId " +
+            "and ( trunc(t.start_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')) " +
+            "or trunc(t.end_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')))",
+            nativeQuery = true)
+    Collection<Tour> findDriverFutureTours(@Param("driverId") long driverId);
+
     boolean existsByTittle(String title);
 }

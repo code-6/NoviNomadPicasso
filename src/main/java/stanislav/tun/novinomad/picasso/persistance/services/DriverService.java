@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
+import stanislav.tun.novinomad.picasso.persistance.repositories.ITourRepo;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -18,6 +19,9 @@ public class  DriverService {
     Logger logger = LoggerFactory.getLogger(DriverService.class);
     @Autowired
     IDriverRepo repo;
+
+    @Autowired
+    private ITourRepo tourRepo;
 
     public void createOrUpdateDriver(Driver driver){
         var u = UUID.randomUUID().toString();
@@ -70,7 +74,7 @@ public class  DriverService {
     }
 
     public boolean hasFutureTours(Driver driver){
-        Collection<Tour> tours = repo.findDriverFutureTours(driver.getId());
+        Collection<Tour> tours = tourRepo.findDriverFutureTours(driver.getId());
         if(tours != null)
             return !tours.isEmpty();
 
@@ -78,7 +82,7 @@ public class  DriverService {
     }
 
     public Collection<Tour> getDriverFutureTours(Driver driver){
-        return repo.findDriverFutureTours(driver.getId());
+        return tourRepo.findDriverFutureTours(driver.getId());
     }
 
     public boolean exist(Driver driver){
