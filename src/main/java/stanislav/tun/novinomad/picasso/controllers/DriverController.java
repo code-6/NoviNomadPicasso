@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.User;
@@ -80,8 +81,22 @@ public class DriverController {
                 return mav;
             } else {
                 // todo : check if driver attached to future tours.
-                d.setDeleted(true);
-                driverService.createOrUpdateDriver(d);
+                if (!driverService.hasFutureTours(driver.get())){
+                    d.setDeleted(true);
+                    driverService.createOrUpdateDriver(d);
+                }else{
+                    // todo : return error view.
+                    mav = getDriversListView();
+                    mav.addObject("error", "Delete rejected!");
+                    var desc = "Driver: "+d.getFullName()+" has tours: ";
+                    var futureTours = driverService.getDriverFutureTours(d);
+                    for (Tour t : futureTours) {
+                        desc += t.getTittle()+";\n";
+                    }
+                    desc += "Please remove driver from tours above and try again.";
+                    mav.addObject("errorDesc", desc);
+                    return mav;
+                }
             }
         }
         mav.addObject("drivers", driverService.getDriversList());

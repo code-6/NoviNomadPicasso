@@ -10,10 +10,7 @@ import stanislav.tun.novinomad.picasso.persistance.repositories.IDriverRepo;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -70,6 +67,18 @@ public class  DriverService {
             }
         }
         return list;
+    }
+
+    public boolean hasFutureTours(Driver driver){
+        var tours = repo.findDriverFutureTours(driver.getId());
+        if(tours != null)
+            return !tours.isEmpty();
+
+        return true;
+    }
+
+    public Collection<Tour> getDriverFutureTours(Driver driver){
+        return repo.findDriverFutureTours(driver.getId());
     }
 
     public boolean exist(Driver driver){
