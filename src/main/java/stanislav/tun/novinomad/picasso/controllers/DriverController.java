@@ -88,12 +88,12 @@ public class DriverController {
                     // todo : return error view.
                     mav = getDriversListView();
                     mav.addObject("error", "Delete rejected!");
-                    var desc = "Driver: "+d.getFullName()+" has tours: ";
+                    var desc = "Driver: "+d.getFullName()+" included in tours: ";
                     var futureTours = driverService.getDriverFutureTours(d);
                     for (Tour t : futureTours) {
                         desc += t.getTittle()+";\n";
                     }
-                    desc += "Please remove driver from tours above and try again.";
+                    desc += "Please exclude driver from tours above and try again.";
                     mav.addObject("errorDesc", desc);
                     return mav;
                 }
