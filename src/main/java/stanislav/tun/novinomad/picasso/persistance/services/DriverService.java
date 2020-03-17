@@ -70,7 +70,7 @@ public class  DriverService {
     }
 
     public boolean hasFutureTours(Driver driver){
-        var tours = repo.findDriverFutureTours(driver.getId());
+        Collection<Tour> tours = repo.findDriverFutureTours(driver.getId());
         if(tours != null)
             return !tours.isEmpty();
 

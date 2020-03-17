@@ -20,8 +20,8 @@ public interface IDriverRepo extends CrudRepository<Driver, Long> {
             value = "select t.* from tours t " +
                     "join tours_drivers td on t.id = td.tour_id " +
                     "where td.driver_id = :driverId " +
-                    "and ( trunc(t.start_date) >= trunc(to_date(sysdate, 'DD.MM.YYYY')) " +
-                    "or trunc(t.end_date) >= trunc(to_date(sysdate, 'DD.MM.YYYY')) )")
+                    "and ( trunc(t.start_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')) " +
+                    "or trunc(t.end_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')))")
     Collection<Tour> findDriverFutureTours(@Param("driverId") long driverId);
 
 }
