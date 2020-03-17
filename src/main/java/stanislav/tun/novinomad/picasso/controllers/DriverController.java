@@ -79,6 +79,7 @@ public class DriverController {
                 mav.addObject("errorDesc", desc);
                 return mav;
             } else {
+                // todo : check if driver attached to future tours.
                 d.setDeleted(true);
                 driverService.createOrUpdateDriver(d);
             }
