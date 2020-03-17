@@ -85,6 +85,8 @@ public class PicassoApp {
             d.setFirstName(faker.name().firstName());
             d.setLastName(faker.name().lastName());
             d.setCar(getRandomCar());
+            d.setCreatedBy("SYSTEM");
+            d.setCreationDate(new Date());
             driverService.createOrUpdateDriver(d);
         }
     }
@@ -95,6 +97,8 @@ public class PicassoApp {
             g.setFirstName(faker.name().firstName());
             g.setLastName(faker.name().lastName());
             g.setLanguage(getRandomLanguage());
+            g.setCreatedBy("SYSTEM");
+            g.setCreationDate(new Date());
             guideService.createOrUpdateGuide(g);
         }
     }
@@ -145,6 +149,7 @@ public class PicassoApp {
 
             tour.setCreatedBy("SYSTEM");
             tour.setCreationDate(new Date());
+            tour.setTouristsCount(getRandomNumInRange(7, 14));
 
             tourService.createOrUpdateTour(tour);
         }

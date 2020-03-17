@@ -16,12 +16,12 @@ public interface IDriverRepo extends CrudRepository<Driver, Long> {
 
     Driver findByFullName(String name);
 
-    @Query(nativeQuery = true,
-            value = "select t.* from tours t " +
-                    "join tours_drivers td on t.id = td.tour_id " +
-                    "where td.driver_id = :driverId " +
-                    "and ( trunc(t.start_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')) " +
-                    "or trunc(t.end_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')))")
+    @Query(value = "select t.* from tours as t " +
+            "join tours_drivers as td on t.id = td.tour_id " +
+            "where td.driver_id = :driverId " +
+            "and ( trunc(t.start_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')) " +
+            "or trunc(t.end_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')))",
+            nativeQuery = true)
     Collection<Tour> findDriverFutureTours(@Param("driverId") long driverId);
 
 }
