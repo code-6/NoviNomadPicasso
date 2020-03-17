@@ -75,7 +75,7 @@ public class TourController {
         var mav = new ModelAndView("toursListPage");
         List<Tour> allTours;
         if (year == null) {
-            if(holder.getYearByUser(user) == -1)
+            if (holder.getYearByUser(user) == -1)
                 holder.hold(LocalDate.now().getYear(), user);
             allTours = tourService.getToursByYear(holder.getYearByUser(user));
         } else {
@@ -191,9 +191,15 @@ public class TourController {
         } catch (ValidationException e) {
             logger.error(getStackTrace(e));
         }
-        tour.setFileName(file.getOriginalFilename());
+        var exist = tourService.exist(tour.getTittle());
+        // to resolve bug when file overwrites if edit tour.
+        if (exist) {
+            if (file.getOriginalFilename().equals("") || file.getOriginalFilename() == null)
+                tour.setFileName(tourService.getTour(tour.getId()).get().getFileName());
+        } else
+            tour.setFileName(file.getOriginalFilename());
+
         var mav = new ModelAndView();
-        // todo : refactor duplicate try-catch blocks
         try {
             attachDrivers(drivers2attach, tour);
             attachGuides(guides2attach, tour);
@@ -208,9 +214,12 @@ public class TourController {
         }
         excludeDrivers(drivers2exclude, tour);
         excludeGuides(guides2exclude, tour);
-        var exist = tourService.exist(tour.getTittle());
+
 
         var logtour = tourService.createOrUpdateTour(tour);
+        // set default interval even if adv pressed or not.
+        // this fix bug when user pressed advanced and leaves
+        setDefaultIntervals(tour);
         if (adv) {
             if (tour.getStartDate() == null && tour.getEndDate() == null) {
                 mav = getAddTourView();
@@ -222,16 +231,15 @@ public class TourController {
                 mav.setViewName("advancedTourPage");
                 getAdvancedPage(tour, wrapper);
             }
-        } else { // set to whole tour by default
+        } else {
             // todo: release tour only if advanced no pressed, otherwise release only after advanced confirm
             holder.release(tour);
-            setDefaultIntervals(tour);
             var m = tour.getStartDate().getMonth().getValue();
             var y = tour.getStartDate().getYear();
             var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
             mav.setViewName(r);
 
-            if(!exist)
+            if (!exist)
                 logger.info("create " + logtour.toString());
             else
                 logger.info("edit " + logtour.toString());

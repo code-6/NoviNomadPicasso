@@ -55,11 +55,6 @@ public class PicassoApp {
     Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
-
-    @Bean
     public AuditorAware<String> auditorAware() {
         return new AuditorAwareImpl();
     }
@@ -248,7 +243,7 @@ public class PicassoApp {
 
         createDriversLoop(50);
         createGuidesLoop(50);
-        createToursLoop(100, 2);
+        //createToursLoop(100, 2);
     }
 
 }
