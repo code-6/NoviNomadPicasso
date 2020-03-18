@@ -46,5 +46,13 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
             nativeQuery = true)
     Collection<Tour> findDriverFutureTours(@Param("driverId") long driverId);
 
+    @Query(value = "select t.* from tours as t " +
+            "join tours_guides as td on t.id = td.tour_id " +
+            "where td.guide_id = :guideId " +
+            "and ( trunc(t.start_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')) " +
+            "or trunc(t.end_date) >= trunc(to_char(sysdate, 'YYYY-MM-DD HH:MM:SS')))",
+            nativeQuery = true)
+    Collection<Tour> findGuideFutureTours(@Param("guideId") long guideId);
+
     boolean existsByTittle(String title);
 }

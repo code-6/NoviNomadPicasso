@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
+import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
 import stanislav.tun.novinomad.picasso.persistance.pojos.User;
 import stanislav.tun.novinomad.picasso.persistance.services.GuideService;
 import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
+
+import java.util.UUID;
 
 
 @Controller
@@ -91,8 +94,22 @@ public class GuideController {
 
                 return mav;
             } else {
-                g.setDeleted(true);
-                guideService.createOrUpdateGuide(g);
+                if(!guideService.hasFutureTours(g)){
+                    g.setDeleted(true);
+                    var v = guideService.createOrUpdateGuide(g);
+                    logger.info("Deleted guide "+v.getId()+" "+v.getFullName()+" by "+v.getLastModifiedBy());
+                }else{
+                    mav = getGuidesListView();
+                    mav.addObject("error", "Delete rejected!");
+                    var desc = "Guide: " + g.getFullName() + " included in tours: ";
+                    var futureTours = guideService.getGuideFutureTours(g);
+                    for (Tour t : futureTours) {
+                        desc += t.getTittle() + ";\n";
+                    }
+                    desc += "Please exclude guide from tours above and try again.";
+                    mav.addObject("errorDesc", desc);
+                    return mav;
+                }
             }
         }
         mav.addObject("guides", guideService.getGuidesList());
@@ -105,10 +122,17 @@ public class GuideController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String addOrUpdateGuideAction(Guide guide) {
         // if exist => edit => hold
-        if(guideService.exist(guide))
+        var exist = guideService.exist(guide);
+        if(exist)
             holder.release(guide);
         
-        guideService.createOrUpdateGuide(guide);
+        var g = guideService.createOrUpdateGuide(guide);
+        var uuid = UUID.randomUUID().toString();
+        if (exist)
+            logger.info(uuid + " edit " + g.toString());
+        else
+            logger.info(uuid + " create " + g.toString());
+
         return "redirect:/guides/list";
     }
 }

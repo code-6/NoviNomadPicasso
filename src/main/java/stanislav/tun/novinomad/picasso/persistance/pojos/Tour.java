@@ -396,21 +396,21 @@ public class Tour extends AbstractEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Tour{" +
-                "\nid=" + id +
-                ",\ntittle='" + tittle + '\'' +
-                ",\ndate=" + getRange().toString() +
-                ",\nfileName='" + fileName + '\'' +
-                ",\ndays=" + days +
-                ",\ntouristsCount=" + touristsCount +
-                ",\ndesc="+description+
-                ",\ndrivers="+getDriversAsString()+
-                ",\nguides="+getGuidesAsString() +
-                ",\ncreatedBy='" + createdBy + '\'' +
-                ",\ncreationDate=" + creationDate +
-                ",\nlastModifiedBy='" + lastModifiedBy + '\'' +
-                ",\nlasModifyDate=" + lasModifyDate +
-                '}';
+        return "Tour {" +
+                "\n     id=" + id +
+                ",\n    tittle='" + tittle + '\'' +
+                ",\n    date=" + getRange().toString() +
+                ",\n    fileName='" + fileName + '\'' +
+                ",\n    days=" + days +
+                ",\n    touristsCount=" + touristsCount +
+                ",\n    desc="+description+
+                ",\n    drivers="+getDriversAsString()+
+                ",\n    guides="+getGuidesAsString() +
+                ",\n    createdBy='" + createdBy + '\'' +
+                ",\n    creationDate=" + creationDate +
+                ",\n    lastModifiedBy='" + lastModifiedBy + '\'' +
+                ",\n    lasModifyDate=" + lasModifyDate +
+                "\n}";
     }
 
     private String getDriversAsString() {

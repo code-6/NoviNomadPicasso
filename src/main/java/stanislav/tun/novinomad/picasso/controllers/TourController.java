@@ -191,6 +191,7 @@ public class TourController {
         } catch (ValidationException e) {
             logger.error(getStackTrace(e));
         }
+        var uuid = UUID.randomUUID().toString();
         var exist = tourService.exist(tour.getTittle());
         // to resolve bug when file overwrites if edit tour.
         if (exist) {
@@ -215,7 +216,6 @@ public class TourController {
         excludeDrivers(drivers2exclude, tour);
         excludeGuides(guides2exclude, tour);
 
-
         var logtour = tourService.createOrUpdateTour(tour);
         // set default interval even if adv pressed or not.
         // this fix bug when user pressed advanced and leaves
@@ -233,18 +233,21 @@ public class TourController {
             }
         } else {
             // todo: release tour only if advanced no pressed, otherwise release only after advanced confirm
-            holder.release(tour);
+            if(holder.isHold(tour))
+                holder.release(tour);
+
             var m = tour.getStartDate().getMonth().getValue();
             var y = tour.getStartDate().getYear();
             var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
             mav.setViewName(r);
 
-            if (!exist)
-                logger.info("create " + logtour.toString());
-            else
-                logger.info("edit " + logtour.toString());
+            if (exist) {
+                logger.info(uuid + " edit " + logtour.toString());
+            } else {
+                logger.info(uuid + " create " + logtour.toString());
+            }
         }
-        mav.addObject("tour", tour);
+        mav.addObject("tour", logtour);
 
         return mav;
     }

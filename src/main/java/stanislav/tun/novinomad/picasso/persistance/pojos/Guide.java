@@ -131,33 +131,33 @@ public class Guide extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Guide{" +
-                "\nid=" + id +
-                ",\nfullName='" + getFullName() + '\'' +
-                ",\nlanguage='" + language + '\'' +
-                ",\ncreatedBy='" + createdBy + '\'' +
-                ",\ncreationDate=" + creationDate +
-                ",\nlastModifiedBy='" + lastModifiedBy + '\'' +
-                ",\nlasModifyDate=" + lasModifyDate +
-                ",\ndeleted=" + deleted +
-                '}';
+        return "Guide {" +
+                "\n     id=" + id +
+                ",\n    fullName='" + getFullName() + '\'' +
+                ",\n    language='" + language + '\'' +
+                ",\n    createdBy='" + createdBy + '\'' +
+                ",\n    creationDate=" + creationDate +
+                ",\n    lastModifiedBy='" + lastModifiedBy + '\'' +
+                ",\n    lasModifyDate=" + lasModifyDate +
+                ",\n    deleted=" + deleted +
+                "\n}";
     }
 
     public String toString(DateTimeRange i) {
 
         try{
-            return "Guide{" +
-                    "\nid=" + id +
-                    ",\nfullName='" + getFullName() + '\'' +
-                    ",\nlanguage='" + language + '\'' +
-                    ",\ninterval=" + i.toString() +
-                    '}';
+            return "Guide {" +
+                    "\n         id=" + id +
+                    ",\n        fullName='" + getFullName() + '\'' +
+                    ",\n        language='" + language + '\'' +
+                    ",\n        interval=" + i.toString() +
+                    "\n}";
         }catch (NullPointerException e){
-            return "Guide{" +
-                    "\nid=" + id +
-                    ",\nfullName='" + getFullName() + '\'' +
-                    ",\nlanguage='" + language + '\'' +
-                    '}';
+            return "Guide {" +
+                    "\n         id=" + id +
+                    ",\n        fullName='" + getFullName() + '\'' +
+                    ",\n        language='" + language + '\'' +
+                    "\n}";
         }
 
     }

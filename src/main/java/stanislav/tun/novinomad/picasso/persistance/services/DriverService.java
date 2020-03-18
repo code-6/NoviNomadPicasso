@@ -23,16 +23,8 @@ public class  DriverService {
     @Autowired
     private ITourRepo tourRepo;
 
-    public void createOrUpdateDriver(Driver driver){
-        var u = UUID.randomUUID().toString();
-        if(exist(driver))
-            logger.info(u+" edit "+ driver.toString());
-        else
-            logger.info(u+" create "+driver.toString());
-
-        repo.save(driver);
-
-        logger.info(u+" success");
+    public Driver createOrUpdateDriver(Driver driver){
+        return repo.save(driver);
     }
 
     public List<Driver> getDriversList(){

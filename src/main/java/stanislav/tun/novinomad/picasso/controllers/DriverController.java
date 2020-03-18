@@ -16,6 +16,8 @@ import stanislav.tun.novinomad.picasso.persistance.pojos.User;
 import stanislav.tun.novinomad.picasso.persistance.services.DriverService;
 import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/drivers")
 public class DriverController {
@@ -81,17 +83,19 @@ public class DriverController {
                 return mav;
             } else {
                 // todo : check if driver attached to future tours.
-                if (!driverService.hasFutureTours(driver.get())){
+                if (!driverService.hasFutureTours(driver.get())) {
                     d.setDeleted(true);
-                    driverService.createOrUpdateDriver(d);
-                }else{
+                    var v = driverService.createOrUpdateDriver(d);
+
+                    logger.info("Deleted driver "+v.getId()+" "+v.getFullName()+" by "+v.getLastModifiedBy());
+                } else {
                     // todo : return error view.
                     mav = getDriversListView();
                     mav.addObject("error", "Delete rejected!");
-                    var desc = "Driver: "+d.getFullName()+" included in tours: ";
+                    var desc = "Driver: " + d.getFullName() + " included in tours: ";
                     var futureTours = driverService.getDriverFutureTours(d);
                     for (Tour t : futureTours) {
-                        desc += t.getTittle()+";\n";
+                        desc += t.getTittle() + ";\n";
                     }
                     desc += "Please exclude driver from tours above and try again.";
                     mav.addObject("errorDesc", desc);
@@ -122,11 +126,16 @@ public class DriverController {
 //        modelAndView.setViewName("redirect:/drivers/add");
         modelAndView.setViewName("redirect:/drivers/list");
         // if exist => edit => hold
-        if (driverService.exist(driver))
+        var exist = driverService.exist(driver);
+        if (exist)
             holder.release(driver);
 
-        driverService.createOrUpdateDriver(driver);
-
+        var d = driverService.createOrUpdateDriver(driver);
+        var uuid = UUID.randomUUID().toString();
+        if (exist)
+            logger.info(uuid + " edit " + d.toString());
+        else
+            logger.info(uuid + " create " + d.toString());
         return modelAndView;
     }
 }

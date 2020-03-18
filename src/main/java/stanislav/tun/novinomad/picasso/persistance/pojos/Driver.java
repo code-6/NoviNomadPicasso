@@ -134,32 +134,32 @@ public class Driver extends AbstractEntity implements Serializable {
     @Override
     public String toString() {
         return "Driver{" +
-                "\nid=" + id +
-                ",\nfullName='" + getFullName() + '\'' +
-                ",\ncar='" + car + '\'' +
-                ",\ncreatedBy='" + createdBy + '\'' +
-                ",\ncreationDate=" + creationDate +
-                ",\nlastModifiedBy='" + lastModifiedBy + '\'' +
-                ",\nlasModifyDate=" + lasModifyDate +
-                ",\ndeleted=" + deleted +
-                '}';
+                "\n     id=" + id +
+                ",\n    fullName='" + getFullName() + '\'' +
+                ",\n    car='" + car + '\'' +
+                ",\n    createdBy='" + createdBy + '\'' +
+                ",\n    creationDate=" + creationDate +
+                ",\n    lastModifiedBy='" + lastModifiedBy + '\'' +
+                ",\n    lasModifyDate=" + lasModifyDate +
+                ",\n    deleted=" + deleted +
+                "\n}";
     }
 
     public String toString(DateTimeRange i) {
 
         try{
-            return "Driver{" +
-                    "\nid=" + id +
-                    ",\nfullName='" + getFullName() + '\'' +
-                    ",\ncar='" + car + '\'' +
-                    ",\ninterval=" + i.toString() +
-                    '}';
+            return "Driver {" +
+                    "\n         id=" + id +
+                    ",\n        fullName='" + getFullName() + '\'' +
+                    ",\n        car='" + car + '\'' +
+                    ",\n        interval=" + i.toString() +
+                    "\n}";
         }catch (NullPointerException e){
-            return "Driver{" +
-                    "\nid=" + id +
-                    ",\nfullName='" + getFullName() + '\'' +
-                    ",\ncar='" + car + '\'' +
-                    '}';
+            return "Driver {" +
+                    "\n         id=" + id +
+                    ",\n        fullName='" + getFullName() + '\'' +
+                    ",\n        car='" + car + '\'' +
+                    "\n}";
         }
 
     }
