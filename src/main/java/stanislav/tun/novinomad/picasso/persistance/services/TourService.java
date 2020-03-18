@@ -26,13 +26,10 @@ public class TourService {
 
     public Tour createOrUpdateTour(Tour tour) {
         var u = UUID.randomUUID().toString();
-        if (repo.existsById(tour.getId()))
-            logger.info(u+" edit tour " + tour.getId());
-        else
-            logger.info(u+" create tour " + tour.getId());
-
+        var exist = repo.existsById(tour.getId());
         Tour t = repo.save(tour);
-        logger.info(u+" success");
+        var msg = exist ? u+" edit "+t.toString() : u+" create "+t.toString();
+        logger.info(msg);
         return t;
     }
 

@@ -4,7 +4,6 @@ plugins {
     id 'java'
     id 'eclipse'
     id 'idea'
-    id 'war'
 }
 
 group = 'stanislav.tun'
@@ -13,10 +12,6 @@ sourceCompatibility = '11'
 
 bootRun {
     sourceResources sourceSets.main
-}
-
-bootWar {
-    archiveName 'novinomad.war'
 }
 
 configurations {
@@ -35,7 +30,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.oracle.ojdbc:ojdbc8'
@@ -63,6 +57,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
     compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
+    
     // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
     compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
 
