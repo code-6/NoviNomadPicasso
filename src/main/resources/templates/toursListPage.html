@@ -43,7 +43,7 @@
                           th:text="${'Tours for: '+selectedYear+' year'}"
                           style="color: white"></span>
 
-                    <span th:text="${'Tours count: '+toursCount}"
+                    <span th:text="${' count: '+toursCount}"
                           style="color: white"></span>
                 </div>
             </div>
@@ -53,9 +53,9 @@
             <caption>List of tours</caption>
             <thead class="thead-dark">
             <tr>
-                <th data-sortable="true" data-field="id">
-                    <button type="button" class="btn btn-outline-info btn-sm">ID</button>
-                </th>
+<!--                <th data-sortable="true" data-field="id">-->
+<!--                    <button type="button" class="btn btn-outline-info btn-sm">ID</button>-->
+<!--                </th>-->
                 <th data-sortable="true" data-field="title">
                     <button type="button" class="btn btn-outline-info btn-sm">TITLE</button>
                 </th>
@@ -66,7 +66,8 @@
                     <button type="button" class="btn btn-outline-info btn-sm">END</button>
                 </th>
                 <th data-sortable="true" data-field="days">
-                    <button type="button" class="btn btn-outline-info btn-sm">DAYS</button>
+                    <button type="button" class="btn btn-outline-info btn-sm"
+                            title="Total days in tour">DC</button>
                 </th>
                 <th data-sortable="true" data-field="drivers">
                     <button type="button" class="btn btn-outline-info btn-sm">DRIVERS</button>
@@ -97,7 +98,7 @@
             <tbody>
             <!--/*@thymesVar id="toursList" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Tour>"*/-->
             <tr th:each="tour:${toursList}">
-                <td th:text="${tour.id}"></td>
+<!--                <td th:text="${tour.id}"></td>-->
                 <!--            <td th:text="${tour.tittle}" th:title="${tour.description}"></td>-->
                 <td style="max-width: 130px;" class="text-truncate">
                     <a th:href="@{/tours/details{id}(id=${tour.id})}"
