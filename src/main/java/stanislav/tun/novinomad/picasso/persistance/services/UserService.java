@@ -13,7 +13,7 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     @Autowired
-    IUserRepo userRepo;
+    private IUserRepo userRepo;
 
     public void createUser(User user) {
         userRepo.save(user);

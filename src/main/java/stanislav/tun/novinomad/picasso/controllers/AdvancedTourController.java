@@ -36,14 +36,13 @@ public class AdvancedTourController {
     private GuideService guideService;
 
     @Autowired
-    ConcurrentHolder holder;
+    private ConcurrentHolder holder;
 
     @Autowired
-    AuditorAware auditor;
+    private AuditorAware auditor;
 
     @Autowired
-    UserService userService;
-
+    private UserService userService;
 
     private Logger logger = LoggerFactory.getLogger(AdvancedTourController.class);
 

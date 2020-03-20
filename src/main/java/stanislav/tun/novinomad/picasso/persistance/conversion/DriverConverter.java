@@ -13,7 +13,7 @@ import java.util.Locale;
 public class DriverConverter implements Formatter< Driver> {
 
     @Autowired
-    DriverService service;
+    private DriverService service;
 
     @Override
     public Driver parse(String text, Locale locale) throws ParseException {

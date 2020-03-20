@@ -23,18 +23,18 @@ import java.util.UUID;
 public class DriverController {
 
     @Autowired
-    DriverService driverService;
+    private DriverService driverService;
 
     @Autowired
-    ConcurrentHolder holder;
+    private ConcurrentHolder holder;
 
     @Autowired
-    AuditorAware auditor;
+    private AuditorAware auditor;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    Logger logger = LoggerFactory.getLogger(DriverController.class);
+    private Logger logger = LoggerFactory.getLogger(DriverController.class);
 
     @RequestMapping("/list")
     public ModelAndView getDriversListView() {

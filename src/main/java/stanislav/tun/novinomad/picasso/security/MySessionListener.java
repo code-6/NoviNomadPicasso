@@ -14,16 +14,16 @@ import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
 
 @Component
 public class MySessionListener implements ApplicationListener<HttpSessionDestroyedEvent> {
-    Logger log = LoggerFactory.getLogger(MySessionListener.class);
+    private Logger log = LoggerFactory.getLogger(MySessionListener.class);
 
     @Autowired
-    ConcurrentHolder holder;
+    private ConcurrentHolder holder;
 
     @Autowired
-    AuditorAware auditor;
+    private AuditorAware auditor;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Override
     public void onApplicationEvent(HttpSessionDestroyedEvent event) {

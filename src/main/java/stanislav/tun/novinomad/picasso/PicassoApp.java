@@ -53,7 +53,7 @@ public class PicassoApp {
     @Autowired
     private TourService tourService;
 
-    Logger logger = LoggerFactory.getLogger(PicassoApp.class);
+    private Logger logger = LoggerFactory.getLogger(PicassoApp.class);
 
     @Bean
     public AuditorAware<String> auditorAware() {

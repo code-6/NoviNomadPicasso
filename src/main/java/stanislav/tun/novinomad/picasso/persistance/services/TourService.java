@@ -3,6 +3,7 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,14 @@ import java.util.UUID;
 @Transactional
 public class TourService {
 
-    Logger logger = LoggerFactory.getLogger(TourService.class);
+    private Logger logger = LoggerFactory.getLogger(TourService.class);
 
     @Autowired
-    ITourRepo repo;
+    private ITourRepo repo;
 
 //    @CachePut({"findAll", "findToursByMonthAndYear", "findToursByMonthAndYearAndDriver", "findToursByMonthAndYearAndGuide",
 //    "findToursByYear", "findDriverFutureTours", "findGuideFutureTours"})
+    @CacheEvict(value = {"ToursRelated2Driver", "ToursRelated2Guide", "ToursForDate", "ToursByYear"}, allEntries = true)
     public Tour createOrUpdateTour(Tour tour) {
         return repo.save(tour);
     }
@@ -44,10 +46,12 @@ public class TourService {
         return repo.existsByTittle(title);
     }
 
+    @Cacheable("ToursRelated2Driver")
     public List<Tour> getToursRelated2Driver(Long driverId, int month, int year) {
         return (List<Tour>) repo.findToursByMonthAndYearAndDriver(month, year, driverId);
     }
 
+    @Cacheable("ToursRelated2Guide")
     public List<Tour> getToursRelated2Guide(Long guideId, int month, int year){
         return (List<Tour>) repo.findToursByMonthAndYearAndGuide(month, year, guideId);
     }
@@ -60,10 +64,12 @@ public class TourService {
         return repo.findAll();
     }
 
+    @CacheEvict("ToursForDate")
     public List<Tour> getToursForDate(int month, int year) {
         return (List<Tour>) repo.findToursByMonthAndYear(month, year);
     }
 
+    @Cacheable("ToursByYear")
     public List<Tour> getToursByYear(int year){
         return (List<Tour>) repo.findToursByYear(year);
     }

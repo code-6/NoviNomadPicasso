@@ -23,18 +23,18 @@ import java.util.UUID;
 @RequestMapping("/guides")
 public class GuideController {
     @Autowired
-    GuideService guideService;
+    private GuideService guideService;
 
     @Autowired
-    ConcurrentHolder holder;
+    private ConcurrentHolder holder;
 
     @Autowired
-    AuditorAware auditor;
+    private AuditorAware auditor;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    Logger logger = LoggerFactory.getLogger(GuideController.class);
+    private Logger logger = LoggerFactory.getLogger(GuideController.class);
 
     @RequestMapping("/list")
     public ModelAndView getGuidesListView() {

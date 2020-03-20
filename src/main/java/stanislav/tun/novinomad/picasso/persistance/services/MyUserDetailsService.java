@@ -11,7 +11,7 @@ import stanislav.tun.novinomad.picasso.security.MyUserDetails;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
     @Autowired
-    IUserRepo userRepo;
+    private IUserRepo userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

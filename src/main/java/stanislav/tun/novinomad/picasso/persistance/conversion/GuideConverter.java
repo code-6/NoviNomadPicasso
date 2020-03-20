@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class GuideConverter implements Formatter<Guide> {
     @Autowired
-    GuideService guideService;
+    private GuideService guideService;
 
     @Override
     public Guide parse(String s, Locale locale) throws ParseException {

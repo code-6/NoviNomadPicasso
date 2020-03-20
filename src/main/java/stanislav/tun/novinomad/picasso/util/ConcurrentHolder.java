@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConcurrentHolder {
-    Logger logger = LoggerFactory.getLogger(ConcurrentHolder.class);
+    private Logger logger = LoggerFactory.getLogger(ConcurrentHolder.class);
     private Map<Driver, User> driversHolder = new HashMap<>();
     private Map<Guide, User> guidesHolder = new HashMap<>();
     private Map<Tour, User> toursHolder = new HashMap<>();

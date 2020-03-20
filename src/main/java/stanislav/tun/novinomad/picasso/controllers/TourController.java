@@ -27,30 +27,30 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 @RequestMapping("/tours")
 public class TourController {
     @Autowired
-    TourService tourService;
+    private TourService tourService;
 
     @Autowired
-    GuideService guideService;
+    private GuideService guideService;
 
     @Autowired
-    DriverService driverService;
+    private DriverService driverService;
 
     @Autowired
-    ConcurrentHolder holder;
+    private ConcurrentHolder holder;
 
     @Autowired
-    AuditorAware auditor;
+    private AuditorAware auditor;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    DriverIntervalService driverIntervalService;
+    private DriverIntervalService driverIntervalService;
 
     @Autowired
-    GuideIntervalService guideIntervalService;
+    private GuideIntervalService guideIntervalService;
 
-    Logger logger = LoggerFactory.getLogger(TourController.class);
+    private Logger logger = LoggerFactory.getLogger(TourController.class);
 
     @GetMapping("/add")
     public ModelAndView getAddTourView() {

@@ -16,10 +16,10 @@ import java.util.Optional;
 @Service
 @Transactional
 public class GuideIntervalService {
-    Logger logger = LoggerFactory.getLogger(GuideIntervalService.class);
+    private Logger logger = LoggerFactory.getLogger(GuideIntervalService.class);
 
     @Autowired
-    IGuideIntervalRepo repo;
+    private IGuideIntervalRepo repo;
 
     public void createOrUpdateInterval( GuideTourIntervals interval) {
 

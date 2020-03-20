@@ -17,10 +17,10 @@ import java.util.Optional;
 @Transactional
 public class DriverIntervalService {
 
-    Logger logger = LoggerFactory.getLogger(DriverIntervalService.class);
+    private Logger logger = LoggerFactory.getLogger(DriverIntervalService.class);
 
     @Autowired
-    IDriverIntervalRepo repo;
+    private IDriverIntervalRepo repo;
 
     public void createOrUpdateInterval(DriverTourIntervals interval) {
         //logger.info("created " + JsonPrinter.getString(interval));
