@@ -3,6 +3,8 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Guide;
@@ -24,6 +26,8 @@ public class TourService {
     @Autowired
     ITourRepo repo;
 
+//    @CachePut({"findAll", "findToursByMonthAndYear", "findToursByMonthAndYearAndDriver", "findToursByMonthAndYearAndGuide",
+//    "findToursByYear", "findDriverFutureTours", "findGuideFutureTours"})
     public Tour createOrUpdateTour(Tour tour) {
         return repo.save(tour);
     }

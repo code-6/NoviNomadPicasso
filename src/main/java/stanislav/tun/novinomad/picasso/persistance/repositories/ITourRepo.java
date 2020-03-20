@@ -14,14 +14,17 @@ import java.util.List;
 public interface ITourRepo extends JpaRepository<Tour, Long> {
 
     @Override
+    //@Cacheable("findAll")
     List<Tour> findAll();
 
     Tour findByTittle(String tittle);
 
+    //@Cacheable("findToursByMonthAndYear")
     @Query("select t from tours as t where ( extract(MONTH FROM t.startDate) = :month and extract(YEAR from t.startDate) = :year)" +
             "or (extract(month from t.endDate) = :month and extract(YEAR from t.endDate) = :year) order by t.startDate asc")
     Collection<Tour> findToursByMonthAndYear(@Param("month") int month, @Param("year") int year);
 
+    //@Cacheable("findToursByMonthAndYearAndDriver")
     @Query(value = "select t.* from tours as t join tours_drivers as tg on tg.tour_id = t.id and tg.driver_id = :driverId where (extract(MONTH from t.start_date) = :month and extract(YEAR from t.start_date) = :year) or (extract(MONTH from t.end_date) = :month and extract(YEAR from t.end_date) = :year) order by t.start_date asc",
             nativeQuery = true)
     Collection<Tour> findToursByMonthAndYearAndDriver(@Param("month") int month, @Param("year") int year, @Param("driverId") long driverId);
@@ -31,13 +34,16 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
 //            "where d.id = :guideId " +
 //            "and ( extract(MONTH FROM t.startDate) = :month and extract(YEAR from t.startDate) = :year)" +
 //            "or (extract(month from t.endDate) = :month and extract(YEAR from t.endDate) = :year) order by t.startDate asc")
+    //@Cacheable("findToursByMonthAndYearAndGuide")
     @Query(value = "select t.* from tours as t join tours_guides as tg on tg.tour_id = t.id and tg.guide_id = :guideId where (extract(MONTH from t.start_date) = :month and extract(YEAR from t.start_date) = :year) or (extract(MONTH from t.end_date) = :month and extract(YEAR from t.end_date) = :year) order by t.start_date asc",
             nativeQuery = true)
     Collection<Tour> findToursByMonthAndYearAndGuide(@Param("month") int month, @Param("year") int year, @Param("guideId") long guideId);
 
+    //@Cacheable("findToursByYear")
     @Query("select t from tours as t where extract(YEAR from t.startDate) = :year or extract(YEAR from t.endDate) = :year order by t.startDate asc")
     Collection<Tour> findToursByYear(@Param("year") int year);
 
+    //@Cacheable("findDriverFutureTours")
     @Query(value = "select t.* from tours as t " +
             "join tours_drivers as td on t.id = td.tour_id " +
             "where td.driver_id = :driverId " +
@@ -46,6 +52,7 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
             nativeQuery = true)
     Collection<Tour> findDriverFutureTours(@Param("driverId") long driverId);
 
+    //@Cacheable("findGuideFutureTours")
     @Query(value = "select t.* from tours as t " +
             "join tours_guides as td on t.id = td.tour_id " +
             "where td.guide_id = :guideId " +

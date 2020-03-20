@@ -22,6 +22,7 @@ import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 import stanislav.tun.novinomad.picasso.security.audit.AuditorAwareImpl;
 import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
+import org.h2.tools.RunScript;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -241,9 +242,9 @@ public class PicassoApp {
         userService.createUser(user2);
         userService.createUser(user3);
 
-        //createDriversLoop(50);
-        //createGuidesLoop(50);
-        //createToursLoop(100, 2);
+        createDriversLoop(150);
+        createGuidesLoop(150);
+        createToursLoop(600, 2);
     }
 
 }

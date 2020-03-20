@@ -12,7 +12,13 @@
 <div layout:fragment="content">
 
 	<!--/*@thymesVar id="error" type="java.lang.String"*/-->
-	<h1>create / edit driver</h1>
+<!--	<h1 th:text="${edit} ? 'edit driver '+driver.fullName : 'create new driver'"></h1>-->
+	<div th:if="${edit}">
+		<h1 th:text="${'Edit driver: '+driver.fullName}"></h1>
+	</div>
+	<div th:unless="${edit}">
+		<h1 th:text="${'Create new driver'}"></h1>
+	</div>
 	<br/>
 	<!--/*@thymesVar id="driver" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
 	<form action="#" th:action="@{/drivers/save}" th:object="${driver}" method="post">

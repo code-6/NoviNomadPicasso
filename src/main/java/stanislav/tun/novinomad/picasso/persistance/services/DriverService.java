@@ -3,6 +3,8 @@ package stanislav.tun.novinomad.picasso.persistance.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Driver;
 import stanislav.tun.novinomad.picasso.persistance.pojos.Tour;
@@ -17,12 +19,15 @@ import java.util.*;
 @Transactional
 public class  DriverService {
     Logger logger = LoggerFactory.getLogger(DriverService.class);
+
     @Autowired
     IDriverRepo repo;
 
     @Autowired
     private ITourRepo tourRepo;
 
+    //@CacheEvict(value = "drivers", allEntries = true)
+    //@CachePut(value = "drivers")
     public Driver createOrUpdateDriver(Driver driver){
         return repo.save(driver);
     }

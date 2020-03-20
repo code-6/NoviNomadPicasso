@@ -52,8 +52,10 @@ public class DriverController {
     public ModelAndView getEditDriverView(@PathVariable(value = "id") Long driverId) {
         var driver = driverService.getDriver(driverId);
         var mav = new ModelAndView();
-        mav.addObject("driver", driver);
+        mav.addObject("driver", driver.get());
+        mav.addObject("edit",true);
         mav.setViewName("addDriverPage");
+
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         if (holder.isHold(driver.get())) {
             mav = getDriversListView();

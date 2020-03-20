@@ -30,7 +30,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.h2database:h2'
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.oracle.ojdbc:ojdbc8'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

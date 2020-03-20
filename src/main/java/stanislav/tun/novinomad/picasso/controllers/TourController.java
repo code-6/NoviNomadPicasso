@@ -195,6 +195,7 @@ public class TourController {
         var exist = tourService.exist(tour.getTittle());
         // to resolve bug when file overwrites if edit tour.
         if (exist) {
+            logger.debug("EXIST "+tour.getTittle());
             if (file.getOriginalFilename().equals("") || file.getOriginalFilename() == null)
                 tour.setFileName(tourService.getTour(tour.getId()).get().getFileName());
         } else
