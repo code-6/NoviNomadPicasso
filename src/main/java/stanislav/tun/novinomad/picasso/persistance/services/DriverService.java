@@ -47,7 +47,7 @@ public class DriverService {
 
     /**
      * @param name: can be a first, middle, or last name of the driver
-     *              todo: make method more smart, find by any entered text. f+m, f+l, f+m+l etc.
+     * todo: make method more smart, find by any entered text. f+m, f+l, f+m+l etc.
      */
     public Driver getDriver(String name) {
         return repo.findByFullName(name);

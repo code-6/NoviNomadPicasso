@@ -29,7 +29,8 @@ public class TourService {
 
 //    @CachePut({"findAll", "findToursByMonthAndYear", "findToursByMonthAndYearAndDriver", "findToursByMonthAndYearAndGuide",
 //    "findToursByYear", "findDriverFutureTours", "findGuideFutureTours"})
-    @CacheEvict(value = {"ToursRelated2Driver", "ToursRelated2Guide", "ToursForDate", "ToursByYear"}, allEntries = true)
+    @CacheEvict(value = {"ToursRelated2Driver", "ToursRelated2Guide", "ToursForDate", "ToursByYear",
+            "DriverFutureTours", "GuideFutureTours"}, allEntries = true)
     public Tour createOrUpdateTour(Tour tour) {
         return repo.save(tour);
     }

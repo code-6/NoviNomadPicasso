@@ -43,7 +43,7 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
     @Query("select t from tours as t where extract(YEAR from t.startDate) = :year or extract(YEAR from t.endDate) = :year order by t.startDate asc")
     Collection<Tour> findToursByYear(@Param("year") int year);
 
-    //@Cacheable("findDriverFutureTours")
+    @Cacheable("DriverFutureTours")
     @Query(value = "select t.* from tours as t " +
             "join tours_drivers as td on t.id = td.tour_id " +
             "where td.driver_id = :driverId " +
@@ -52,7 +52,7 @@ public interface ITourRepo extends JpaRepository<Tour, Long> {
             nativeQuery = true)
     Collection<Tour> findDriverFutureTours(@Param("driverId") long driverId);
 
-    //@Cacheable("findGuideFutureTours")
+    @Cacheable("GuideFutureTours")
     @Query(value = "select t.* from tours as t " +
             "join tours_guides as td on t.id = td.tour_id " +
             "where td.guide_id = :guideId " +
