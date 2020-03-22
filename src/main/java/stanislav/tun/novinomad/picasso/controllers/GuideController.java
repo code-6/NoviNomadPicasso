@@ -62,7 +62,7 @@ public class GuideController {
     public ModelAndView getEditGuideView(@PathVariable(value = "id") Long guideId){
         var guide = guideService.getGuide(guideId);
         var mav = new ModelAndView();
-        mav.addObject("guide", guide);
+        mav.addObject("guide", guide.get());
         mav.addObject("edit",true);
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         if (holder.isHold(guide.get())) {

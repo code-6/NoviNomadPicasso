@@ -35,7 +35,7 @@
 <body class="jumbotron">
 <div layout:fragment="content">
 	<div th:if="${edit}">
-		<h1 th:text="${'Edit tour: '+tour.title}"></h1>
+		<h1 th:text="${'Edit tour: '+tour.tittle}"></h1>
 	</div>
 	<div th:unless="${edit}">
 		<h1 th:text="${'Create new tour'}"></h1>
