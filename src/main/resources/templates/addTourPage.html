@@ -34,7 +34,12 @@
 </head>
 <body class="jumbotron">
 <div layout:fragment="content">
-	<h1>Add/edit tour</h1>
+	<div th:if="${edit}">
+		<h1 th:text="${'Edit tour: '+tour.title}"></h1>
+	</div>
+	<div th:unless="${edit}">
+		<h1 th:text="${'Create new tour'}"></h1>
+	</div>
 	<br/>
 	<!--/*@thymesVar id="tour" type="stanislav.tun.novinomad.picasso.persistance.pojos.Tour"*/-->
 	<!--/*@thymesVar id="drivers" type="java.util.List<stanislav.tun.novinomad.picasso.persistance.pojos.Driver>"*/-->
@@ -68,7 +73,7 @@
 				<td>Date Time Range:</td>
 				<td>
 					<input readonly th:name="tourDateTimeRange" type="text" class="datetimes"
-					       th:style="${'width: 260px;padding-left: 5px;'}" th:value="${tourRange}"/>
+					       th:style="${'width: 280px;padding-left: 5px;'}" th:value="${tourRange}"/>
 					<script>
                         $(function () {
                             $('.datetimes').daterangepicker({
@@ -78,9 +83,10 @@
                                 timePicker24Hour: true,
                                 timePickerIncrement: 5,
                                 autoApply: true,
-                                cancelLabel: 'Clear',
+                                startDate: moment().startOf('day'),
+                                endDate: moment().startOf('day'),
                                 locale: {
-
+									cancelLabel: 'Clear',
                                     format: 'DD.MM.YYYY HH:mm'
                                 }
                             });

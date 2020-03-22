@@ -56,7 +56,7 @@
         <tr th:each="driver:${drivers}">
             <td th:text="${driver.getId()}"></td>
             <td>
-                <a th:href="@{/picasso/getViewRelatedToDriver{driverId}(driverId=${driver.id})}"
+                <a th:href="@{/getViewRelatedToDriver{driverId}(driverId=${driver.id})}"
                    th:text="${driver.fullName}"></a>
             </td>
             <td th:text="${driver.getCar()}"></td>

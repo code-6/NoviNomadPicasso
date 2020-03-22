@@ -22,7 +22,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 @Controller
-@RequestMapping("/picasso")
+@RequestMapping("/")
 public class AdvancedTourController {
     private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -46,7 +46,7 @@ public class AdvancedTourController {
 
     private Logger logger = LoggerFactory.getLogger(AdvancedTourController.class);
 
-    @GetMapping("/getview")
+    @GetMapping("/")
     public ModelAndView getView(@RequestParam(required = false, name = "month") Integer month,
                                 @RequestParam(required = false, name = "year") String year) {
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();

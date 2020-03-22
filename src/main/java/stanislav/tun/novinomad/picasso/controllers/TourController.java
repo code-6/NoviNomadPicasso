@@ -107,6 +107,7 @@ public class TourController {
     public ModelAndView getEditTourView(@PathVariable(value = "id") Long tourId) {
         var tour = tourService.getTour(tourId).get();
         var mav = new ModelAndView();
+        mav.addObject("edit",true);
         User user = userService.getUser(auditor.getCurrentAuditor().get().toString()).get();
         // show error if tour is hold
         if (holder.isHold(tour)) {
@@ -181,7 +182,6 @@ public class TourController {
                                       @RequestParam(name = "tourDateTimeRange") String tourDateTimeRange,
                                       @RequestParam(required = false, name = "file") MultipartFile file,
                                       @RequestParam(required = false, name = "adv") boolean adv) {
-
         try {
             if (tourDateTimeRange != "" || tourDateTimeRange != null) {
                 var dtr = DateTimeRange.parseSingle(tourDateTimeRange);
@@ -239,7 +239,7 @@ public class TourController {
 
             var m = tour.getStartDate().getMonth().getValue();
             var y = tour.getStartDate().getYear();
-            var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
+            var r = String.format("redirect:/?month=%d&year=%d", m, y);
             mav.setViewName(r);
 
             if (exist) {
@@ -307,6 +307,7 @@ public class TourController {
                     e.printStackTrace();
                 }
             }
+            logger.debug("All days = " + allDays);
             // in case of new intervals, value will be empty string
             wrapper.getGuideMap().put(guide, allDays);
         }
@@ -325,7 +326,7 @@ public class TourController {
 
         var m = tour.getStartDate().getMonth().getValue();
         var y = tour.getStartDate().getYear();
-        var r = String.format("redirect:/picasso/getview?month=%d&year=%d", m, y);
+        var r = String.format("redirect:/?month=%d&year=%d", m, y);
         mav.setViewName(r);
 
         if (tourService.exist(tourId))

@@ -10,7 +10,12 @@
 </head>
 <body class="jumbotron">
 <div layout:fragment="content" >
-    <h1>create/edit guide</h1>
+    <div th:if="${edit}">
+        <h1 th:text="${'Edit guide: '+guide.fullName}"></h1>
+    </div>
+    <div th:unless="${edit}">
+        <h1 th:text="${'Create new guide'}"></h1>
+    </div>
     <br/>
     <!--/*@thymesVar id="guide" type="stanislav.tun.novinomad.picasso.persistance.pojos.Driver"*/-->
     <form action="#" th:action="@{/guides/save}" th:object="${guide}" method="post">
