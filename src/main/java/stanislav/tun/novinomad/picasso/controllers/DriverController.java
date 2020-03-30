@@ -43,7 +43,7 @@ public class DriverController {
         var drivers = driverService.getDriversList();
         var modelAndView = new ModelAndView();
         modelAndView.addObject("drivers", drivers);
-        modelAndView.setViewName("driversListPage.html");
+        modelAndView.setViewName("driversListPage");
         modelAndView.addObject("activeDrivers", true);
         return modelAndView;
     }
