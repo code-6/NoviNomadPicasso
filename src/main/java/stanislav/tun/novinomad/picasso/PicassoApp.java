@@ -1,6 +1,5 @@
 package stanislav.tun.novinomad.picasso;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import stanislav.tun.novinomad.picasso.persistance.services.TourService;
 import stanislav.tun.novinomad.picasso.persistance.services.UserService;
 import stanislav.tun.novinomad.picasso.security.audit.AuditorAwareImpl;
 import stanislav.tun.novinomad.picasso.util.ConcurrentHolder;
-import org.h2.tools.RunScript;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -244,9 +242,9 @@ public class PicassoApp {
         userService.createUser(user2);
         userService.createUser(user3);
 
-        createDriversLoop(150);
-        createGuidesLoop(150);
-        createToursLoop(600, 2);
+        createDriversLoop(3);
+        createGuidesLoop(3);
+        //createToursLoop(0, 2);
     }
 
 }

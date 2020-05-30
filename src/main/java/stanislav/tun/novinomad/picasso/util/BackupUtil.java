@@ -1,17 +1,14 @@
 package stanislav.tun.novinomad.picasso.util;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.h2.tools.RunScript;
 import org.h2.tools.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import stanislav.tun.novinomad.picasso.controllers.TourController;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;

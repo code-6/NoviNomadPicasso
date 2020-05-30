@@ -1,5 +1,6 @@
 package stanislav.tun.novinomad.picasso.controllers;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -344,11 +345,11 @@ public class TourController {
             //var driverTourIntervals = driverIntervalService.getAllRelatedToTourAndDriver(tour, d);
             var setDti = d.getDriverTourIntervals();
             if (setDti.size() > 0) {
-                for (DriverTourIntervals dti : setDti) {
+                setDti.forEach(dti -> {
                     driverIntervalService.delete(dti);
-                    tour.getDriverIntervals().clear();
-                    d.getDriverTourIntervals().clear();
-                }
+                });
+                tour.getDriverIntervals().clear();
+                d.getDriverTourIntervals().clear();
             }
             try {
                 var dateTimeRange = DateTimeRange.parseSingle(dates);

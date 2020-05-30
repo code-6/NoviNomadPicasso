@@ -56,12 +56,12 @@
     "timePicker24Hour": true,
     "timePickerIncrement": 5,
     "autoApply": true,
-    startDate: moment().startOf('day'),
-    endDate: moment().startOf('day'),
     "locale": {
-        "format": "DD.MM.YYYY HH:ss",
+        "format": "DD.MM.YYYY HH:mm",
         "cancelLabel": "Clear"
 },
+startDate: [(${tour.getStartDateForPicker()})],
+endDate: [(${tour.getEndDateForPicker()})],
 minDate: [(${tour.getStartDateForPicker()})],
 maxDate: [(${tour.getEndDateForPicker()})]
                     });
