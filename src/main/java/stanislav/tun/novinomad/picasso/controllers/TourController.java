@@ -58,7 +58,7 @@ public class TourController {
         var map = new HashMap<String, Object>();
         var tour = new Tour();
         map.put("tour", tour);
-        // todo : get drivers list from cash data
+
         map.put("drivers", driverService.getDriversList());
         map.put("driversExclude", tour.getDrivers());
 
@@ -123,12 +123,13 @@ public class TourController {
             holder.hold(tour, user);
         }
         mav.addObject("tour", tour);
-        var allDrivers = driverService.getDriversList();
-        var allGuides = guideService.getGuidesList();
+        // fix bug when try to add new tour not all drivers appear.
+        var allDrivers = new HashSet<Driver>(driverService.getDriversList());
+        var allGuides = new HashSet<Guide>(guideService.getGuidesList());
         // exclude already attached drivers from view
         var drvs = tour.getDrivers();
         allDrivers.removeAll(drvs);
-        // exclude already attached drivers from view
+        // exclude already attached guides from view
         allGuides.removeAll(tour.getGuides());
 
         mav.addObject("drivers", allDrivers);
@@ -195,10 +196,13 @@ public class TourController {
         var uuid = UUID.randomUUID().toString();
         var exist = tourService.exist(tour.getTittle());
         // to resolve bug when file overwrites if edit tour.
+        // FIXME: 01.06.2020 file not attaches if created initially without file and on edit try to add
         if (exist) {
             logger.debug("EXIST "+tour.getTittle());
             if (file.getOriginalFilename().equals("") || file.getOriginalFilename() == null)
                 tour.setFileName(tourService.getTour(tour.getId()).get().getFileName());
+            else
+                tour.setFileName(file.getOriginalFilename());
         } else
             tour.setFileName(file.getOriginalFilename());
 
