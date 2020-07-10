@@ -245,9 +245,9 @@ public class PicassoApp {
         if (!userService.existByUserName(user3.getUserName()))
             userService.createUser(user3);
 
-//        createDriversLoop(5);
-//        createGuidesLoop(5);
-//        createToursLoop(5, 2);
+        createDriversLoop(5);
+        createGuidesLoop(5);
+        createToursLoop(50, 2);
     }
 
 }
