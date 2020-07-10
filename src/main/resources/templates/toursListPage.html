@@ -11,7 +11,7 @@
 		}
 		div.fixed {
             position: sticky;
-            background: #343a40;
+            background: #e9ecef;
 			top: 55px;
 			z-index: 100;
 		}
@@ -41,17 +41,17 @@
                     <button type="submit" class="btn btn-outline-info btn-sm">submit</button>
                     <span th:if="${selectedYear}"
                           th:text="${'Tours for: '+selectedYear+' year'}"
-                          style="color: white"></span>
+                          style="color: black"></span>
 
                     <span th:text="${' count: '+toursCount}"
-                          style="color: white"></span>
+                          style="color: black"></span>
                 </div>
             </div>
         </div>
         <table id="table"
                class="table table-sm table-striped table-bordered table-hover results">
             <caption>List of tours</caption>
-            <thead class="thead-dark">
+            <thead class="thead-light">
             <tr>
 <!--                <th data-sortable="true" data-field="id">-->
 <!--                    <button type="button" class="btn btn-outline-info btn-sm">ID</button>-->

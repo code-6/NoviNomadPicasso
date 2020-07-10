@@ -28,7 +28,7 @@
     </div>
     <table id="table" class="table table-sm table-hover">
         <!--			<caption>List of drivers</caption>-->
-        <thead class="thead-dark">
+        <thead class="thead-light">
         <tr>
             <th data-sortable="true" data-field="id">
                 <button type="button" class="btn btn-outline-info btn-sm">ID</button>
@@ -63,7 +63,8 @@
             <td th:text="${driver.getCreatedBy()}"></td>
             <td>
                 <a th:href="@{/drivers/edit{id}(id=${driver.getId()})}">
-                    <button type="button" class="btn btn-outline-info btn-sm">edit</button>
+<!--                    <button type="button" class="btn btn-outline-info btn-sm">edit</button>-->
+                edit
                 </a>
                 <!--                    <button th:target="@{/drivers/edit{id}(id=${driver.getId()})}" type="button" class="btn btn-outline-secondary">edit</button>-->
             </td>
