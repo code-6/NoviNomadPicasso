@@ -166,7 +166,7 @@
                     <!--					<span th:if="${d.getDayOfMonth() > t.startDate.dayOfMonth && d.getDayOfMonth() < t.endDate.dayOfMonth}">*</span>-->
                     <!--					<span th:if="${d.getDayOfMonth() == t.startDate.dayOfMonth || d.getDayOfMonth() == t.endDate.dayOfMonth}">|</span>-->
                     <span th:title="${t.getRange().toString()}"
-                          th:if="${d.isAfter(t.startDate.toLocalDate()) && d.isBefore(t.endDate.toLocalDate())}">---</span>
+                          th:if="${d.isAfter(t.startDate.toLocalDate()) && d.isBefore(t.endDate.toLocalDate())}">--</span>
                     <!--					<span th:if="${d.isEqual(t.startDate) || d.isEqual(t.endDate)}">|</span>-->
 
                     <span th:title="${t.getRange().toString()}"
@@ -177,7 +177,8 @@
 
                 <td>
                     <a th:href="@{/tours/edit{id}(id=${t.id})}">
-                        <button type="button" class="btn btn-outline-info btn-sm">edit</button>
+<!--                        <button type="button" class="btn btn-outline-info btn-sm">edit</button>-->
+                        edit
                     </a>
                 </td>
             </tr>

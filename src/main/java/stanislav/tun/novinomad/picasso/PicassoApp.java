@@ -226,15 +226,15 @@ public class PicassoApp {
 
     @PostConstruct
     private void init() {
-        var user1 = new User("visitor", "$2a$10$lnyXL7Jc.PlCMdrxSXyIu.5klIHkztPUaDwQBHoRdqdc20rjOJZHC");
+        var user1 = new User("visitor", "$2y$12$B5RY2Orz1AL.e6shKb9hkO9b09qwzqKJr8jfSPR5gFj4YVGZEOTdm");
         user1.addAuthority("visitor");
         user1.setEnabled(true);
 
-        var user2 = new User("creator", "$2a$10$YHyM3KAswilNcNbAUmZH9O28kBDhUX6Bz5CXCTzuBVX6ARJ3EpAjW");
+        var user2 = new User("creator", "$2y$12$B5RY2Orz1AL.e6shKb9hkO9b09qwzqKJr8jfSPR5gFj4YVGZEOTdm");
         user2.addAuthority("create");
         user2.setEnabled(true);
 
-        var user3 = new User("editor", "$2a$10$Z/.BLe3VelzXHnUKn9/.pOKKYnk9ctCW2WPj4wB7it/B9Q6gGbZtC");
+        var user3 = new User("editor", "$2y$12$B5RY2Orz1AL.e6shKb9hkO9b09qwzqKJr8jfSPR5gFj4YVGZEOTdm");
         user3.addAuthority("create-edit");
         user3.setEnabled(true);
 
@@ -247,7 +247,7 @@ public class PicassoApp {
 
 //        createDriversLoop(5);
 //        createGuidesLoop(5);
-//        createToursLoop(0, 2);
+//        createToursLoop(5, 2);
     }
 
 }
