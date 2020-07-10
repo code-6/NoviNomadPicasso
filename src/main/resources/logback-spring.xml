@@ -21,12 +21,12 @@
 
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- rollover daily and when the file reaches 100 MegaBytes -->
-            <fileNamePattern>${LOGS}/archived/picasso_log-%d{dd-MM-yyyy}.%i.log
+            <!-- rollover daily and when the file reaches 300 MegaBytes -->
+            <fileNamePattern>${LOGS}/archived/picasso_log-%d{dd-MM-yyyy}.%i.log.zip
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+                <maxFileSize>300MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
     </appender>

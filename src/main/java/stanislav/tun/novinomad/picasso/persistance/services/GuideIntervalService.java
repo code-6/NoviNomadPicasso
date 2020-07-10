@@ -44,7 +44,6 @@ public class GuideIntervalService {
         return repo.findByTourEquals(tour);
     }
 
-
     public Collection<GuideTourIntervals> getAllRelatedToTourAndGuide(Tour tour, Guide guide) {
         //return Collections.sort(Arrays.asList(repo.findByDriverEquals(driverId)));
         return repo.findByGuideAndTourEquals(guide, tour);
@@ -61,5 +60,9 @@ public class GuideIntervalService {
 
     public void delete(Long id){
         repo.deleteById(id);
+    }
+
+    public void delete(long tourId, long guideId){
+        repo.delete(tourId, guideId);
     }
 }

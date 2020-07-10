@@ -222,6 +222,13 @@ public class TourController {
         excludeDrivers(drivers2exclude, tour);
         excludeGuides(guides2exclude, tour);
 
+        for (Guide g : tour.getGuides()) {
+            guideIntervalService.delete(tour.getId(), g.getId());
+        }
+
+        for (Driver d : tour.getDrivers()) {
+            driverIntervalService.delete(tour.getId(), d.getId());
+        }
         var logtour = tourService.createOrUpdateTour(tour);
         // set default interval even if adv pressed or not.
         // this fix bug when user pressed advanced and leaves

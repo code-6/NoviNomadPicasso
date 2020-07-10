@@ -59,4 +59,8 @@ public class DriverIntervalService {
     public void delete(Long id) {
         repo.deleteById(id);
     }
+
+    public void delete(long tourId, long driverId) {
+        repo.delete(tourId, driverId);
+    }
 }

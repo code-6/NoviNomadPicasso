@@ -26,4 +26,9 @@ public class UserService {
     public Optional<User> getUser(Long id){
         return userRepo.findById(id);
     }
+
+    public boolean existByUserName(String userName){
+        var res = userRepo.findByUserName(userName);
+        return !res.isEmpty();
+    }
 }

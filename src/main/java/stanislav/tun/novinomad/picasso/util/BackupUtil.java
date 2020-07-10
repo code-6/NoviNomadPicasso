@@ -1,6 +1,7 @@
 package stanislav.tun.novinomad.picasso.util;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import org.h2.tools.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +21,15 @@ import java.util.Date;
 
 @Component
 public class BackupUtil {
-    private  Logger logger = LoggerFactory.getLogger(BackupUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(BackupUtil.class);
 
-    private  Script script = new Script();
+    private static final Script script = new Script();
 
-    private  String separator = FileSystems.getDefault().getSeparator();
-    private  String folderPath = '.' + separator + "picasso_db" + separator + "backup" + separator;
+    private static final String separator = FileSystems.getDefault().getSeparator();
+    private static final String folderPath = '.' + separator + "picasso_db" + separator + "backup" + separator;
 
     @Scheduled(cron = "0 0 21 * * ?")
-    public  boolean backup() {
+    public static boolean backup() {
         logger.debug("start create backup of db");
         var success = false;
         var currentDate = LocalDateTime.now();
@@ -52,7 +53,7 @@ public class BackupUtil {
         return success;
     }
 
-    public  boolean deleteOldBackup() {
+    public static boolean deleteOldBackup() {
         logger.debug("start delete old backup");
         var success = false;
         var currentDate = new Date().toInstant().truncatedTo(ChronoUnit.DAYS);
@@ -80,7 +81,7 @@ public class BackupUtil {
         return success;
     }
 
-    public  boolean backupCreated(String fileName){
+    public static boolean backupCreated(String fileName){
         var file = new File(folderPath+fileName);
         logger.debug("check file absPath: "+file.getAbsolutePath());
         logger.debug("check file path: "+file.getPath());

@@ -62,7 +62,7 @@ public class PicassoApp {
 
     @Bean
     @Scope("singleton")
-    public ConcurrentHolder concurrentHolderSingleton(){
+    public ConcurrentHolder concurrentHolderSingleton() {
         return new ConcurrentHolder();
     }
 
@@ -115,31 +115,31 @@ public class PicassoApp {
             // add 1,2 or 3 drivers to tour
             switch (rnd) {
                 case 1:
-                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size() - 1))));
                     break;
                 case 2:
-                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
-                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size() - 1))));
+                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size() - 1))));
                     break;
                 case 3:
-                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
-                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
-                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size() - 1))));
+                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size() - 1))));
+                    tour.addDriver(java.util.Optional.of(allDrivers.get(getRandomNumInRange(0, allDrivers.size() - 1))));
                     break;
             }
 
             switch (rnd2) {
                 case 1:
-                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size() - 1))));
                     break;
                 case 2:
-                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size()-1))));
-                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size() - 1))));
+                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size() - 1))));
                     break;
                 case 3:
-                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size()-1))));
-                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size()-1))));
-                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size()-1))));
+                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size() - 1))));
+                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size() - 1))));
+                    tour.addGuide(java.util.Optional.of(allGuides.get(getRandomNumInRange(0, allDrivers.size() - 1))));
                     break;
             }
 
@@ -151,8 +151,8 @@ public class PicassoApp {
         }
     }
 
-    private DateTimeRange getRandomRange(){
-        var start = LocalDateTime.of(2020, getRandomNumInRange(1,12), getRandomNumInRange(1,28), getRandomNumInRange(0,23), getRandomNumInRange(0,59), 0);
+    private DateTimeRange getRandomRange() {
+        var start = LocalDateTime.of(2020, getRandomNumInRange(1, 12), getRandomNumInRange(1, 28), getRandomNumInRange(0, 23), getRandomNumInRange(0, 59), 0);
         var rnd = getRandomNumInRange(10, 15);
         var end = start.plusDays(rnd);
         try {
@@ -225,7 +225,7 @@ public class PicassoApp {
     }
 
     @PostConstruct
-    private void init(){
+    private void init() {
         var user1 = new User("visitor", "$2a$10$lnyXL7Jc.PlCMdrxSXyIu.5klIHkztPUaDwQBHoRdqdc20rjOJZHC");
         user1.addAuthority("VISITOR");
         user1.setEnabled(true);
@@ -237,14 +237,16 @@ public class PicassoApp {
         var user3 = new User("testuser", "$2a$10$Z/.BLe3VelzXHnUKn9/.pOKKYnk9ctCW2WPj4wB7it/B9Q6gGbZtC");
         user3.addAuthority("USER");
         user3.setEnabled(true);
+        if (!userService.existByUserName(user1.getUserName()))
+            userService.createUser(user1);
+        if (!userService.existByUserName(user2.getUserName()))
+            userService.createUser(user2);
+        if (!userService.existByUserName(user3.getUserName()))
+            userService.createUser(user3);
 
-        userService.createUser(user1);
-        userService.createUser(user2);
-        userService.createUser(user3);
-
-        createDriversLoop(5);
-        createGuidesLoop(5);
-        //createToursLoop(0, 2);
+//        createDriversLoop(5);
+//        createGuidesLoop(5);
+//        createToursLoop(0, 2);
     }
 
 }
