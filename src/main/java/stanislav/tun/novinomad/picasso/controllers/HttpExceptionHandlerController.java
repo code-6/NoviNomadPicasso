@@ -7,14 +7,28 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import stanislav.tun.novinomad.picasso.util.CustomMailSender;
 
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.file.FileSystems;
 
 @Controller
 public class HttpExceptionHandlerController implements ErrorController {
+    private final CustomMailSender sender;
+    private final String s = FileSystems.getDefault().getSeparator();
+    private final String path = "."+s+"picasso"+s+"picasso_logs"+s+"picasso_log.log";
+    private static final String toEmail = "wong.stanislav@gmail.com";
+
     Logger logger = LoggerFactory.getLogger(HttpExceptionHandlerController.class);
+
     private ModelAndView mav = new ModelAndView("errorPage");
+
+    public HttpExceptionHandlerController(CustomMailSender sender) {
+        this.sender = sender;
+    }
+
     @RequestMapping("/error")
     public ModelAndView getErrorPage(HttpServletRequest request) {
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
@@ -46,6 +60,12 @@ public class HttpExceptionHandlerController implements ErrorController {
         mav.addObject("description", "Don't panic. Looks like you found a BUG.");
         mav.addObject("errorCode", 500);
         logger.error("Unknown error! " + "Requested url: " + request.getRequestURI() + " " + ExceptionUtils.getStackTrace(e));
+        try {
+            sender.sendEmail(toEmail,"Novinomad picasso thrown an "+e.getMessage()+" exception",
+                    "see stack "+ExceptionUtils.getStackTrace(e), path);
+        } catch (MessagingException messagingException) {
+            logger.error("Unable to send email "+ExceptionUtils.getStackTrace(messagingException));
+        }
         return mav;
     }
 

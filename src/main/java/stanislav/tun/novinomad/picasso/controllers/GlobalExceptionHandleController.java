@@ -8,16 +8,26 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import stanislav.tun.novinomad.picasso.exceptions.AccessDeniedException;
-import stanislav.tun.novinomad.picasso.exceptions.PageNotFoundException;
+import stanislav.tun.novinomad.picasso.util.CustomMailSender;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.file.FileSystems;
 
 // for internal controllers exceptions
 @ControllerAdvice
 public class GlobalExceptionHandleController {
 
+    private final CustomMailSender sender;
+    private final String s = FileSystems.getDefault().getSeparator();
+    private final String path = "."+s+"picasso"+s+"picasso_logs"+s+"picasso_log.log";
+    private static final String toEmail = "wong.stanislav@gmail.com";
+
     Logger logger = LoggerFactory.getLogger(GlobalExceptionHandleController.class);
+
+    public GlobalExceptionHandleController(CustomMailSender sender) {
+        this.sender = sender;
+    }
 
     // handle all unexpected exceptions
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -28,6 +38,13 @@ public class GlobalExceptionHandleController {
         mav.addObject("description", "Don't panic. Looks like you found a BUG.");
         mav.addObject("errorCode", 500);
         logger.error("Unknown error! " + "Requested url: " + req.getRequestURI() + " " + ExceptionUtils.getStackTrace(e));
+
+        try {
+            sender.sendEmail(toEmail,"Novinomad picasso thrown an "+e.getMessage()+" exception",
+                    "see stack "+ExceptionUtils.getStackTrace(e), path);
+        } catch (MessagingException messagingException) {
+            logger.error("Unable to send email "+ExceptionUtils.getStackTrace(messagingException));
+        }
         return mav;
     }
 // this not works for http errors

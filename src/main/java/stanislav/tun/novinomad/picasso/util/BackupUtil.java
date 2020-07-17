@@ -35,7 +35,7 @@ public class BackupUtil {
         var currentDate = LocalDateTime.now();
         var backupName = "dbBackup_" + currentDate.toString() + ".zip";
         try {
-            script.runTool("-url", "jdbc:h2:file:~/IdeaProjects/NoviNomadPicasso/picasso_db/picassoDB",
+            script.runTool("-url", "jdbc:h2:file:~/picasso/picasso_db/picassoDB",
                     "-user", "sa", "-password", "password", "-script", folderPath+backupName,
                     "-options", "compression", "zip");
             logger.debug("backup path: "+folderPath+backupName);
