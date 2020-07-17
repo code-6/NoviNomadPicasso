@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/*/add").hasAnyAuthority("create")
+                .antMatchers("/*/add").hasAnyAuthority("create", "create-edit")
                 .antMatchers("/*/edit{id}").hasAuthority("create-edit")
                 .antMatchers("/h2-console/**").hasAuthority("admin")
                 .anyRequest()
