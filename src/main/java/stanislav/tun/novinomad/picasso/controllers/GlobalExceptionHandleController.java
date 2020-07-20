@@ -40,8 +40,9 @@ public class GlobalExceptionHandleController {
         logger.error("Unknown error! " + "Requested url: " + req.getRequestURI() + " " + ExceptionUtils.getStackTrace(e));
 
         try {
-            sender.sendEmail(toEmail,"Novinomad picasso thrown an "+e.getMessage()+" exception",
-                    "see stack "+ExceptionUtils.getStackTrace(e), path);
+            sender.sendEmail(toEmail,"Novinomad picasso thrown exception. ",
+                    "requested resource: "+req.getRequestURI()+"\nmessage: "+e.getMessage()+"\nstack trace:\n"+ExceptionUtils.getStackTrace(e),
+                    path);
         } catch (MessagingException messagingException) {
             logger.error("Unable to send email "+ExceptionUtils.getStackTrace(messagingException));
         }
