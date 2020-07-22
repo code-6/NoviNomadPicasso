@@ -28,7 +28,7 @@ public class CustomMailSender {
 
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom("stanislav.tun.1995@gmail.com");
+        helper.setFrom("novinomad.picasso@gmail.com");
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(text);

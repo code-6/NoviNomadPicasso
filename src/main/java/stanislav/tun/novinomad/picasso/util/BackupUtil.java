@@ -25,8 +25,8 @@ public class BackupUtil {
 
     private static final Script script = new Script();
 
-    private static final String separator = FileSystems.getDefault().getSeparator();
-    private static final String folderPath = '.' + separator + "picasso_db" + separator + "backup" + separator;
+    private static final String s = FileSystems.getDefault().getSeparator();
+    private static final String folderPath = '.' + s + "picasso" + s + "picasso_db" + s + "backup" + s;
 
     @Scheduled(cron = "0 0 21 * * ?")
     public static boolean backup() {
@@ -36,14 +36,14 @@ public class BackupUtil {
         var backupName = "dbBackup_" + currentDate.toString() + ".zip";
         try {
             script.runTool("-url", "jdbc:h2:file:~/picasso/picasso_db/picassoDB",
-                    "-user", "sa", "-password", "password", "-script", folderPath+backupName,
+                    "-user", "sa", "-password", "password", "-script", folderPath + backupName,
                     "-options", "compression", "zip");
-            logger.debug("backup path: "+folderPath+backupName);
+            logger.debug("backup path: " + folderPath + backupName);
             success = backupCreated(backupName);
-            if(success){
+            if (success) {
                 logger.info("backup created");
                 deleteOldBackup();
-            }else{
+            } else {
                 logger.warn("backup not created");
             }
 
@@ -60,15 +60,15 @@ public class BackupUtil {
         var folder = new File(folderPath);
 
         for (File file : folder.listFiles()) {
-            logger.debug("check file to delete "+file.getName());
+            logger.debug("check file to delete " + file.getName());
             try {
                 var attributes = Files.readAttributes(Paths.get(file.getPath()), BasicFileAttributes.class);
                 var fileCreationDate = attributes.creationTime().toInstant().truncatedTo(ChronoUnit.DAYS);
 
-                if(fileCreationDate.isBefore(currentDate)){
+                if (fileCreationDate.isBefore(currentDate)) {
                     success = file.delete();
-                    if(success)
-                        logger.info("old backup deleted "+file.getAbsolutePath());
+                    if (success)
+                        logger.info("old backup deleted " + file.getAbsolutePath());
                     else
                         logger.warn("old backup not deleted.");
                 }
@@ -81,10 +81,10 @@ public class BackupUtil {
         return success;
     }
 
-    public static boolean backupCreated(String fileName){
-        var file = new File(folderPath+fileName);
-        logger.debug("check file absPath: "+file.getAbsolutePath());
-        logger.debug("check file path: "+file.getPath());
+    public static boolean backupCreated(String fileName) {
+        var file = new File(folderPath + fileName);
+        logger.debug("check file absPath: " + file.getAbsolutePath());
+        logger.debug("check file path: " + file.getPath());
         return file.exists();
     }
 }
